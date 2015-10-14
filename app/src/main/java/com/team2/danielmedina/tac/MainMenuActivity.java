@@ -3,12 +3,10 @@ package com.team2.danielmedina.tac;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toolbar;
 
 public class MainMenuActivity extends Activity {
 
@@ -17,10 +15,10 @@ public class MainMenuActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        final Button categories = (Button) findViewById(R.id.button);
-        final Button tags = (Button) findViewById(R.id.button2);
-        final Button favorites = (Button) findViewById(R.id.button3);
-        final Button saved = (Button) findViewById(R.id.button4);
+        final Button categories = (Button) findViewById(R.id.CategoriesBtn);
+        final Button tags = (Button) findViewById(R.id.TagsBtn);
+        final Button favorites = (Button) findViewById(R.id.FavoritesBtn);
+        final Button saved = (Button) findViewById(R.id.SavedBtn);
 
         categories.setOnClickListener(new View.OnClickListener() {
             @Override

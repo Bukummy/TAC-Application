@@ -17,6 +17,9 @@ public class CategoryAnnouncement extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_announcement);
 
+        Intent intent = getIntent();
+
+        setTitle(intent.getStringExtra("Title"));
 
         final ListView list = (ListView) findViewById(R.id.listCategoryAnnouncement);
 
@@ -50,6 +53,10 @@ public class CategoryAnnouncement extends Activity {
             default:
                 categories = new String[] {"Empty"};
                 break;
+        }
+
+        if (categories.length == 0){
+            categories = new String[] {"Empty"};
         }
 
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, categories);

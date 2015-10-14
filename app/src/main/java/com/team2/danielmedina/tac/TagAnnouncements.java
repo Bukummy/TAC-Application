@@ -18,6 +18,10 @@ public class TagAnnouncements extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tag_announcements);
 
+        Intent intent = getIntent();
+
+        setTitle(intent.getStringExtra("Title"));
+
         final ListView list = (ListView) findViewById(R.id.listTagAnnouncements);
 
         String[] Announcements= {};
@@ -49,7 +53,9 @@ public class TagAnnouncements extends Activity {
                 break;
         }
 
-
+        if (Announcements.length == 0){
+            Announcements = new String[] {"Empty"};
+        }
 
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, Announcements);
 
