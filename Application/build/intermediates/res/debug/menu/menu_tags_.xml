@@ -1,0 +1,7 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.android.slidingtabsbasic.Tags_Activity">
+    <item android:id="@+id/action_save" android:title="@string/action_save"
+        android:orderInCategory="100" android:showAsAction="never" />
+</menu>
+<!-- From: file:/Users/DanielMedina/Desktop/SlidingTabsBasic%202/Application/src/main/res/menu/menu_tags_.xml -->
