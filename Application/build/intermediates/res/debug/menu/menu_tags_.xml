@@ -4,4 +4,4 @@
     <item android:id="@+id/action_save" android:title="@string/action_save"
         android:orderInCategory="100" android:showAsAction="never" />
 </menu>
-<!-- From: file:/Users/DanielMedina/Desktop/SlidingTabsBasic%202/Application/src/main/res/menu/menu_tags_.xml -->
+<!-- From: file:/C:/Users/Bukunmi/AndroidStudioProjects/TAC4/TAC-Application/Application/src/main/res/menu/menu_tags_.xml -->

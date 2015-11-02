@@ -23,7 +23,13 @@
         android:minSdkVersion="14"
         android:targetSdkVersion="23" />
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <!-- Min/target SDK versions (<uses-sdk>) managed by build.gradle -->
     <application
@@ -51,6 +57,11 @@
         <activity
             android:name="com.example.android.slidingtabsbasic.DisplayAnnouncement"
             android:label="@string/title_activity_display_announcement" >
+        </activity>
+        <activity
+            android:name="com.team2.bukunmioyedeji.tac.AllAnnouncementsList"
+            android:label="@string/title_activity_all_announcements"
+            android:parentActivityName="com.example.android.slidingtabsbasic.MainActivity" >
         </activity>
     </application>
 

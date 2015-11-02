@@ -16,9 +16,6 @@
 
 package com.example.android.slidingtabsbasic;
 
-import com.example.android.common.logger.Log;
-import com.example.android.common.view.SlidingTabLayout;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -30,7 +27,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
+
+import com.example.android.common.logger.Log;
+import com.example.android.common.view.SlidingTabLayout;
+import com.team2.bukunmioyedeji.tac.AllAnnouncementsList;
 
 /**
  * A basic sample which shows how to use {@link com.example.android.common.view.SlidingTabLayout}
@@ -153,7 +153,7 @@ public class SlidingTabsBasicFragment extends Fragment {
             switch (position) {
                 case 0:
 
-                    view = getActivity().getLayoutInflater().inflate(R.layout.activity_tags_,
+                    view = getActivity().getLayoutInflater().inflate(R.layout.activity_tags,
                             container, false);
 
                     //Set up list to add to view
@@ -165,7 +165,7 @@ public class SlidingTabsBasicFragment extends Fragment {
                     break;
 
                 case 1:
-                    view = getActivity().getLayoutInflater().inflate(R.layout.activity_tags_,
+                    view = getActivity().getLayoutInflater().inflate(R.layout.activity_tags,
                             container, false);
                     // Add the newly created View to the ViewPager
                     setTabList(view,position);
@@ -175,7 +175,7 @@ public class SlidingTabsBasicFragment extends Fragment {
                     break;
 
                 case 2:
-                    view = getActivity().getLayoutInflater().inflate(R.layout.activity_tags_,
+                    view = getActivity().getLayoutInflater().inflate(R.layout.activity_tags,
                             container, false);
                     // Add the newly created View to the ViewPager
                     container.addView(view);
@@ -183,7 +183,7 @@ public class SlidingTabsBasicFragment extends Fragment {
                     break;
 
                 case 3:
-                    view = getActivity().getLayoutInflater().inflate(R.layout.activity_tags_,
+                    view = getActivity().getLayoutInflater().inflate(R.layout.activity_tags,
                             container, false);
                     // Add the newly created View to the ViewPager
                     container.addView(view);
@@ -191,7 +191,7 @@ public class SlidingTabsBasicFragment extends Fragment {
                     break;
 
                 default:
-                    view = getActivity().getLayoutInflater().inflate(R.layout.activity_tags_,
+                    view = getActivity().getLayoutInflater().inflate(R.layout.activity_tags,
                             container, false);
                     // Add the newly created View to the ViewPager
                     container.addView(view);
@@ -226,10 +226,20 @@ public class SlidingTabsBasicFragment extends Fragment {
                         public void onItemClick(AdapterView<?> parent, View view, int position, long arg3) {
                             view.setSelected(true);
                             //Display Chosen Category Announcement List
+
+                            if (position == 0)
+                            {
+                                Intent intent = new Intent(getActivity(), AllAnnouncementsList.class);
+                                intent.putExtra("Title", tags[position]);
+                                intent.putExtra("From","Category");
+                                getActivity().startActivity(intent);
+                            }
+                            else {
                             Intent intent = new Intent(getActivity(), AnnouncementsList.class);
                             intent.putExtra("Title", tags[position]);
                             intent.putExtra("From","Category");
                             getActivity().startActivity(intent);
+                            }
                         }
                     });
 
@@ -239,7 +249,7 @@ public class SlidingTabsBasicFragment extends Fragment {
                     //TODO: Change the R.id.listTags to the corresponding id of the ListView in XML
                     list = (ListView) view.findViewById(R.id.listTags);
 
-                    final String[] categories = new String[]{"Free Stuff", "Movies", "Graduate", "Undergraduate"
+                    String[] categories = new String[]{"Free Stuff", "Movies", "Graduate", "Undergraduate"
                             , "Paid Research"};
 
                     adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, categories);
@@ -252,10 +262,9 @@ public class SlidingTabsBasicFragment extends Fragment {
                         public void onItemClick(AdapterView<?> parent, View view, int position, long arg3) {
                             view.setSelected(true);
                             //TODO: Display Chosen Tag Announcements
-                            Intent intent = new Intent(getActivity(), AnnouncementsList.class);
-                            intent.putExtra("Title", categories[position]);
-                            intent.putExtra("From","Tags");
-                            getActivity().startActivity(intent);
+//                            Intent intent = new Intent(getActivity(), NextClass.class);
+//                            intent.putExtra("Title", tags[position]);
+//                            getActivity().startActivity(intent);
                         }
                     });
 
@@ -289,7 +298,6 @@ public class SlidingTabsBasicFragment extends Fragment {
                 // On Saved Tab
                 case 3:
                     //TODO: Change the R.id.listTags to the corresponding id of the ListView in XML of Next Activity
-
                     list = (ListView) view.findViewById(R.id.listTags);
 
                     String[] saved = new String[]{};

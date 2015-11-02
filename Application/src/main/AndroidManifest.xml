@@ -14,12 +14,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
+
+
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android.slidingtabsbasic"
     android:versionCode="1"
     android:versionName="1.0" >
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+    <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
 
     <!-- Min/target SDK versions (<uses-sdk>) managed by build.gradle -->
     <application
@@ -47,6 +57,12 @@
         <activity
             android:name=".DisplayAnnouncement"
             android:label="@string/title_activity_display_announcement" >
+        </activity>
+
+        <activity
+            android:name="com.team2.bukunmioyedeji.tac.AllAnnouncementsList"
+            android:label="@string/title_activity_all_announcements"
+            android:parentActivityName=".MainActivity">
         </activity>
     </application>
 

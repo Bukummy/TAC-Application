@@ -25,21 +25,30 @@ public class AnnouncementsList extends Activity {
 
         ListView list = (ListView) findViewById(R.id.AnnouncementListView);
 
+
         String[] announcements = new String[]{"No Announcements"};
         //Set announcements depending on which was chosen
         switch (pastActivity){
             case "Category":
-                announcements = new String[]{"Category Announcements"};
+                announcements = new String[]{"List of Announcements by Category "};
                 break;
 
             case "Tags":
-                announcements = new String[]{"Tag Announcements"};
+                announcements = new String[]{"List of Announcements by Key Phrases"};
+                break;
+
+            case "Favorites":
+                announcements = new String[]{"Favorite Category List"};
+                //list of selected categories
+                break;
+
+            case "Saved":
+                announcements = new String[]{"Saved Announcements List"};
                 break;
 
             default:
                 break;
         }
-
 
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, announcements);
@@ -63,7 +72,7 @@ public class AnnouncementsList extends Activity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+        public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_announcements_list, menu);
         return false;
@@ -76,6 +85,10 @@ public class AnnouncementsList extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        if (id == android.R.id.home ){
+            finish();
+            return true;
+        }
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
