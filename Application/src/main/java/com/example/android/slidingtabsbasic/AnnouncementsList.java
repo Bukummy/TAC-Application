@@ -10,8 +10,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class AnnouncementsList extends Activity {
+import java.util.ArrayList;
 
+public class AnnouncementsList extends Activity {
+    String[] announcementTitles;
+    String[] announcementLinks;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,21 +25,26 @@ public class AnnouncementsList extends Activity {
         setTitle(title);
 
         String pastActivity = intent.getStringExtra("From");
+        announcementTitles = intent.getStringArrayExtra("Titles");
+        announcementLinks = intent.getStringArrayExtra("URLs");
 
         ListView list = (ListView) findViewById(R.id.AnnouncementListView);
 
         String[] announcements = new String[]{"No Announcements"};
         //Set announcements depending on which was chosen
-        switch (pastActivity){
-            case "Category":
-                announcements = new String[]{"Category Announcements"};
+        switch (title){
+            case "All Announcements":
+
+                announcements = announcementTitles;
+
                 break;
 
             case "Tags":
-                announcements = new String[]{"Tag Announcements"};
+                announcements = new String[]{"No Available Tags"};
                 break;
 
             default:
+                announcements = new String[]{"No Announcements"};
                 break;
         }
 
@@ -55,7 +63,7 @@ public class AnnouncementsList extends Activity {
                 //TODO: Display webView of Announcement
                             Intent intent = new Intent(AnnouncementsList.this, DisplayAnnouncement.class);
                             intent.putExtra("Title", finalAnnouncements[position]);
-                            intent.putExtra("URL","http://www.techannounce.ttu.edu/Client/ViewMessage.aspx?MsgId=181115");
+                            intent.putExtra("URL",announcementLinks[position]);
                             startActivity(intent);
             }
         });
