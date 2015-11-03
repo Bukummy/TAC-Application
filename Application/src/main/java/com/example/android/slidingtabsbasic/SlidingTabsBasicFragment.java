@@ -18,8 +18,16 @@ package com.example.android.slidingtabsbasic;
 
 import com.example.android.common.logger.Log;
 import com.example.android.common.view.SlidingTabLayout;
+import com.example.android.slidingtabsbasic.RSSParser.AllAnnouncementsList;
+import com.example.android.slidingtabsbasic.RSSParser.HttpManager;
+import com.example.android.slidingtabsbasic.RSSParser.TechAnnounce;
+import com.example.android.slidingtabsbasic.RSSParser.TechAnnounceParser;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
@@ -30,7 +38,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A basic sample which shows how to use {@link com.example.android.common.view.SlidingTabLayout}
@@ -40,7 +53,8 @@ import android.widget.TextView;
 public class SlidingTabsBasicFragment extends Fragment {
 
     static final String LOG_TAG = "SlidingTabsBasicFragment";
-
+    String[] announcementTitles;
+    String[] announcementURLs;
     /**
      * A custom {@link ViewPager} title strip which looks much like Tabs present in Android v4.0 and
      * above, but is designed to give continuous feedback to the user when scrolling.
@@ -76,6 +90,11 @@ public class SlidingTabsBasicFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // BEGIN_INCLUDE (setup_viewpager)
         // Get the ViewPager and set it's PagerAdapter so that it can display items
+
+        announcementTitles = getArguments().getStringArray("Announcement Titles");
+        announcementURLs = getArguments().getStringArray("Announcement URLs");
+
+
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
         mViewPager.setAdapter(new SamplePagerAdapter());
         // END_INCLUDE (setup_viewpager)
@@ -203,6 +222,7 @@ public class SlidingTabsBasicFragment extends Fragment {
             return view;
         }
 
+
         //Set up each tab UI
         public void setTabList(View view,int position){
             ListView list;
@@ -213,10 +233,10 @@ public class SlidingTabsBasicFragment extends Fragment {
                 case 0:
                     list = (ListView) view.findViewById(R.id.listTags);
 
-                    final String[] tags = new String[]{"All Announcements", "Athletic", "Orientation", "Fundraiser"
+                    final String[] categories = new String[]{"All Announcements", "Athletic", "Orientation", "Fundraiser"
                             ,"Academic", "Research", "Training", "Departamental", "IT Announcements", "Rec Sports", "Events"};
 
-                    adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, tags);
+                    adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, categories);
 
                     list.setAdapter(adapter);
 
@@ -226,9 +246,12 @@ public class SlidingTabsBasicFragment extends Fragment {
                         public void onItemClick(AdapterView<?> parent, View view, int position, long arg3) {
                             view.setSelected(true);
                             //Display Chosen Category Announcement List
+
                             Intent intent = new Intent(getActivity(), AnnouncementsList.class);
-                            intent.putExtra("Title", tags[position]);
                             intent.putExtra("From","Category");
+                            intent.putExtra("Title", categories[position]);
+                            intent.putExtra("Titles", announcementTitles);
+                            intent.putExtra("URLs", announcementURLs);
                             getActivity().startActivity(intent);
                         }
                     });
@@ -239,10 +262,10 @@ public class SlidingTabsBasicFragment extends Fragment {
                     //TODO: Change the R.id.listTags to the corresponding id of the ListView in XML
                     list = (ListView) view.findViewById(R.id.listTags);
 
-                    final String[] categories = new String[]{"Free Stuff", "Movies", "Graduate", "Undergraduate"
+                    final String[] tags = new String[]{"Free Stuff", "Movies", "Graduate", "Undergraduate"
                             , "Paid Research"};
 
-                    adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, categories);
+                    adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, tags);
 
                     list.setAdapter(adapter);
 
@@ -253,8 +276,10 @@ public class SlidingTabsBasicFragment extends Fragment {
                             view.setSelected(true);
                             //TODO: Display Chosen Tag Announcements
                             Intent intent = new Intent(getActivity(), AnnouncementsList.class);
-                            intent.putExtra("Title", categories[position]);
+                            intent.putExtra("Title", tags[position]);
                             intent.putExtra("From","Tags");
+                            intent.putExtra("Titles", announcementTitles);
+                            intent.putExtra("URLs", announcementURLs);
                             getActivity().startActivity(intent);
                         }
                     });

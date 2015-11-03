@@ -21,6 +21,13 @@
       android:id="@+id/sample_main_layout">
 
 
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/progressBar"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.08" />
 
     <FrameLayout
           android:id="@+id/sample_content_fragment"
@@ -32,4 +39,4 @@
 
 </LinearLayout>
 
-<!-- From: file:/Users/DanielMedina/Desktop/SlidingTabsBasic%202/Application/src/main/res/layout/activity_main.xml -->
+<!-- From: file:/Users/DanielMedina/Documents/TAC-Application/Application/src/main/res/layout/activity_main.xml -->
