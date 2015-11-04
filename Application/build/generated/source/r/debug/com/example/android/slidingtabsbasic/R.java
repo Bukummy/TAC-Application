@@ -141,21 +141,20 @@ containing a value of this type.
     }
     public static final class id {
         public static final int AnnouncementListView=0x7f090001;
-        public static final int action_get_data=0x7f09000e;
-        public static final int action_save=0x7f09000f;
-        public static final int action_settings=0x7f09000d;
-        public static final int listAnnouncementTitle=0x7f090002;
-        public static final int listTags=0x7f090009;
-        public static final int log_fragment=0x7f090008;
-        public static final int menu_toggle_log=0x7f09000c;
-        public static final int progressBar=0x7f090005;
+        public static final int action_get_data=0x7f09000d;
+        public static final int action_save=0x7f09000e;
+        public static final int action_settings=0x7f09000c;
+        public static final int listTags=0x7f090008;
+        public static final int log_fragment=0x7f090007;
+        public static final int menu_toggle_log=0x7f09000b;
+        public static final int progressBar=0x7f090004;
         public static final int progressBar1=0x7f090000;
-        public static final int sample_content_fragment=0x7f090006;
-        public static final int sample_main_layout=0x7f090004;
-        public static final int sample_output=0x7f090007;
-        public static final int sliding_tabs=0x7f09000a;
-        public static final int viewpager=0x7f09000b;
-        public static final int webView=0x7f090003;
+        public static final int sample_content_fragment=0x7f090005;
+        public static final int sample_main_layout=0x7f090003;
+        public static final int sample_output=0x7f090006;
+        public static final int sliding_tabs=0x7f090009;
+        public static final int viewpager=0x7f09000a;
+        public static final int webView=0x7f090002;
     }
     public static final class layout {
         public static final int activity_all_announcements=0x7f030000;
@@ -183,11 +182,9 @@ containing a value of this type.
         public static final int intro_message=0x7f070006;
         public static final int sample_hide_log=0x7f070007;
         public static final int sample_show_log=0x7f070008;
-        public static final int title_activity_all_announcement_list=0x7f070009;
-        public static final int title_activity_all_announcements=0x7f07000a;
-        public static final int title_activity_announcements_list=0x7f07000b;
-        public static final int title_activity_display_announcement=0x7f07000c;
-        public static final int title_activity_tags_=0x7f07000d;
+        public static final int title_activity_announcements_list=0x7f070009;
+        public static final int title_activity_display_announcement=0x7f07000a;
+        public static final int title_activity_tags_=0x7f07000b;
     }
     public static final class style {
         public static final int AppTheme=0x7f050002;

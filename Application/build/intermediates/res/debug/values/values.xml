@@ -31,10 +31,10 @@
     <string name="action_settings">Settings</string>
     <!-- From: file:/C:/Users/Bukunmi/AndroidStudioProjects/TAC5(afterIteration3_presentation)/TAC-Application/Application/src/main/res/values/base-strings.xml -->
     <eat-comment/>
-    <string name="app_name">Tech Announce App</string>
+    <string name="app_name">TAC</string>
     <!-- From: file:/C:/Users/Bukunmi/AndroidStudioProjects/TAC5(afterIteration3_presentation)/TAC-Application/Application/src/main/res/values/strings.xml -->
     <eat-comment/>
-    <string name="get_data">ReFresh Content</string>
+    <string name="get_data">Refresh List</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hello_world">Hello world!</string>
     <!-- From: file:/C:/Users/Bukunmi/AndroidStudioProjects/TAC5(afterIteration3_presentation)/TAC-Application/Application/src/main/res/values/base-strings.xml -->
@@ -55,10 +55,8 @@
     <string name="sample_show_log">Show Log</string>
     <!-- From: file:/C:/Users/Bukunmi/AndroidStudioProjects/TAC5(afterIteration3_presentation)/TAC-Application/Application/src/main/res/values/strings.xml -->
     <eat-comment/>
-    <string name="title_activity_all_announcement_list">AllAnnouncementList</string>
-    <string name="title_activity_all_announcements">AllAnnouncements</string>
-    <string name="title_activity_announcements_list">Announcements List</string>
-    <string name="title_activity_display_announcement">Display Announcement</string>
+    <string name="title_activity_announcements_list">AnnouncementsList</string>
+    <string name="title_activity_display_announcement">DisplayAnnouncement</string>
     <string name="title_activity_tags_">Tags_Activity</string>
     <!-- From: file:/C:/Users/Bukunmi/AndroidStudioProjects/TAC5(afterIteration3_presentation)/TAC-Application/Application/src/main/res/values/template-styles.xml -->
     <eat-comment/>
