@@ -30,7 +30,7 @@ public class DisplayAnnouncement extends Activity {
 
         setContentView(webview);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+//        getActionBar().setDisplayHomeAsUpEnabled(true);
 
 //        setContentView(R.layout.activity_display_announcement);
 

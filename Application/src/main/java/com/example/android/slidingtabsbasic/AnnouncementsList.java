@@ -10,8 +10,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-
 public class AnnouncementsList extends Activity {
     String[] announcementTitles;
     String[] announcementLinks;
@@ -22,7 +20,7 @@ public class AnnouncementsList extends Activity {
 
         Intent intent = getIntent();
         String title = intent.getStringExtra("Title");
-        setTitle(title);
+
 
         String pastActivity = intent.getStringExtra("From");
         announcementTitles = intent.getStringArrayExtra("Titles");
@@ -31,31 +29,38 @@ public class AnnouncementsList extends Activity {
         ListView list = (ListView) findViewById(R.id.AnnouncementListView);
 
         String[] announcements = new String[]{"No Announcements"};
+        String[] linkTo = new String[]{""};
+        String[] titleValue = new String[]{"Category","Tags","Favorite"};
+
         //Set announcements depending on which was chosen
-        switch (title){
-            case "All Announcements":
-
-                announcements = announcementTitles;
-
-                break;
-
-            case "Tags":
-                announcements = new String[]{"No Available Tags"};
-                break;
-
-            default:
-                announcements = new String[]{"No Announcements"};
-                break;
+        if (pastActivity.equals(titleValue[0])){
+            DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title).invoke();
+            announcements = displayAnnouncementList.getAnnouncements();
+            linkTo = displayAnnouncementList.getLinkTo();
         }
-
-
+        else if (pastActivity.equals(titleValue[1])){
+            DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title).invoke();
+            announcements = displayAnnouncementList.getAnnouncements();
+            linkTo = displayAnnouncementList.getLinkTo();
+        }
+        else if (pastActivity.equals(titleValue[2])){
+            DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title).invoke();
+            announcements = displayAnnouncementList.getAnnouncements();
+            linkTo = displayAnnouncementList.getLinkTo();
+        }
+        else{
+            announcements = new String[]{"No Announcement"};
+            linkTo = new String[]{"http://www.techannounce.ttu.edu"};
+        }
+        final String[] finalAnnouncements = announcements;
+        final String[] finalLink = linkTo;
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, announcements);
 
         list.setAdapter(adapter);
 
         // View Chosen Category List
-        final String[] finalAnnouncements = announcements;
+
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long arg3) {
@@ -63,7 +68,7 @@ public class AnnouncementsList extends Activity {
                 //TODO: Display webView of Announcement
                             Intent intent = new Intent(AnnouncementsList.this, DisplayAnnouncement.class);
                             intent.putExtra("Title", finalAnnouncements[position]);
-                            intent.putExtra("URL",announcementLinks[position]);
+                            intent.putExtra("URL",finalLink[position]);
                             startActivity(intent);
             }
         });
@@ -90,5 +95,39 @@ public class AnnouncementsList extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private class DisplayAnnouncementList {
+        private String title;
+        private String[] announcements;
+        private String[] linkTo;
+
+        public DisplayAnnouncementList(String title) {
+            this.title = title;
+        }
+
+        public String[] getAnnouncements() {
+            return announcements;
+        }
+
+        public String[] getLinkTo() {
+            return linkTo;
+        }
+
+        public DisplayAnnouncementList invoke() {
+            setTitle(title + " List");
+            switch (title){
+                case "All Announcements":
+                    announcements = announcementTitles;
+                    linkTo = announcementLinks;
+                    break;
+
+                default:
+                    announcements = new String[]{"No Announcement"};
+                    linkTo = new String[]{"http://www.techannounce.ttu.edu"};
+                    break;
+            }
+            return this;
+        }
     }
 }

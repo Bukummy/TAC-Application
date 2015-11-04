@@ -43,10 +43,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.android.slidingtabsbasic.Tags_Activity"
-            android:label="@string/title_activity_tags_" >
-        </activity>
-        <activity
             android:name="com.example.android.slidingtabsbasic.AnnouncementsList"
             android:label="@string/title_activity_announcements_list" >
         </activity>
