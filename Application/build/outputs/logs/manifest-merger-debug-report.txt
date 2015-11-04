@@ -1,8 +1,6 @@
 -- Merging decision tree log ---
 manifest
 ADDED from AndroidManifest.xml:17:1
-	xmlns:android
-		ADDED from AndroidManifest.xml:17:11
 	package
 		ADDED from AndroidManifest.xml:18:5
 	android:versionName
@@ -11,6 +9,8 @@ ADDED from AndroidManifest.xml:17:1
 		ADDED from AndroidManifest.xml:19:5
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
+	xmlns:android
+		ADDED from AndroidManifest.xml:17:11
 uses-permission#android.permission.INTERNET
 ADDED from AndroidManifest.xml:22:5
 	android:name
@@ -49,24 +49,18 @@ category#android.intent.category.LAUNCHER
 ADDED from AndroidManifest.xml:38:17
 	android:name
 		ADDED from AndroidManifest.xml:38:27
-activity#com.example.android.slidingtabsbasic.Tags_Activity
+activity#com.example.android.slidingtabsbasic.AnnouncementsList
 ADDED from AndroidManifest.xml:41:9
 	android:label
 		ADDED from AndroidManifest.xml:43:13
 	android:name
 		ADDED from AndroidManifest.xml:42:13
-activity#com.example.android.slidingtabsbasic.AnnouncementsList
+activity#com.example.android.slidingtabsbasic.DisplayAnnouncement
 ADDED from AndroidManifest.xml:45:9
 	android:label
 		ADDED from AndroidManifest.xml:47:13
 	android:name
 		ADDED from AndroidManifest.xml:46:13
-activity#com.example.android.slidingtabsbasic.DisplayAnnouncement
-ADDED from AndroidManifest.xml:49:9
-	android:label
-		ADDED from AndroidManifest.xml:51:13
-	android:name
-		ADDED from AndroidManifest.xml:50:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:support-v4:23.0.0:20:5
