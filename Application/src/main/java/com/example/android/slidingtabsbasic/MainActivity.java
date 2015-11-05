@@ -18,7 +18,6 @@
 package com.example.android.slidingtabsbasic;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -28,23 +27,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.ViewAnimator;
 
-import com.example.android.slidingtabsbasic.RSSParser.AllAnnouncementsList;
-import com.example.android.slidingtabsbasic.RSSParser.TechAnnounce;
-
 import com.example.android.common.activities.SampleActivityBase;
 import com.example.android.common.logger.Log;
-import com.example.android.common.logger.LogFragment;
-import com.example.android.common.logger.LogWrapper;
-import com.example.android.common.logger.MessageOnlyLogFilter;
-import com.example.android.slidingtabsbasic.RSSParser.TechAnnounce;
 import com.example.android.slidingtabsbasic.RSSParser.HttpManager;
+import com.example.android.slidingtabsbasic.RSSParser.TechAnnounce;
 import com.example.android.slidingtabsbasic.RSSParser.TechAnnounceParser;
 
 import java.util.ArrayList;
@@ -98,15 +89,15 @@ public class MainActivity extends SampleActivityBase {
     protected void onStart() {
         super.onStart();
         if (isOnline()) {
-            requestData("http://www.techannounce.ttu.edu/Client/ViewRss.aspx");
+            requestData();
         } else {
             Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG).show();
         }
     }
 
-    private void requestData(String uri) {
+    private void requestData() {
         MyTask task = new MyTask();
-        task.execute(uri);
+        task.execute("http://www.techannounce.ttu.edu/Client/ViewRss.aspx");
     }
 
     protected void updateDisplay() {
@@ -163,11 +154,7 @@ public class MainActivity extends SampleActivityBase {
     protected boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-            return true;
-        } else {
-            return false;
-        }
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
     private class MyTask extends AsyncTask<String, String, String> {
@@ -185,8 +172,7 @@ public class MainActivity extends SampleActivityBase {
         @Override
         protected String doInBackground(String... params) {
 
-            String content = HttpManager.getData(params[0]);
-            return content;
+            return HttpManager.getData(params[0]);
         }
 
 

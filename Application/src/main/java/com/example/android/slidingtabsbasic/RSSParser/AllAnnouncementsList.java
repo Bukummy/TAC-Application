@@ -54,7 +54,7 @@ public class AllAnnouncementsList extends Activity {
     protected void onStart() {
         super.onStart();
         if (isOnline()) {
-            requestData("http://www.techannounce.ttu.edu/Client/ViewRss.aspx");
+            requestData();
         } else {
             Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG).show();
         }
@@ -81,16 +81,16 @@ public class AllAnnouncementsList extends Activity {
         // manually Refresh List
         if (item.getItemId() == R.id.action_settings) {
             if (isOnline()) {
-                requestData("http://www.techannounce.ttu.edu/Client/ViewRss.aspx");
+                requestData();
             } else {
                 Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG).show();
             }
         }
         return super.onOptionsItemSelected(item);
     }
-    private void requestData(String uri) {
+    private void requestData() {
         MyTask task = new MyTask();
-        task.execute(uri);
+        task.execute("http://www.techannounce.ttu.edu/Client/ViewRss.aspx");
     }
 
     protected void updateDisplay() {
@@ -133,11 +133,7 @@ public class AllAnnouncementsList extends Activity {
     protected boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-            return true;
-        } else {
-            return false;
-        }
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
     private class MyTask extends AsyncTask<String, String, String> {
@@ -155,8 +151,7 @@ public class AllAnnouncementsList extends Activity {
         @Override
         protected String doInBackground(String... params) {
 
-            String content = HttpManager.getData(params[0]);
-            return content;
+            return HttpManager.getData(params[0]);
         }
 
 
