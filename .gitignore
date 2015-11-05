@@ -1,0 +1,9 @@
+/.idea/
+/.gradle/
+/app/
+/build/
+*.ap_
+*.log
+*.class
+*.dex
+.navigation/
