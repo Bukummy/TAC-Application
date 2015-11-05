@@ -4,7 +4,7 @@ This Is an Android application that clasifies Texas Tech's Tech Announcements th
 
 It uses a template SlidingTabsBasic Sample for the inital page layout.
 
-The app currently displays parses a list of announcements as shown on techannounce website.
+The app currently displays parsed  list of announcements as shown on techannounce website.
 
 Android SlidingTabsBasic Sample
 ===================================
