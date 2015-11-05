@@ -2,46 +2,46 @@
 <items version="2" >
 
     <item
+        jar="C:\Users\Bukunmi\AndroidStudioProjects\TAC4\TAC-Application\Application\build\intermediates\exploded-aar\com.android.support\support-v13\23.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="bb0ac3f3ee2d71854501cc28e52cc84a20209b41">
+        <dex dex="C:\Users\Bukunmi\AndroidStudioProjects\TAC4\TAC-Application\Application\build\intermediates\pre-dexed\debug\classes-f701f43a099a643baf0accf14595907f94785fe5.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bukunmi\AndroidStudioProjects\TAC4\TAC-Application\Application\build\intermediates\exploded-aar\com.android.support\cardview-v7\23.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="1ccbc26be2c465c622a48310e8092241b01abe80">
+        <dex dex="C:\Users\Bukunmi\AndroidStudioProjects\TAC4\TAC-Application\Application\build\intermediates\pre-dexed\debug\classes-26da6d227c6ae400dacd37338c49ba306537f6dd.jar" />
+    </item>
+    <item
+        jar="C:\Users\Bukunmi\AndroidStudioProjects\TAC4\TAC-Application\Application\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.0\jars\libs\internal_impl-23.0.0.jar"
+        jumboMode="false"
+        revision="23.0.0"
+        sha1="8bd336eeae661e8311330284897ee07f8ebaa297">
+        <dex dex="C:\Users\Bukunmi\AndroidStudioProjects\TAC4\TAC-Application\Application\build\intermediates\pre-dexed\debug\internal_impl-23.0.0-4200f308375e63bbae0120d5a7ff183c2b5da3c2.jar" />
+    </item>
+    <item
         jar="C:\Users\Bukunmi\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\23.0.0\support-annotations-23.0.0.jar"
         jumboMode="false"
         revision="23.0.0"
         sha1="990e7f98a7bad86a40b1f0bcfeb039023afd0839">
-        <dex dex="C:\Users\Bukunmi\AndroidStudioProjects\TAC5(afterIteration3_presentation)\TAC-Application\Application\build\intermediates\pre-dexed\debug\support-annotations-23.0.0-c25b75bb304e7f19632df9033e95baf276245490.jar" />
+        <dex dex="C:\Users\Bukunmi\AndroidStudioProjects\TAC4\TAC-Application\Application\build\intermediates\pre-dexed\debug\support-annotations-23.0.0-c25b75bb304e7f19632df9033e95baf276245490.jar" />
     </item>
     <item
-        jar="C:\Users\Bukunmi\AndroidStudioProjects\TAC5(afterIteration3_presentation)\TAC-Application\Application\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.0\jars\classes.jar"
+        jar="C:\Users\Bukunmi\AndroidStudioProjects\TAC4\TAC-Application\Application\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.0\jars\classes.jar"
         jumboMode="false"
         revision="23.0.0"
         sha1="8413c27b45b7fe61dca4a98159f65e2cee215f5a">
-        <dex dex="C:\Users\Bukunmi\AndroidStudioProjects\TAC5(afterIteration3_presentation)\TAC-Application\Application\build\intermediates\pre-dexed\debug\classes-f2d744f3fe1ec17054fa9d8ae2078ad48b060db9.jar" />
+        <dex dex="C:\Users\Bukunmi\AndroidStudioProjects\TAC4\TAC-Application\Application\build\intermediates\pre-dexed\debug\classes-58a48eed966572779e45fb92a4ee7a9c55531806.jar" />
     </item>
     <item
-        jar="C:\Users\Bukunmi\AndroidStudioProjects\TAC5(afterIteration3_presentation)\TAC-Application\Application\build\intermediates\exploded-aar\com.android.support\support-v13\23.0.0\jars\libs\internal_impl-23.0.0.jar"
+        jar="C:\Users\Bukunmi\AndroidStudioProjects\TAC4\TAC-Application\Application\build\intermediates\exploded-aar\com.android.support\support-v13\23.0.0\jars\libs\internal_impl-23.0.0.jar"
         jumboMode="false"
         revision="23.0.0"
         sha1="5d4bccb885c8a89d066ecb6c4addb553a99a79a2">
-        <dex dex="C:\Users\Bukunmi\AndroidStudioProjects\TAC5(afterIteration3_presentation)\TAC-Application\Application\build\intermediates\pre-dexed\debug\internal_impl-23.0.0-cf00ab396e902b42954c588d93b94a491e6b334b.jar" />
-    </item>
-    <item
-        jar="C:\Users\Bukunmi\AndroidStudioProjects\TAC5(afterIteration3_presentation)\TAC-Application\Application\build\intermediates\exploded-aar\com.android.support\cardview-v7\23.0.0\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.0"
-        sha1="1ccbc26be2c465c622a48310e8092241b01abe80">
-        <dex dex="C:\Users\Bukunmi\AndroidStudioProjects\TAC5(afterIteration3_presentation)\TAC-Application\Application\build\intermediates\pre-dexed\debug\classes-399070d2073b2c81e46d107d9a171b5419c771a6.jar" />
-    </item>
-    <item
-        jar="C:\Users\Bukunmi\AndroidStudioProjects\TAC5(afterIteration3_presentation)\TAC-Application\Application\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.0\jars\libs\internal_impl-23.0.0.jar"
-        jumboMode="false"
-        revision="23.0.0"
-        sha1="8bd336eeae661e8311330284897ee07f8ebaa297">
-        <dex dex="C:\Users\Bukunmi\AndroidStudioProjects\TAC5(afterIteration3_presentation)\TAC-Application\Application\build\intermediates\pre-dexed\debug\internal_impl-23.0.0-352cb9fd034a8a7b43e4a110d3f8e296afb0fcc2.jar" />
-    </item>
-    <item
-        jar="C:\Users\Bukunmi\AndroidStudioProjects\TAC5(afterIteration3_presentation)\TAC-Application\Application\build\intermediates\exploded-aar\com.android.support\support-v13\23.0.0\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.0"
-        sha1="bb0ac3f3ee2d71854501cc28e52cc84a20209b41">
-        <dex dex="C:\Users\Bukunmi\AndroidStudioProjects\TAC5(afterIteration3_presentation)\TAC-Application\Application\build\intermediates\pre-dexed\debug\classes-e89e64fd15f0cbb336e993963c25c719ebdd73ca.jar" />
+        <dex dex="C:\Users\Bukunmi\AndroidStudioProjects\TAC4\TAC-Application\Application\build\intermediates\pre-dexed\debug\internal_impl-23.0.0-4ff84174a52a4776de424a9169242be6ee5d1769.jar" />
     </item>
 
 </items>
