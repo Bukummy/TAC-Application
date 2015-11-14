@@ -50,7 +50,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String Column_AnnouncementsCategories_Categories_ID ="c_id";
     public static final String Column_AnnouncementsCategories_Date_Added ="ac_date_added";
 
-    public static final String DATABASE_NAME = "tac.db";
+    public static final String DATABASE_NAME = "announcements.db";
     public static final int DATABASE_VERSION = 1;
 
     //SQL statements of Announcements table creation
