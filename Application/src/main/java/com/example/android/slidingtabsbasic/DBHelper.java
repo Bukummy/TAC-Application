@@ -1,7 +1,7 @@
 package com.example.android.slidingtabsbasic;
 
+import android.content.ContentValues;
 import android.database.sqlite.SQLiteOpenHelper;
-
 
 
 import android.database.sqlite.SQLiteDatabase;
