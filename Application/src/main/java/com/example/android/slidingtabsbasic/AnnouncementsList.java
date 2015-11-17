@@ -10,7 +10,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+
 public class AnnouncementsList extends Activity {
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> database
     String[] announcementTitles;
     String[] announcementLinks;
     @Override
@@ -20,7 +26,11 @@ public class AnnouncementsList extends Activity {
 
         Intent intent = getIntent();
         String title = intent.getStringExtra("Title");
+<<<<<<< HEAD
 
+=======
+        setTitle(title+ " List");
+>>>>>>> database
 
         String pastActivity = intent.getStringExtra("From");
         announcementTitles = intent.getStringArrayExtra("Titles");
@@ -28,7 +38,10 @@ public class AnnouncementsList extends Activity {
 
         ListView list = (ListView) findViewById(R.id.AnnouncementListView);
 
+        String[] listName = new String[]{"Category","Tags","Favorite"};
+
         String[] announcements = new String[]{"No Announcements"};
+<<<<<<< HEAD
         String[] linkTo = new String[]{""};
         String[] titleValue = new String[]{"Category","Tags","Favorite"};
 
@@ -37,6 +50,27 @@ public class AnnouncementsList extends Activity {
             DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title).invoke();
             announcements = displayAnnouncementList.getAnnouncements();
             linkTo = displayAnnouncementList.getLinkTo();
+=======
+        String[] links = new String[]{"http://www.techannounce.ttu.edu/"};
+
+        //Set announcements depending on which was chosen
+        if (pastActivity.equals(listName[0])){
+            DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title).invoke();
+            announcements = displayAnnouncementList.getAnnouncements();
+                links = displayAnnouncementList.getLinks();
+
+        }
+        if (pastActivity.equals(listName[1])){
+            DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title).invoke();
+            announcements = displayAnnouncementList.getAnnouncements();
+            links = displayAnnouncementList.getLinks();
+        }
+
+        if (pastActivity.equals(listName[2])){
+            DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title).invoke();
+            announcements = displayAnnouncementList.getAnnouncements();
+            links = displayAnnouncementList.getLinks();
+>>>>>>> database
         }
         else if (pastActivity.equals(titleValue[1])){
             DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title).invoke();
@@ -55,21 +89,34 @@ public class AnnouncementsList extends Activity {
         final String[] finalAnnouncements = announcements;
         final String[] finalLink = linkTo;
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, announcements);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.ann_list_style, R.id.tvAnn, announcements);
 
         list.setAdapter(adapter);
 
         // View Chosen Category List
+<<<<<<< HEAD
+=======
+        final String[] finalAnnouncements = announcements;
+        final String[] finalLinks = links;
+>>>>>>> database
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long arg3) {
                 view.setSelected(true);
                 //TODO: Display webView of Announcement
+<<<<<<< HEAD
                             Intent intent = new Intent(AnnouncementsList.this, DisplayAnnouncement.class);
                             intent.putExtra("Title", finalAnnouncements[position]);
                             intent.putExtra("URL",finalLink[position]);
                             startActivity(intent);
+=======
+                Intent intent = new Intent(AnnouncementsList.this, DisplayAnnouncement.class);
+                intent.putExtra("Title", finalAnnouncements[position]);
+                intent.putExtra("URL",finalLinks[position]);
+                startActivity(intent);
+>>>>>>> database
             }
         });
 
@@ -87,16 +134,57 @@ public class AnnouncementsList extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        //int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            // When the user clicks START ALARM, set the alarm.
+            case R.id.start_action:
+                //alarm.setAlarm(this);
+                return true;
+            // When the user clicks CANCEL ALARM, cancel the alarm.
+            case R.id.cancel_action:
+                //alarm.cancelAlarm(this);
+                return true;
         }
+        return false;
 
-        return super.onOptionsItemSelected(item);
+
     }
 
+    private class DisplayAnnouncementList {
+        private String title;
+        private String[] announcements;
+        private String[] links;
+
+        public DisplayAnnouncementList(String title) {
+            this.title = title;
+        }
+
+        public String[] getAnnouncements() {
+            return announcements;
+        }
+
+        public String[] getLinks() {
+            return links;
+        }
+
+        public DisplayAnnouncementList invoke() {
+            switch (title){
+                case "All Announcements":
+                    announcements = announcementTitles;
+                    links = announcementLinks;
+                    break;
+
+                default:
+                    announcements = new String[]{"No Announcements"};
+                    links = new String[]{"http://www.techannounce.ttu.edu/"};
+                    break;
+            }
+            return this;
+        }
+    }
+
+<<<<<<< HEAD
     private class DisplayAnnouncementList {
         private String title;
         private String[] announcements;
@@ -130,4 +218,7 @@ public class AnnouncementsList extends Activity {
             return this;
         }
     }
+=======
+
+>>>>>>> database
 }

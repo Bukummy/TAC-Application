@@ -4,11 +4,23 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_save">Save</string>
 
-<!-- TODO: Remove or change this placeholder text -->
+
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_announcements_list">AnnouncementsList</string>
+    <string name="title_activity_all_announcement_list">AllAnnouncementList</string>
     <string name="title_activity_display_announcement">DisplayAnnouncement</string>
     <string name="action_settings">Settings</string>
+<<<<<<< HEAD
     <string name="get_data">Refresh List</string>
+=======
+    <string name="get_data">Start Refresh List</string>
+    <string name="cancel_text">Cancel Auto-Refresh</string>
+    <string name="announcement_alert">Tech Announce Update</string>
+    <string name="announcement_found">There is a Tech Announcement update today!!</string>
+    <string name="no_announcement">No announcement today.</string>
+    <string name="connection_error">Connection error.</string>
+    <string name="tag_fav_text">Set as Favorite</string>
+>>>>>>> database
 
 </resources>

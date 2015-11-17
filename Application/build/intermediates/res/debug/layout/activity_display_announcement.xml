@@ -17,4 +17,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true" />
 </RelativeLayout>
+<<<<<<< HEAD
 <!-- From: file:/C:/Users/Bukunmi/AndroidStudioProjects/TAC5(afterIteration3_presentation)/TAC-Application/Application/src/main/res/layout/activity_display_announcement.xml -->
+=======
+<!-- From: file:/C:/Users/yuan/Documents/GitHub/TAC-Application/Application/src/main/res/layout/activity_display_announcement.xml -->
+>>>>>>> database
