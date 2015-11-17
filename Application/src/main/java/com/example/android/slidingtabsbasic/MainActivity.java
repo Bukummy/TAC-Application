@@ -35,7 +35,11 @@ import android.widget.ViewAnimator;
 import com.example.android.common.activities.SampleActivityBase;
 import com.example.android.common.logger.Log;
 import com.example.android.slidingtabsbasic.RSSParser.HttpManager;
+<<<<<<< HEAD
 import com.example.android.slidingtabsbasic.RSSParser.TechAnnounce;
+=======
+import com.example.android.slidingtabsbasic.AppContent.TechAnnounce;
+>>>>>>> database
 import com.example.android.slidingtabsbasic.RSSParser.TechAnnounceParser;
 
 import java.util.ArrayList;
@@ -52,10 +56,18 @@ public class MainActivity extends SampleActivityBase {
 
     public static final String TAG = "MainActivity";
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> database
     ListView listAnnouncement;
     ProgressBar pb;
     List<MyTask> tasks;
     List<TechAnnounce> techAnnounceList;
+<<<<<<< HEAD
+=======
+    //List<String[]> announcementCategories = new ArrayList<>();
+>>>>>>> database
     String[] announcementTitles = new String[]{};
     String[] announcementURLs = new String[]{};
 
@@ -105,19 +117,40 @@ public class MainActivity extends SampleActivityBase {
 
             final String[] announcementTitle = new String[techAnnounceList.size()];
             final String[] announcementLink = new String[techAnnounceList.size()];
+<<<<<<< HEAD
 
             int i = 0,j = 0;
             for (TechAnnounce techannounce :techAnnounceList ) {
                 announcementTitle[i++] = techannounce.getTitle();
                 announcementLink[j++] = techannounce.getLink();
+=======
+            final ArrayList <String[]> announcementCategory = new ArrayList<>();
+            String[] categories = new String[techAnnounceList.size()];
+
+            int i = 0,j = 0;
+            for (TechAnnounce techannounce :techAnnounceList ) {
+                categories = techannounce.getCategoryList();
+                announcementTitle[i++] = techannounce.getTitle();
+                announcementLink[j++] = techannounce.getLink();
+                announcementCategory.add(categories);
+
+>>>>>>> database
             }
             //createIntent(announcementTitle, announcementLink);
             announcementTitles = announcementTitle;
             announcementURLs = announcementLink;
 
+<<<<<<< HEAD
             Bundle announcementsBundle = new Bundle();
             announcementsBundle.putStringArray("Announcement Titles",announcementTitles);
             announcementsBundle.putStringArray("Announcement URLs", announcementURLs);
+=======
+
+            Bundle announcementsBundle = new Bundle();
+            announcementsBundle.putStringArray("Announcement Titles", announcementTitles);
+            announcementsBundle.putStringArray("Announcement URLs", announcementURLs);
+//            announcementsBundle.putStringArrayList("Announcement Category", categories);
+>>>>>>> database
             if (state == null) {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 SlidingTabsBasicFragment fragment = new SlidingTabsBasicFragment();
@@ -126,6 +159,7 @@ public class MainActivity extends SampleActivityBase {
                 transaction.commit();
             }
 
+<<<<<<< HEAD
         }
 
     }
@@ -198,6 +232,80 @@ public class MainActivity extends SampleActivityBase {
 
     }
 
+=======
+        }
+
+    }
+
+//    protected void createIntent(final String[] announcementTitle, final String[] announcementLink) {
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+//                this, android.R.layout.simple_list_item_2, android.R.id.text1,announcementTitle );
+//
+//        listAnnouncement.setAdapter(adapter);
+//
+//        listAnnouncement.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long arg3) {
+//                view.setSelected(true);
+//
+//                Intent intent = new Intent(AllAnnouncementsList.this, DisplayAnnouncement.class);
+//
+//                intent.putExtra("Title", announcementTitle[position]);
+//                intent.putExtra("URL", announcementLink[position]);
+//                AllAnnouncementsList.this.startActivity(intent);
+//            }
+//        });
+//      }
+
+    protected boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    private class MyTask extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            //updateDisplay("Starting task");
+
+            if (tasks.isEmpty()) {
+                pb.setVisibility(View.VISIBLE);
+            }
+            tasks.add(this);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            return HttpManager.getData(params[0]);
+        }
+
+
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            techAnnounceList = TechAnnounceParser.parseFeed(result);
+
+            updateDisplay();
+
+            tasks.remove(this);
+            if (tasks.size() == 0) {
+                pb.setVisibility(View.INVISIBLE);
+            }    techAnnounceList = TechAnnounceParser.parseFeed(result);
+
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            //		updateDisplay(values[0]);
+        }
+
+    }
+
+>>>>>>> database
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

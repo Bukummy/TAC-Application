@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:tag="false"
+        android:drawable="@drawable/ic_checkbox_marked_grey"   >
+    </item>
+
+    <item
+    android:tag="true"
+    android:drawable="@drawable/ic_checkbox_marked_black" >
+</item>
+
+
+</selector><!-- From: file:/C:/Users/Bukunmi/AndroidStudioProjects/TAC4/TAC-Application/Application/src/main/res/drawable/ann_list_selcetor.xml -->
