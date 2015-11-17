@@ -10,7 +10,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+
 public class AnnouncementsList extends Activity {
+
+
     String[] announcementTitles;
     String[] announcementLinks;
     @Override
@@ -37,7 +40,7 @@ public class AnnouncementsList extends Activity {
         if (pastActivity.equals(listName[0])){
             DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title).invoke();
             announcements = displayAnnouncementList.getAnnouncements();
-            links = displayAnnouncementList.getLinks();
+                links = displayAnnouncementList.getLinks();
 
         }
         if (pastActivity.equals(listName[1])){
@@ -55,7 +58,7 @@ public class AnnouncementsList extends Activity {
 
 
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, announcements);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.ann_list_style, R.id.tvAnn, announcements);
 
         list.setAdapter(adapter);
 
@@ -89,14 +92,21 @@ public class AnnouncementsList extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        //int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            // When the user clicks START ALARM, set the alarm.
+            case R.id.start_action:
+                //alarm.setAlarm(this);
+                return true;
+            // When the user clicks CANCEL ALARM, cancel the alarm.
+            case R.id.cancel_action:
+                //alarm.cancelAlarm(this);
+                return true;
         }
+        return false;
 
-        return super.onOptionsItemSelected(item);
+
     }
 
     private class DisplayAnnouncementList {
@@ -131,4 +141,6 @@ public class AnnouncementsList extends Activity {
             return this;
         }
     }
+
+
 }

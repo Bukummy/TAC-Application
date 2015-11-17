@@ -16,18 +16,7 @@
 
 package com.example.android.slidingtabsbasic;
 
-import com.example.android.common.logger.Log;
-import com.example.android.common.view.SlidingTabLayout;
-import com.example.android.slidingtabsbasic.RSSParser.AllAnnouncementsList;
-import com.example.android.slidingtabsbasic.RSSParser.HttpManager;
-import com.example.android.slidingtabsbasic.RSSParser.TechAnnounce;
-import com.example.android.slidingtabsbasic.RSSParser.TechAnnounceParser;
-
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
@@ -38,12 +27,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.example.android.common.logger.Log;
+import com.example.android.common.view.SlidingTabLayout;
 
 /**
  * A basic sample which shows how to use {@link com.example.android.common.view.SlidingTabLayout}
@@ -74,6 +61,7 @@ public class SlidingTabsBasicFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_sample, container, false);
+
     }
 
     // BEGIN_INCLUDE (fragment_onviewcreated)
@@ -224,8 +212,8 @@ public class SlidingTabsBasicFragment extends Fragment {
 
 
         //Set up each tab UI
-        public void setTabList(View view,int position){
-            ListView list;
+        public void setTabList(View view, int position){
+            final ListView list;
             ArrayAdapter<String> adapter;
 
             switch (position) {
@@ -233,10 +221,32 @@ public class SlidingTabsBasicFragment extends Fragment {
                 case 0:
                     list = (ListView) view.findViewById(R.id.listTags);
 
-                    final String[] categories = new String[]{"All Announcements", "Athletic", "Orientation", "Fundraiser"
-                            ,"Academic", "Research", "Training", "Departamental", "IT Announcements", "Rec Sports", "Events"};
+                    final String[] categories = new String[]{"All Announcements",
+                            "Academic",
+                            "Administration & Finance Information Systems Management (AFISM)",
+                            "Arts & Entertainment",
+                            "Athletic",
+                            "Computing Equipment",
+                            "Departamental",
+                            "Departmental Events",
+                            "Faculty/Staff Organization",
+                            "Fundraiser",
+                            "HR Talent Development",
+                            "IT Announcements",
+                            "Lectures & Seminars",
+                            "Non Computing Equipment",
+                            "Orientation",
+                            "Rec Sports Programing",
+                            "Research",
+                            "Research",
+                            "Small Business Development Center",
+                            "Student Employment/Career Opportunities",
+                            "Student Organization",
+                            "Teaching, Learning & Professional Development Center",
+                            "Training",
+                            "TTU IT Training", "Events" };
 
-                    adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, categories);
+                    adapter = new ArrayAdapter<String>(getActivity(), R.layout.tags_list_style, R.id.tvList, categories);
 
                     list.setAdapter(adapter);
 
@@ -248,13 +258,29 @@ public class SlidingTabsBasicFragment extends Fragment {
                             //Display Chosen Category Announcement List
 
                             Intent intent = new Intent(getActivity(), AnnouncementsList.class);
-                            intent.putExtra("From","Category");
+                            intent.putExtra("From", "Category");
                             intent.putExtra("Title", categories[position]);
                             intent.putExtra("Titles", announcementTitles);
                             intent.putExtra("URLs", announcementURLs);
                             getActivity().startActivity(intent);
                         }
                     });
+
+                    list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                        @Override
+                        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+
+                            int tag_fav = R.string.tag_fav_text;
+                            view.setTag(tag_fav);
+                            view.setSelected(true);
+                            Toast.makeText(getActivity(), "Saved to Favorite", Toast.LENGTH_LONG).show();
+
+                            return true;
+                        }
+                    });
+
 
                         break;
                 // On Tags Tab
@@ -265,7 +291,7 @@ public class SlidingTabsBasicFragment extends Fragment {
                     final String[] tags = new String[]{"Free Stuff", "Movies", "Graduate", "Undergraduate"
                             , "Paid Research"};
 
-                    adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, tags);
+                    adapter = new ArrayAdapter<String>(getActivity(), R.layout.tags_list_style, R.id.tvList, tags);
 
                     list.setAdapter(adapter);
 
@@ -293,7 +319,7 @@ public class SlidingTabsBasicFragment extends Fragment {
 
                     String[] favs = new String[]{};
 
-                    adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, favs);
+                    adapter = new ArrayAdapter<String>(getActivity(), R.layout.tags_list_style, R.id.tvList, favs);
 
                     list.setAdapter(adapter);
 
@@ -319,7 +345,7 @@ public class SlidingTabsBasicFragment extends Fragment {
 
                     String[] saved = new String[]{};
 
-                    adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, saved);
+                    adapter = new ArrayAdapter<String>(getActivity(), R.layout.tags_list_style, R.id.tvList, saved);
 
                     list.setAdapter(adapter);
 

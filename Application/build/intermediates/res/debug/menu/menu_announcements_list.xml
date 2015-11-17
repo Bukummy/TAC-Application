@@ -1,7 +1,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.android.slidingtabsbasic.AnnouncementsList">
-    <item android:id="@+id/action_settings" android:title="@string/action_save"
-        android:orderInCategory="100" android:showAsAction="never" />
+
+    <item android:id="@+id/start_action"
+        android:showAsAction="never"
+        android:orderInCategory="100"
+        android:title="@string/get_data" />
+
+    <item android:id="@+id/cancel_action"
+        android:showAsAction="never"
+        android:orderInCategory="101"
+        android:title="@string/cancel_text" />
 </menu>
 <!-- From: file:/C:/Users/Bukunmi/AndroidStudioProjects/TAC4/TAC-Application/Application/src/main/res/menu/menu_announcements_list.xml -->

@@ -34,8 +34,8 @@ import android.widget.ViewAnimator;
 
 import com.example.android.common.activities.SampleActivityBase;
 import com.example.android.common.logger.Log;
+import com.example.android.slidingtabsbasic.AppContent.TechAnnounce;
 import com.example.android.slidingtabsbasic.RSSParser.HttpManager;
-import com.example.android.slidingtabsbasic.RSSParser.TechAnnounce;
 import com.example.android.slidingtabsbasic.RSSParser.TechAnnounceParser;
 
 import java.util.ArrayList;
@@ -52,10 +52,12 @@ public class MainActivity extends SampleActivityBase {
 
     public static final String TAG = "MainActivity";
 
+    OneTimeRun oneTimeRun = new OneTimeRun();
     ListView listAnnouncement;
     ProgressBar pb;
     List<MyTask> tasks;
     List<TechAnnounce> techAnnounceList;
+    //List<String[]> announcementCategories = new ArrayList<>();
     String[] announcementTitles = new String[]{};
     String[] announcementURLs = new String[]{};
 
@@ -69,7 +71,6 @@ public class MainActivity extends SampleActivityBase {
         super.onCreate(savedInstanceState);
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
 
         setContentView(R.layout.activity_main);
 
@@ -105,19 +106,26 @@ public class MainActivity extends SampleActivityBase {
 
             final String[] announcementTitle = new String[techAnnounceList.size()];
             final String[] announcementLink = new String[techAnnounceList.size()];
+            final ArrayList <String[]> announcementCategory = new ArrayList<>();
+            String[] categories = new String[techAnnounceList.size()];
 
             int i = 0,j = 0;
             for (TechAnnounce techannounce :techAnnounceList ) {
+                categories = techannounce.getCategoryList();
                 announcementTitle[i++] = techannounce.getTitle();
                 announcementLink[j++] = techannounce.getLink();
+                announcementCategory.add(categories);
+
             }
             //createIntent(announcementTitle, announcementLink);
             announcementTitles = announcementTitle;
             announcementURLs = announcementLink;
 
+
             Bundle announcementsBundle = new Bundle();
-            announcementsBundle.putStringArray("Announcement Titles",announcementTitles);
+            announcementsBundle.putStringArray("Announcement Titles", announcementTitles);
             announcementsBundle.putStringArray("Announcement URLs", announcementURLs);
+//            announcementsBundle.putStringArrayList("Announcement Category", categories);
             if (state == null) {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 SlidingTabsBasicFragment fragment = new SlidingTabsBasicFragment();
@@ -216,18 +224,18 @@ public class MainActivity extends SampleActivityBase {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-//        switch(item.getItemId()) {
-//            case R.id.menu_toggle_log:
-//                mLogShown = !mLogShown;
-//                ViewAnimator output = (ViewAnimator) findViewById(R.id.sample_output);
-//                if (mLogShown) {
-//                    output.setDisplayedChild(1);
-//                } else {
-//                    output.setDisplayedChild(0);
-//                }
-//                supportInvalidateOptionsMenu();
-//                return true;
-//        }
+        switch(item.getItemId()) {
+            case R.id.menu_toggle_log:
+                mLogShown = !mLogShown;
+                ViewAnimator output = (ViewAnimator) findViewById(R.id.sample_output);
+                if (mLogShown) {
+                    output.setDisplayedChild(1);
+                } else {
+                    output.setDisplayedChild(0);
+                }
+                supportInvalidateOptionsMenu();
+                return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 }
