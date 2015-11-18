@@ -11,9 +11,6 @@
     <string name="title_activity_all_announcement_list">AllAnnouncementList</string>
     <string name="title_activity_display_announcement">DisplayAnnouncement</string>
     <string name="action_settings">Settings</string>
-<<<<<<< HEAD
-    <string name="get_data">Refresh List</string>
-=======
     <string name="get_data">Start Refresh List</string>
     <string name="cancel_text">Cancel Auto-Refresh</string>
     <string name="announcement_alert">Tech Announce Update</string>
@@ -21,6 +18,5 @@
     <string name="no_announcement">No announcement today.</string>
     <string name="connection_error">Connection error.</string>
     <string name="tag_fav_text">Set as Favorite</string>
->>>>>>> database
 
 </resources>

@@ -1,4 +1,4 @@
-package com.bukunmioyedeji.tac.ContentRetrival;
+package com.example.android.slidingtabsbasic.DAO;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,10 +7,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.scheduler.DBS.TechKeyList;
+
 
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String TAG = "DBHelper";
+
+    public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+        super(context, name, factory, version);
+    }
 
     // column of the Announcements Table
     public static final String Table_Announcements = "announcements";
@@ -21,6 +27,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String Column_Announcements_Saved = "announce_saved";
     public static final String Column_Announcements_Date = "date";
     public static final String Column_Announcements_Date_Added = "a_date_added";
+    public static final String[] Table_Announcements_Column_List = new String[]
+            {Column_Announcements_ID,Column_Announcements_Title,Column_Announcements_Link,Column_Announcements_Desc, Column_Announcements_Saved};
 
     // column of the KeyWords Table
     public static final String Table_KeyWords = "keywords";
@@ -28,6 +36,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String Column_KeyWords_Name = "name";
     public static final String Column_KeyWords_Favorites ="kw_favorites";
     public static final String Column_KeyWords_Date_Added = "kw_date_added";
+    public static final String[] Table_KeyWords_Column_List= new String[]
+            {Column_KeyWords_Name, Column_KeyWords_Favorites};
 
     //column of the Categories Table
     public static final String Table_Categories = "categories";
@@ -35,6 +45,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String Column_Categories_Name = "name";
     public static final String Column_Categories_Favorites ="c_favorites";
     public static final String Column_Categories_Date_Added ="c_date_added";
+    public static final String[] Table_Categories_Column_List= new String[]
+            {Column_Categories_Name, Column_Categories_Favorites};
 
     //column of the AnnouncementsKeywords table creation
     public static final String Table_AnnouncementsKeyWords = "announce_keywords";
@@ -42,6 +54,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String Column_AnnouncementsKeyWords_Announcements_ID ="a_id";
     public static final String Column_AnnouncementsKeyWords_KeyWords_ID ="kw_id";
     public static final String Column_AnnouncementsKeyWords_Date_Added = "aKw_date_added";
+    public static final String[] Table_AnnouncementsKeyWords_Column_List= new String[]
+            {Column_AnnouncementsKeyWords_Announcements_ID, Column_AnnouncementsKeyWords_KeyWords_ID};
 
     //column of the AnnouncementCategories Table
     public static final String Table_AnnouncementsCategories = "announce_categories";
@@ -49,9 +63,11 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String Column_AnnouncementsCategories_Announcements_ID ="a_id";
     public static final String Column_AnnouncementsCategories_Categories_ID ="c_id";
     public static final String Column_AnnouncementsCategories_Date_Added ="aC_date_added";
+    public static final String[] Table_AnnouncementsCategories_Column_List= new String[]
+            {Column_AnnouncementsCategories_Announcements_ID, Column_AnnouncementsCategories_Categories_ID};
 
     public static final String DATABASE_NAME = "announcementsDB";
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 1;
 
     //SQL statements of Announcements table creation
     public static final String SQL_CREATE_TABLE_Announcements = "CREATE TABLE " + Table_Announcements +"("
@@ -156,10 +172,10 @@ public class DBHelper extends SQLiteOpenHelper {
         return instance;
     }
 
-    public Cursor selectCategoriesDB(String column_name){
+    public Cursor selectCategoriesDB(){
         SQLiteDatabase db = this.getReadableDatabase();
 
-        final String[] selectionArg = new String[] {column_name};
+//        final String[] selectionArg = new String[] {column_name};
 
         // Define a projection that specifies which columns from the database
 // you will actually use after this query.
@@ -176,9 +192,10 @@ public class DBHelper extends SQLiteOpenHelper {
 
         Cursor c = db.query(
                 Table_Categories,        // The table to query
-                projection,              // The columns to return
-                Column_Categories_Name,  // The columns for the WHERE clause
-                selectionArg,             // The values for the WHERE clause
+                Table_Categories_Column_List,              // The columns to return
+                null,  // The columns for the WHERE clause
+                null,
+                //selectionArg,             // The values for the WHERE clause
                 null,                    // don't group the rows
                 null,                    // don't filter by row groups
                 sortOrder                // The sort order
@@ -201,6 +218,7 @@ public class DBHelper extends SQLiteOpenHelper {
             Log.d("Inserted", newResult);
 
         }
+        TechKeyList techKeyList;
 
         if (newInsert == -1)
             return false;

@@ -12,11 +12,8 @@ import android.widget.ListView;
 
 
 public class AnnouncementsList extends Activity {
-<<<<<<< HEAD
-=======
 
 
->>>>>>> database
     String[] announcementTitles;
     String[] announcementLinks;
     @Override
@@ -26,11 +23,7 @@ public class AnnouncementsList extends Activity {
 
         Intent intent = getIntent();
         String title = intent.getStringExtra("Title");
-<<<<<<< HEAD
-
-=======
         setTitle(title+ " List");
->>>>>>> database
 
         String pastActivity = intent.getStringExtra("From");
         announcementTitles = intent.getStringArrayExtra("Titles");
@@ -41,16 +34,6 @@ public class AnnouncementsList extends Activity {
         String[] listName = new String[]{"Category","Tags","Favorite"};
 
         String[] announcements = new String[]{"No Announcements"};
-<<<<<<< HEAD
-        String[] linkTo = new String[]{""};
-        String[] titleValue = new String[]{"Category","Tags","Favorite"};
-
-        //Set announcements depending on which was chosen
-        if (pastActivity.equals(titleValue[0])){
-            DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title).invoke();
-            announcements = displayAnnouncementList.getAnnouncements();
-            linkTo = displayAnnouncementList.getLinkTo();
-=======
         String[] links = new String[]{"http://www.techannounce.ttu.edu/"};
 
         //Set announcements depending on which was chosen
@@ -70,24 +53,9 @@ public class AnnouncementsList extends Activity {
             DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title).invoke();
             announcements = displayAnnouncementList.getAnnouncements();
             links = displayAnnouncementList.getLinks();
->>>>>>> database
         }
-        else if (pastActivity.equals(titleValue[1])){
-            DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title).invoke();
-            announcements = displayAnnouncementList.getAnnouncements();
-            linkTo = displayAnnouncementList.getLinkTo();
-        }
-        else if (pastActivity.equals(titleValue[2])){
-            DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title).invoke();
-            announcements = displayAnnouncementList.getAnnouncements();
-            linkTo = displayAnnouncementList.getLinkTo();
-        }
-        else{
-            announcements = new String[]{"No Announcement"};
-            linkTo = new String[]{"http://www.techannounce.ttu.edu"};
-        }
-        final String[] finalAnnouncements = announcements;
-        final String[] finalLink = linkTo;
+
+
 
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.ann_list_style, R.id.tvAnn, announcements);
@@ -95,28 +63,18 @@ public class AnnouncementsList extends Activity {
         list.setAdapter(adapter);
 
         // View Chosen Category List
-<<<<<<< HEAD
-=======
         final String[] finalAnnouncements = announcements;
         final String[] finalLinks = links;
->>>>>>> database
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long arg3) {
                 view.setSelected(true);
                 //TODO: Display webView of Announcement
-<<<<<<< HEAD
-                            Intent intent = new Intent(AnnouncementsList.this, DisplayAnnouncement.class);
-                            intent.putExtra("Title", finalAnnouncements[position]);
-                            intent.putExtra("URL",finalLink[position]);
-                            startActivity(intent);
-=======
                 Intent intent = new Intent(AnnouncementsList.this, DisplayAnnouncement.class);
                 intent.putExtra("Title", finalAnnouncements[position]);
                 intent.putExtra("URL",finalLinks[position]);
                 startActivity(intent);
->>>>>>> database
             }
         });
 
@@ -184,41 +142,5 @@ public class AnnouncementsList extends Activity {
         }
     }
 
-<<<<<<< HEAD
-    private class DisplayAnnouncementList {
-        private String title;
-        private String[] announcements;
-        private String[] linkTo;
 
-        public DisplayAnnouncementList(String title) {
-            this.title = title;
-        }
-
-        public String[] getAnnouncements() {
-            return announcements;
-        }
-
-        public String[] getLinkTo() {
-            return linkTo;
-        }
-
-        public DisplayAnnouncementList invoke() {
-            setTitle(title + " List");
-            switch (title){
-                case "All Announcements":
-                    announcements = announcementTitles;
-                    linkTo = announcementLinks;
-                    break;
-
-                default:
-                    announcements = new String[]{"No Announcement"};
-                    linkTo = new String[]{"http://www.techannounce.ttu.edu"};
-                    break;
-            }
-            return this;
-        }
-    }
-=======
-
->>>>>>> database
 }

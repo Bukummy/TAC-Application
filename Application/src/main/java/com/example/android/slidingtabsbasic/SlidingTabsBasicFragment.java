@@ -16,21 +16,7 @@
 
 package com.example.android.slidingtabsbasic;
 
-<<<<<<< HEAD
-import com.example.android.common.logger.Log;
-import com.example.android.common.view.SlidingTabLayout;
-import com.example.android.slidingtabsbasic.RSSParser.AllAnnouncementsList;
-import com.example.android.slidingtabsbasic.RSSParser.HttpManager;
-import com.example.android.slidingtabsbasic.RSSParser.TechAnnounce;
-import com.example.android.slidingtabsbasic.RSSParser.TechAnnounceParser;
-
-import android.content.Context;
-=======
->>>>>>> database
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
@@ -41,19 +27,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-<<<<<<< HEAD
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
-=======
 import android.widget.Toast;
 
 import com.example.android.common.logger.Log;
 import com.example.android.common.view.SlidingTabLayout;
->>>>>>> database
 
 /**
  * A basic sample which shows how to use {@link com.example.android.common.view.SlidingTabLayout}
@@ -244,12 +221,6 @@ public class SlidingTabsBasicFragment extends Fragment {
                 case 0:
                     list = (ListView) view.findViewById(R.id.listTags);
 
-<<<<<<< HEAD
-                    final String[] categories = new String[]{"All Announcements", "Athletic", "Orientation", "Fundraiser"
-                            ,"Academic", "Research", "Training", "Departamental", "IT Announcements", "Rec Sports", "Events"};
-
-                    adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, categories);
-=======
                     final String[] categories = new String[]{"All Announcements",
                             "Academic",
                             "Administration & Finance Information Systems Management (AFISM)",
@@ -276,7 +247,6 @@ public class SlidingTabsBasicFragment extends Fragment {
                             "TTU IT Training", "Events" };
 
                     adapter = new ArrayAdapter<String>(getActivity(), R.layout.tags_list_style, R.id.tvList, categories);
->>>>>>> database
 
                     list.setAdapter(adapter);
 
@@ -288,11 +258,7 @@ public class SlidingTabsBasicFragment extends Fragment {
                             //Display Chosen Category Announcement List
 
                             Intent intent = new Intent(getActivity(), AnnouncementsList.class);
-<<<<<<< HEAD
-                            intent.putExtra("From","Category");
-=======
                             intent.putExtra("From", "Category");
->>>>>>> database
                             intent.putExtra("Title", categories[position]);
                             intent.putExtra("Titles", announcementTitles);
                             intent.putExtra("URLs", announcementURLs);
@@ -325,11 +291,7 @@ public class SlidingTabsBasicFragment extends Fragment {
                     final String[] tags = new String[]{"Free Stuff", "Movies", "Graduate", "Undergraduate"
                             , "Paid Research"};
 
-<<<<<<< HEAD
-                    adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, tags);
-=======
                     adapter = new ArrayAdapter<String>(getActivity(), R.layout.tags_list_style, R.id.tvList, tags);
->>>>>>> database
 
                     list.setAdapter(adapter);
 
