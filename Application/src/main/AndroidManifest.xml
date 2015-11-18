@@ -38,7 +38,7 @@
 
     <!-- Min/target SDK versions (<uses-sdk>) managed by build.gradle -->
     <application
-        android:name=".OneTimeRun"
+        android:name=".AlarmManager.OneTimeRun"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -61,7 +61,6 @@
             android:name=".DisplayAnnouncement"
             android:label="@string/title_activity_display_announcement"  >
         </activity>
-
         <receiver android:name=".AlarmManager.TACAppAlarmReceiver" />
         <receiver
             android:name=".AlarmManager.TACAppBootReceiver"

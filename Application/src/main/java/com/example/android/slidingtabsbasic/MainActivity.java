@@ -34,8 +34,8 @@ import android.widget.ViewAnimator;
 
 import com.example.android.common.activities.SampleActivityBase;
 import com.example.android.common.logger.Log;
-import com.example.android.slidingtabsbasic.AppContent.TechAnnounce;
 import com.example.android.slidingtabsbasic.RSSParser.HttpManager;
+import com.example.android.slidingtabsbasic.AppContent.TechAnnounce;
 import com.example.android.slidingtabsbasic.RSSParser.TechAnnounceParser;
 
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class MainActivity extends SampleActivityBase {
 
     public static final String TAG = "MainActivity";
 
-    OneTimeRun oneTimeRun = new OneTimeRun();
+
     ListView listAnnouncement;
     ProgressBar pb;
     List<MyTask> tasks;

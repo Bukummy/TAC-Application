@@ -97,23 +97,3 @@ ADDED from AndroidManifest.xml:60:9
 		ADDED from AndroidManifest.xml:62:13
 	android:name
 		ADDED from AndroidManifest.xml:61:13
-receiver#com.example.android.slidingtabsbasic.AlarmManager.TACAppAlarmReceiver
-ADDED from AndroidManifest.xml:65:9
-	android:name
-		ADDED from AndroidManifest.xml:65:19
-receiver#com.example.android.slidingtabsbasic.AlarmManager.TACAppBootReceiver
-ADDED from AndroidManifest.xml:66:9
-	android:enabled
-		ADDED from AndroidManifest.xml:68:13
-	android:name
-		ADDED from AndroidManifest.xml:67:13
-intent-filter#android.intent.action.BOOT_COMPLETED
-ADDED from AndroidManifest.xml:69:13
-action#android.intent.action.BOOT_COMPLETED
-ADDED from AndroidManifest.xml:70:17
-	android:name
-		ADDED from AndroidManifest.xml:70:25
-service#com.example.android.slidingtabsbasic.AlarmManager.TACAppSchedulingService
-ADDED from AndroidManifest.xml:74:9
-	android:name
-		ADDED from AndroidManifest.xml:74:18

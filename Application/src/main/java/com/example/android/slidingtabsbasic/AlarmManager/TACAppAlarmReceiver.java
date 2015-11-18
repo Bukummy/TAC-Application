@@ -101,8 +101,6 @@ public class TACAppAlarmReceiver extends WakefulBroadcastReceiver {
         // Enable {@code TACAppBootReceiver} to automatically restart the alarm when the
         // device is rebooted.
         ComponentName receiver = new ComponentName(context, TACAppBootReceiver.class);
-
-
         PackageManager pm = context.getPackageManager();
 
         pm.setComponentEnabledSetting(receiver,
@@ -132,10 +130,4 @@ public class TACAppAlarmReceiver extends WakefulBroadcastReceiver {
                 PackageManager.DONT_KILL_APP);
     }
     // END_INCLUDE(cancel_alarm)
-
-    /**
-     * Created by Bukunmi on 11/17/2015.
-     */
-    public abstract static class TACAlarmboot {
-    }
 }
