@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class TechAnnounceCategoryList implements Parcelable {
+
     /**
      * @var TechCategoryList
      */
@@ -21,6 +22,9 @@ public class TechAnnounceCategoryList implements Parcelable {
     private int Id;
     private int a_Id;
     private int c_Id;
+
+    public TechAnnounceCategoryList() {
+    }
 
     protected TechAnnounceCategoryList(Parcel in) {
         techAnnounce = in.readParcelable(TechAnnounce.class.getClassLoader());
@@ -49,6 +53,9 @@ public class TechAnnounceCategoryList implements Parcelable {
         Id = id;
     }
 
+    /**
+     * @return TechAnnounce id
+     */
     public int getA_Id() {
         return a_Id;
     }

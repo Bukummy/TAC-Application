@@ -5,11 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.scheduler.DBS.TechAnnounce;
+import com.example.android.slidingtabsbasic.DBS.TechAnnounce;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * Created by yuancui on 11/15/15.
@@ -18,6 +19,8 @@ import java.util.HashMap;
  */
 public class TechAnnounceDAO  {
     private DBHelper dbHelper;
+    private static Calendar calendar = Calendar.getInstance();
+
 
     public int insert(TechAnnounce announcements, Context c) {
 
@@ -29,6 +32,7 @@ public class TechAnnounceDAO  {
         values.put(DBHelper.Column_Announcements_Title, announcements.getTitle());
         values.put(DBHelper.Column_Announcements_Link, announcements.getLink());
         values.put(DBHelper.Column_Announcements_Desc, announcements.getDescription());
+        values.put(DBHelper.Column_Announcements_Date_Added, calendar.getTimeInMillis());
 
         // Inserting Row
         long announcements_id = db.insert(DBHelper.Table_Announcements, null, values);
@@ -41,8 +45,8 @@ public class TechAnnounceDAO  {
         dbHelper = new DBHelper(c);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         // It's a good practice to use parameter ?, instead of concatenate string
-        int result = db.delete(DBHelper.Table_Announcements, announcements_id + "= ?", new String[] { String.valueOf(announcements_id) });
-        //db.close(); // Closing database connection
+        int result = db.delete(DBHelper.Table_Announcements, DBHelper.Column_Announcements_ID + "=?", new String[]{String.valueOf(announcements_id)});
+        db.close(); // Closing database connection
         return result;
     }
 
@@ -53,13 +57,13 @@ public class TechAnnounceDAO  {
         ContentValues values = new ContentValues();
 
         values.put(DBHelper.Column_Announcements_Title, announcements.getTitle());
-        values.put(DBHelper.Column_Announcements_Link, announcements.getLink());
         values.put(DBHelper.Column_Announcements_Desc, announcements.getDescription());
+        values.put(DBHelper.Column_Announcements_Date_Added, calendar.getTimeInMillis());
         // TODO: 11/15/2015 UpdateSaved only
 
         // It's a good practice to use parameter ?, instead of concatenate string
         long announcement_id = db.update(DBHelper.Table_Announcements, values, DBHelper.Column_Announcements_ID + "= ?", new String[]{String.valueOf(id)});
-        //db.close(); // Closing database connection
+        db.close(); // Closing database connection
         return  (int) announcement_id;
     }
 
@@ -74,52 +78,10 @@ public class TechAnnounceDAO  {
 
         // It's a good practice to use parameter ?, instead of concatenate string
         long announcement_id = db.update(DBHelper.Table_Announcements, values, DBHelper.Column_Announcements_ID + "= ?", new String[]{String.valueOf(announcements.getId())});
-        //db.close(); // Closing database connection
+        db.close(); // Closing database connection
         return  (int) announcement_id;
     }
 
-    public ArrayList<HashMap<String, String>> getAnnouncements(Context c) {
-        //Open connection to read only
-
-        dbHelper = new DBHelper(c);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String selectQuery =  "SELECT  " +
-                DBHelper.Column_Announcements_ID + "," +
-                DBHelper.Column_Announcements_Title + "," +
-                DBHelper.Column_Announcements_Link + "," +
-                DBHelper.Column_Announcements_Desc + "," +
-                DBHelper.Column_Announcements_Saved + "," +
-                DBHelper.Column_Announcements_Date_Added + "," +
-                " FROM " + DBHelper.Table_Announcements +
-                " ORDER BY " + DBHelper.Column_Announcements_Date_Added;
-
-        //Announcements announcements = new Announcements();
-        ArrayList<HashMap<String, String>> announcementsList = new ArrayList<HashMap<String, String>>();
-
-
-        Cursor cursor = db.rawQuery(selectQuery, null);
-        // looping through all rows and adding to list
-
-        if (cursor.moveToFirst()) {
-            do {
-                HashMap<String, String> announcements = new HashMap<String, String>();
-                announcements.put("id", cursor.getString(cursor.getColumnIndex(DBHelper.Column_Announcements_ID)));
-                announcements.put("announce_title", cursor.getString(cursor.getColumnIndex(DBHelper.Column_Announcements_Title)));
-                announcements.put("announce_link", cursor.getString(cursor.getColumnIndex(DBHelper.Column_Announcements_Link)));
-                announcements.put("description", cursor.getString(cursor.getColumnIndex(DBHelper.Column_Announcements_Desc)));
-                announcements.put("announce_saved", cursor.getString(cursor.getColumnIndex(DBHelper.Column_Announcements_Saved)));
-                announcements.put("date", cursor.getString(cursor.getColumnIndex(DBHelper.Column_Announcements_Date)));
-                announcements.put("a_date_added", cursor.getString(cursor.getColumnIndex(DBHelper.Column_Announcements_Date_Added)));
-                announcementsList.add(announcements);
-
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
-        db.close();
-        return announcementsList;
-
-    }
 
     public TechAnnounce getAnnouncementsById(int id,Context c ){
         dbHelper = new DBHelper(c);
@@ -156,9 +118,10 @@ public class TechAnnounceDAO  {
         return announcements;
     }
 
-    public TechAnnounce getAnnouncementsB4Date(Timestamp weekOld, Context c){
+    public TechAnnounce getAnnouncementsB4Date(long weekOld, long currentTime, Context c){
         dbHelper = new DBHelper(c);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
+
         String selectQuery =  "SELECT  " +
                 DBHelper.Column_Announcements_ID + "," +
                 DBHelper.Column_Announcements_Title + "," +
@@ -168,12 +131,13 @@ public class TechAnnounceDAO  {
                 DBHelper.Column_Announcements_Date_Added +
                 " FROM " + DBHelper.Table_Announcements
                 + " WHERE " +
-                DBHelper.Column_Announcements_Date_Added + "< ?"; // It's a good practice to use parameter ?, instead of concatenate string
-
+                DBHelper.Column_Announcements_Date_Added +
+                " NOT BETWEEN '" + weekOld + "' AND '" + currentTime + "' " ; // It's a good practice to use parameter ?, instead of concatenate string
+        //String[] selectArg = {};
         int iCount =0;
         TechAnnounce announcements = new TechAnnounce();
 
-        Cursor cursor = db.rawQuery(selectQuery, new String[] { String.valueOf(weekOld) } );
+    Cursor cursor = db.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
             do {
@@ -182,7 +146,7 @@ public class TechAnnounceDAO  {
                 announcements.setLink(cursor.getString(cursor.getColumnIndex(DBHelper.Column_Announcements_Link)));
                 announcements.setDescription(cursor.getString(cursor.getColumnIndex(DBHelper.Column_Announcements_Desc)));
                 announcements.setSaved(cursor.getInt(cursor.getColumnIndex(DBHelper.Column_Announcements_Saved)));
-                announcements.setDate(cursor.getString(cursor.getColumnIndex(dbHelper.Column_Announcements_Date_Added)));
+                announcements.setDateAdded(cursor.getLong(cursor.getColumnIndex(dbHelper.Column_Announcements_Date_Added)));
             } while (cursor.moveToNext());
         }
 
@@ -226,9 +190,10 @@ public class TechAnnounceDAO  {
         return announcements;
     }
 
-    public void checkCategoryList (TechAnnounce announcements){
-
-
+    public Timestamp changeStringDate() throws ParseException {
+        String str_date = "2015-11-18 14:01:32";
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    Timestamp date = (Timestamp)formatter.parse(str_date);
+    return date;
     }
-
 }

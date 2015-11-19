@@ -34,8 +34,9 @@ import android.widget.ViewAnimator;
 
 import com.example.android.common.activities.SampleActivityBase;
 import com.example.android.common.logger.Log;
+import com.example.android.slidingtabsbasic.AlarmManager.TACAppAlarmReceiver;
+import com.example.android.slidingtabsbasic.DBS.TechAnnounce;
 import com.example.android.slidingtabsbasic.RSSParser.HttpManager;
-import com.example.android.slidingtabsbasic.AppContent.TechAnnounce;
 import com.example.android.slidingtabsbasic.RSSParser.TechAnnounceParser;
 
 import java.util.ArrayList;
@@ -50,8 +51,9 @@ import java.util.List;
  */
 public class MainActivity extends SampleActivityBase {
 
-    public static final String TAG = "MainActivity";
+    TACAppAlarmReceiver alarm = new TACAppAlarmReceiver();
 
+    public static final String TAG = "MainActivity";
 
     ListView listAnnouncement;
     ProgressBar pb;
@@ -78,6 +80,9 @@ public class MainActivity extends SampleActivityBase {
 
         pb = (ProgressBar) findViewById(R.id.progressBar);
         pb.setVisibility(View.INVISIBLE);
+
+        //take this out
+//        alarm.setAlarm(this);
 
         tasks = new ArrayList<>();
 

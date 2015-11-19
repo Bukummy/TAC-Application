@@ -3,17 +3,21 @@ package com.example.android.slidingtabsbasic.DBS;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class TechKeyList extends TechCategoryList implements Parcelable{
+public class TechKeyList implements Parcelable{
+    private int id;
+    private String name;
+    private int favorite;
 
-    public TechKeyList(int id, String name, int favorite) {
-        super(id, name, favorite);
+
+    public TechKeyList(){
+
     }
 
     protected TechKeyList(Parcel in) {
 
     }
 
-    public static final Creator<TechKeyList> CREATOR = new Creator<TechKeyList>() {
+    public static final Parcelable.Creator<TechKeyList> CREATOR = new Creator<TechKeyList>() {
         @Override
         public TechKeyList createFromParcel(Parcel in) {
             return new TechKeyList(in);
@@ -25,14 +29,28 @@ public class TechKeyList extends TechCategoryList implements Parcelable{
         }
     };
 
-    @Override
-    String getTableName() {
-        return "keywords";
+    public int getId() {
+        return id;
     }
 
-    @Override
-    String[] getColumnsName(){
-        return new String[]{"id", "name", "favorite"};
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(int favorite) {
+        this.favorite = favorite;
     }
 
     @Override

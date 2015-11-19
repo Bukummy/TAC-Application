@@ -12,13 +12,20 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.android.slidingtabsbasic.AppContent.TechAnnounce;
+import com.example.android.slidingtabsbasic.DAO.TechAnnounceCategoryDAO;
+import com.example.android.slidingtabsbasic.DAO.TechAnnounceDAO;
+import com.example.android.slidingtabsbasic.DAO.TechCategoryDAO;
+import com.example.android.slidingtabsbasic.DBS.TechAnnounce;
+import com.example.android.slidingtabsbasic.DBS.TechAnnounceCategoryList;
 import com.example.android.slidingtabsbasic.MainActivity;
 import com.example.android.slidingtabsbasic.R;
 import com.example.android.slidingtabsbasic.RSSParser.HttpManager;
 import com.example.android.slidingtabsbasic.RSSParser.TechAnnounceParser;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -31,9 +38,31 @@ import java.util.List;
 public class TACAppSchedulingService extends IntentService {
 
     List<TechAnnounce> techAnnounceList;
-    //List<String[]> announcementCategories = new ArrayList<>();
-    String[] announcementTitles = new String[]{};
-    String[] announcementURLs = new String[]{};
+
+    TechAnnounceDAO techAnnounceDAO = new TechAnnounceDAO();
+    TechAnnounceCategoryList techAnnounceCategoryList = new TechAnnounceCategoryList();
+    TechAnnounceCategoryDAO techAnnounceCategoryDAO = new TechAnnounceCategoryDAO();
+    TechCategoryDAO techCategoryDAO = new TechCategoryDAO();
+
+
+    Calendar calendar = Calendar.getInstance();
+    //one week in millisec
+    long diff = 604800;
+
+    long thisTime = calendar.getTimeInMillis();
+    //plus  1 minute
+    long extraTime = thisTime + (60) ;
+    long pastWeekT = extraTime - diff;
+
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    String currentTime = formatter.format(new Timestamp(extraTime));
+
+    //Timestamp currentTime = Timestamp.valueOf(currentT);
+    //String currentTimeTD = String.valueOf(currentTime);
+
+    String pastWeek = formatter.format(new Timestamp(pastWeekT));
+    //Timestamp pastWeek = Timestamp.valueOf(pastWeekS);
+    //String pastWeekTS = String.valueOf(pastWeek);
 
 
     public TACAppSchedulingService() {
@@ -64,13 +93,65 @@ public class TACAppSchedulingService extends IntentService {
 
             //if parseableURl, send notification
             if (techAnnounceList != null) {
-                int i = 0,j = 0;
+
                 for (TechAnnounce techannounce :techAnnounceList ) {
-                    techannounce.getCategoryList();
-                    techannounce.getTitle();
-                    techannounce.getLink();
-                    techannounce.getDescription();
-                    techannounce.getCategoryList();
+
+                    String availLinkInDB = techAnnounceDAO.getAnnouncementsByLink(
+                            techannounce.getLink(), getBaseContext()).getLink();
+
+                    int availIdInDB = techAnnounceDAO.getAnnouncementsByLink(
+                            techannounce.getLink(), getBaseContext()).getId();
+                    if (availLinkInDB == null) {
+                        //perform insertion
+                        int insertedRow = techAnnounceDAO.insert(techannounce, getBaseContext());
+
+                        String value = String.valueOf(insertedRow);
+                        //log progress
+                        if (insertedRow > 0) {
+                            Log.i("Inserted Row NO:", value);
+                            techCategoryDAO.checkCategoryList(techannounce, insertedRow, getBaseContext());
+                        }
+                        else {
+                            Log.i("No Inserted Row:", value);
+                        }
+                    }
+                    //if link is available
+                    else {
+                        //perform update
+                        int updatedRow = techAnnounceDAO.update(techannounce, availIdInDB , getBaseContext());
+                        String value = String.valueOf(updatedRow);
+                        if (updatedRow > 0) {
+                            Log.i("Updated Row NO:", value);
+                        } else {
+                            Log.i("No Updated Row:", value);
+                        }
+
+                    }
+
+                    TechAnnounce announcement = techAnnounceDAO.getAnnouncementsB4Date(pastWeekT, extraTime, getBaseContext());
+                    int id = announcement.getId();
+                    if ( id > 1){
+                        int deletedRow = techAnnounceDAO.delete(id, getBaseContext());
+
+                        if (techAnnounceCategoryList.getA_Id() == id){
+                            int deletedACRow = techAnnounceCategoryDAO.delete(id ,getBaseContext());
+                            String val = String.valueOf(deletedRow);
+                            if (deletedACRow >= 1 ) {
+                                Log.i("Deleted Row NO:", val);
+                            } else {
+                                Log.i("No Deleted Row:", val);
+                            }
+                        }
+
+                        String value = String.valueOf(deletedRow);
+                        if (deletedRow >= 1) {
+                            Log.i("Deleted Row NO:", value);
+                        } else {
+                            Log.i("No Deleted Row:", value);
+                        }
+
+                    }
+
                 }
 
                     sendNotification(getString(R.string.announcement_found));

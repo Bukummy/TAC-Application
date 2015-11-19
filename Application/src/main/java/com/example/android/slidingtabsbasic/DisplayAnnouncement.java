@@ -30,7 +30,7 @@ public class DisplayAnnouncement extends Activity {
 
         setContentView(webview);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        //getActionBar().setDisplayHomeAsUpEnabled(true);
 
 //        setContentView(R.layout.activity_display_announcement);
 
@@ -64,12 +64,6 @@ public class DisplayAnnouncement extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_save) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }

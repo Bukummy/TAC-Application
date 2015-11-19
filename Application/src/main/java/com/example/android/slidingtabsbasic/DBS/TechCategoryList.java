@@ -9,6 +9,7 @@ import android.os.Parcelable;
 public class TechCategoryList implements Parcelable {
 // TOdo this class structure
 
+
     protected int id;
     protected String name;
     protected int favorite;

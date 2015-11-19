@@ -1,13 +1,10 @@
 package com.example.android.slidingtabsbasic.DAO;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-
-import com.example.scheduler.DBS.TechKeyList;
 
 
 public class DBHelper extends SQLiteOpenHelper {
@@ -17,6 +14,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
+
+
 
     // column of the Announcements Table
     public static final String Table_Announcements = "announcements";
@@ -67,7 +66,7 @@ public class DBHelper extends SQLiteOpenHelper {
             {Column_AnnouncementsCategories_Announcements_ID, Column_AnnouncementsCategories_Categories_ID};
 
     public static final String DATABASE_NAME = "announcementsDB";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 3;
 
     //SQL statements of Announcements table creation
     public static final String SQL_CREATE_TABLE_Announcements = "CREATE TABLE " + Table_Announcements +"("
@@ -76,6 +75,7 @@ public class DBHelper extends SQLiteOpenHelper {
             + Column_Announcements_Link + " TEXT NOT NULL, "
             + Column_Announcements_Desc + " TEXT NOT NULL, "
             + Column_Announcements_Saved + " INTEGER, "
+            + Column_Announcements_Date + " INTEGER, "
             + Column_Announcements_Date_Added + " TEXT default CURRENT_TIMESTAMP "
             +");";
 
@@ -205,25 +205,4 @@ public class DBHelper extends SQLiteOpenHelper {
         return c;
     }
 
-    public  boolean insertCategoriesDB(String[] categories ) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        long newInsert = 0 ;
-        for (String category : categories) {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(Column_Categories_Name, category);
-
-            newInsert = db.insert(Table_Categories, null, contentValues);
-            String newResult = String.valueOf(newInsert);
-
-            Log.d("Inserted", newResult);
-
-        }
-        TechKeyList techKeyList;
-
-        if (newInsert == -1)
-            return false;
-        else
-            return true;
-
-    }
 }

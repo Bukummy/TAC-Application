@@ -23,6 +23,8 @@ public class TechAnnounceKeyList implements Parcelable {
     private int a_id;
     private int k_id;
 
+    public TechAnnounceKeyList() {
+    }
 
     protected TechAnnounceKeyList(Parcel in) {
         techAnnounce = in.readParcelable(TechAnnounce.class.getClassLoader());

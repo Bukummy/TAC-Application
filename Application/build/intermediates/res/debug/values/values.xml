@@ -40,7 +40,7 @@
     <string name="announcement_found">There is a Tech Announcement update today!!</string>
     <!-- From: file:/C:/Users/Bukunmi/AndroidStudioProjects/TAC4/TAC-Application/Application/src/main/res/values/base-strings.xml -->
     <eat-comment/>
-    <string name="app_name">Tech Announce Classifier</string>
+    <string name="app_name">TAC</string>
     <!-- From: file:/C:/Users/Bukunmi/AndroidStudioProjects/TAC4/TAC-Application/Application/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="cancel_text">Cancel Auto-Refresh</string>

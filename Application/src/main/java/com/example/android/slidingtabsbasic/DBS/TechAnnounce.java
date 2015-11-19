@@ -3,22 +3,19 @@ package com.example.android.slidingtabsbasic.DBS;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.sql.Timestamp;
-
 /**
  * Created by Bukunmi on 10/16/2015.
  */
 
 public class TechAnnounce implements Parcelable {
 
-
-
     private int id;
     private String title;
     private String link;
     private String description;
+    private String[] KeyList;
     private String[] categoryList;
-    private Timestamp dateAdded;
+    private long dateAdded;
 
     private String date;
     private int saved;
@@ -56,12 +53,20 @@ public class TechAnnounce implements Parcelable {
         return new String[]{"id", "title", "link", "category", "description", "author", "date", "saved"};
     }
 
-    public Timestamp getDateAdded() {
+    public long getDateAdded() {
         return dateAdded;
     }
 
-    public void setDateAdded(Timestamp dateAdded) {
+    public void setDateAdded(long dateAdded) {
         this.dateAdded = dateAdded;
+    }
+
+    public String[] getKeyList() {
+        return KeyList;
+    }
+
+    public void setKeyList(String[] keyList) {
+        KeyList = keyList;
     }
 
     public String[] getCategoryList() {

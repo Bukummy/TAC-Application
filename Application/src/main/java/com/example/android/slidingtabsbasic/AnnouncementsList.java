@@ -10,12 +10,37 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.android.slidingtabsbasic.DAO.TechAnnounceCategoryDAO;
+import com.example.android.slidingtabsbasic.DAO.TechAnnounceDAO;
+import com.example.android.slidingtabsbasic.DAO.TechAnnounceKeyDAO;
+import com.example.android.slidingtabsbasic.DAO.TechCategoryDAO;
+import com.example.android.slidingtabsbasic.DAO.TechKeyDAO;
+import com.example.android.slidingtabsbasic.DBS.TechAnnounce;
+import com.example.android.slidingtabsbasic.DBS.TechAnnounceCategoryList;
+import com.example.android.slidingtabsbasic.DBS.TechAnnounceKeyList;
+import com.example.android.slidingtabsbasic.DBS.TechCategoryList;
+import com.example.android.slidingtabsbasic.DBS.TechKeyList;
+
+import java.util.ArrayList;
+
 
 public class AnnouncementsList extends Activity {
 
+    TechAnnounce techAnnounce = new TechAnnounce();
+    TechCategoryList techCategoryList = new TechCategoryList();
+    TechKeyList techKeyList = new TechKeyList();
+    TechAnnounceKeyList techAnnounceKeyList = new TechAnnounceKeyList();
+    TechAnnounceCategoryList techAnnounceCategoryList = new TechAnnounceCategoryList();
+
+    TechAnnounceDAO techAnnounceDAO = new TechAnnounceDAO();
+    TechCategoryDAO techCategoryDAO = new TechCategoryDAO();
+    TechKeyDAO techKeyDAO = new TechKeyDAO();
+    TechAnnounceKeyDAO techAnnounceKeyDAO = new TechAnnounceKeyDAO();
+    TechAnnounceCategoryDAO techAnnounceCategoryDAO = new TechAnnounceCategoryDAO();
 
     String[] announcementTitles;
     String[] announcementLinks;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +48,8 @@ public class AnnouncementsList extends Activity {
 
         Intent intent = getIntent();
         String title = intent.getStringExtra("Title");
-        setTitle(title+ " List");
+        setTitle(title + " List");
+
 
         String pastActivity = intent.getStringExtra("From");
         announcementTitles = intent.getStringArrayExtra("Titles");
@@ -31,31 +57,23 @@ public class AnnouncementsList extends Activity {
 
         ListView list = (ListView) findViewById(R.id.AnnouncementListView);
 
-        String[] listName = new String[]{"Category","Tags","Favorite"};
+        String[] listName = new String[]{"Category", "Tags", "Favorite"};
 
         String[] announcements = new String[]{"No Announcements"};
         String[] links = new String[]{"http://www.techannounce.ttu.edu/"};
 
         //Set announcements depending on which was chosen
-        if (pastActivity.equals(listName[0])){
-            DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title).invoke();
+        if (pastActivity.equals(listName[0])) {
+            DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title, 0).invoke();
             announcements = displayAnnouncementList.getAnnouncements();
-                links = displayAnnouncementList.getLinks();
+            links = displayAnnouncementList.getLinks();
 
         }
-        if (pastActivity.equals(listName[1])){
-            DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title).invoke();
+        if (pastActivity.equals(listName[1])) {
+            DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title, 1).invoke();
             announcements = displayAnnouncementList.getAnnouncements();
             links = displayAnnouncementList.getLinks();
         }
-
-        if (pastActivity.equals(listName[2])){
-            DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title).invoke();
-            announcements = displayAnnouncementList.getAnnouncements();
-            links = displayAnnouncementList.getLinks();
-        }
-
-
 
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.ann_list_style, R.id.tvAnn, announcements);
@@ -73,7 +91,7 @@ public class AnnouncementsList extends Activity {
                 //TODO: Display webView of Announcement
                 Intent intent = new Intent(AnnouncementsList.this, DisplayAnnouncement.class);
                 intent.putExtra("Title", finalAnnouncements[position]);
-                intent.putExtra("URL",finalLinks[position]);
+                intent.putExtra("URL", finalLinks[position]);
                 startActivity(intent);
             }
         });
@@ -111,10 +129,12 @@ public class AnnouncementsList extends Activity {
 
     private class DisplayAnnouncementList {
         private String title;
+        private int list;
         private String[] announcements;
         private String[] links;
 
-        public DisplayAnnouncementList(String title) {
+        public DisplayAnnouncementList(String title, int list) {
+            this.list = list;
             this.title = title;
         }
 
@@ -127,20 +147,65 @@ public class AnnouncementsList extends Activity {
         }
 
         public DisplayAnnouncementList invoke() {
-            switch (title){
-                case "All Announcements":
-                    announcements = announcementTitles;
-                    links = announcementLinks;
+            switch (list) {
+                case 0:
+                    switch (title) {
+                        case "All Announcements":
+                            announcements = announcementTitles;
+                            links = announcementLinks;
+                            break;
+
+                        default:
+
+                            ArrayList<TechAnnounceCategoryList> announcementCat =techAnnounceCategoryDAO.getAnnByCatId(
+                                    techCategoryDAO.getCategoriesByName(title, getBaseContext()).getId(), getBaseContext());
+                            String[] announcementsCatTitle = new String[announcementCat.size()];
+                            String[] announcementsCatLink = new String[announcementCat.size()];
+                            int val = 0;
+                            for(TechAnnounceCategoryList techAnnounceCategoryList: announcementCat)
+                            {
+                                announcementsCatTitle[val++] = techAnnounceDAO.getAnnouncementsById(
+                                        techAnnounceCategoryList.getA_Id(), getBaseContext()).getTitle();
+
+                                announcementsCatLink[val++] = techAnnounceDAO.getAnnouncementsById(
+                                        techAnnounceCategoryList.getA_Id(), getBaseContext()).getLink();
+                            }
+                            announcements = announcementsCatTitle;
+                            links = announcementsCatLink;
+                            break;
+                    }
+                    break;
+                case 1:
+                    switch (title) {
+                        case "All Announcements":
+                            announcements = announcementTitles;
+                            links = announcementLinks;
+                            break;
+
+                        default:
+                            announcements = new String[]{"No Announcements"};
+                            links = new String[]{"http://www.techannounce.ttu.edu/"};
+                            break;
+                    }
                     break;
 
                 default:
-                    announcements = new String[]{"No Announcements"};
-                    links = new String[]{"http://www.techannounce.ttu.edu/"};
+                    switch (title) {
+                        case "All Announcements":
+                            announcements = announcementTitles;
+                            links = announcementLinks;
+                            break;
+
+                        default:
+                            announcements = new String[]{"No Announcements"};
+                            links = new String[]{"http://www.techannounce.ttu.edu/"};
+                            break;
+                    }
                     break;
+
             }
             return this;
         }
     }
-
-
 }
+
