@@ -1,30 +1,36 @@
-package com.example.android.slidingtabsbasic.AppContent;
+package com.example.android.slidingtabsbasic.DBS;
 
 /**
  * Created by Bukunmi on 10/16/2015.
  */
 
 public class TechAnnounce {
-    public TechAnnounce(int id) {
-        this.id = id;
-    }
 
     private int id;
     private String title;
     private String link;
     private String description;
+    private int saved;
+    private String[] KeyList;
     private String[] categoryList;
+    private long dateAdded;
 
-    private String date;
-    private String saved;
-
-    String  getTableName(){
-        return "announcement";
+    public long getDateAdded() {
+        return dateAdded;
     }
 
-    String[] getColumnName() {
-        return new String[]{"id", "title", "link", "category", "description", "author", "date", "saved"};
+    public void setDateAdded(long dateAdded) {
+        this.dateAdded = dateAdded;
     }
+
+    public String[] getKeyList() {
+        return KeyList;
+    }
+
+    public void setKeyList(String[] keyList) {
+        KeyList = keyList;
+    }
+
     public String[] getCategoryList() {
         return categoryList;
     }
@@ -49,11 +55,11 @@ public class TechAnnounce {
         this.title = title;
     }
 
-    public String  getLink() {
+    public String getLink() {
         return link;
     }
 
-    public void setLink(String  link) {
+    public void setLink(String link) {
         this.link = link;
     }
 
@@ -65,22 +71,12 @@ public class TechAnnounce {
         this.description = description;
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getSaved() {
+    public int getSaved() {
         return saved;
     }
 
-    public void setSaved(String saved) {
+    public void setSaved(int saved) {
         this.saved = saved;
     }
-
-
 
 }

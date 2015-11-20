@@ -1,3 +1,10 @@
-/.idea/
-/.gradle/
-/build/
+.idea/
+.gradle/
+build/
+*.ap_
+*.log
+*.class
+*.dex
+.navigation/
+.idea/workspace.xml
+*.zip

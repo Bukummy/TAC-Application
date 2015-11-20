@@ -1,19 +1,9 @@
-package com.example.android.slidingtabsbasic.AppContent;
+package com.example.android.slidingtabsbasic.DBS;
 
-/**
- * Created by Bukunmi on 10/16/2015.
- */
-public class TechCategoryList {
-// TOdo this class structure
-
+public class TechKeyList {
     private int id;
     private String name;
     private int favorite;
-
-    String  getTableName(){
-        return "category";
-    }
-
 
     public int getId() {
         return id;
@@ -38,5 +28,5 @@ public class TechCategoryList {
     public void setFavorite(int favorite) {
         this.favorite = favorite;
     }
-}
 
+}

@@ -1,10 +1,15 @@
 TAC-Application
 ===============
-This Is an Android application that clasifies Texas Tech's Tech Announcements that are provided daily, In order to give, the students and faculty, more meaningful announcements without wasting much time.
 
-It uses a template SlidingTabsBasic Sample for the inital page layout.
 
-The app currently displays parsed  list of announcements as shown on techannounce website.
+This Is an Android application that classifies Texas Tech's Tech Announcements that are provided daily, In order to give, the students and faculty, more meaningful announcements without wasting much time.
+
+The application :
+- Saves list of announcements in a database table, the list of categories, and maps this two together, to display Announcements by categories.
+
+It uses a template SlidingTabsBasic Sample for the initial page layout.
+
+The app currently displays parsed  list of announcements as shown on TechAnnounce website.
 
 Android SlidingTabsBasic Sample
 ===================================

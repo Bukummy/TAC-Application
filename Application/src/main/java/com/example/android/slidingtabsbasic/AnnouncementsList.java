@@ -9,16 +9,34 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.example.android.common.logger.Log;
+import com.example.android.slidingtabsbasic.DAO.TechAnnounceCategoryDAO;
+import com.example.android.slidingtabsbasic.DAO.TechAnnounceDAO;
+import com.example.android.slidingtabsbasic.DAO.TechCategoryDAO;
+import com.example.android.slidingtabsbasic.DBS.TechAnnounce;
+import com.example.android.slidingtabsbasic.DBS.TechAnnounceCategoryList;
+
+import java.util.ArrayList;
 
 
 public class AnnouncementsList extends Activity {
-<<<<<<< HEAD
-=======
+    //TechAnnounce techAnnounce = new TechAnnounce();
+    //TechCategoryList techCategoryList = new TechCategoryList();
+    //TechKeyList techKeyList = new TechKeyList();
+    //TechAnnounceKeyList techAnnounceKeyList = new TechAnnounceKeyList();
+    //TechAnnounceCategoryList techAnnounceCategoryList = new TechAnnounceCategoryList();
 
+    private final TechAnnounceDAO techAnnounceDAO = new TechAnnounceDAO();
+    private final TechCategoryDAO techCategoryDAO = new TechCategoryDAO();
+    //TechKeyDAO techKeyDAO = new TechKeyDAO();
+    //TechAnnounceKeyDAO techAnnounceKeyDAO = new TechAnnounceKeyDAO();
+    private final TechAnnounceCategoryDAO techAnnounceCategoryDAO = new TechAnnounceCategoryDAO();
 
->>>>>>> database
-    String[] announcementTitles;
-    String[] announcementLinks;
+    private String[] announcementTitles;
+    private String[] announcementLinks;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,99 +44,78 @@ public class AnnouncementsList extends Activity {
 
         Intent intent = getIntent();
         String title = intent.getStringExtra("Title");
-<<<<<<< HEAD
 
-=======
-        setTitle(title+ " List");
->>>>>>> database
+        setTitle(title + " List");
+
 
         String pastActivity = intent.getStringExtra("From");
-        announcementTitles = intent.getStringArrayExtra("Titles");
         announcementLinks = intent.getStringArrayExtra("URLs");
+        announcementTitles = intent.getStringArrayExtra("Titles");
 
-        ListView list = (ListView) findViewById(R.id.AnnouncementListView);
+        final ListView list = (ListView) findViewById(R.id.AnnouncementListView);
 
-        String[] listName = new String[]{"Category","Tags","Favorite"};
+        String[] listName = new String[]{"Category", "Tags", "Favorite"};
 
-        String[] announcements = new String[]{"No Announcements"};
-<<<<<<< HEAD
-        String[] linkTo = new String[]{""};
-        String[] titleValue = new String[]{"Category","Tags","Favorite"};
-
-        //Set announcements depending on which was chosen
-        if (pastActivity.equals(titleValue[0])){
-            DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title).invoke();
-            announcements = displayAnnouncementList.getAnnouncements();
-            linkTo = displayAnnouncementList.getLinkTo();
-=======
-        String[] links = new String[]{"http://www.techannounce.ttu.edu/"};
+        String[] announcements;
+        String[] links;
 
         //Set announcements depending on which was chosen
-        if (pastActivity.equals(listName[0])){
-            DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title).invoke();
-            announcements = displayAnnouncementList.getAnnouncements();
-                links = displayAnnouncementList.getLinks();
-
-        }
-        if (pastActivity.equals(listName[1])){
-            DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title).invoke();
+        if (pastActivity.equals(listName[1])) {
+            DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title, 1).invoke();
             announcements = displayAnnouncementList.getAnnouncements();
             links = displayAnnouncementList.getLinks();
         }
 
-        if (pastActivity.equals(listName[2])){
-            DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title).invoke();
-            announcements = displayAnnouncementList.getAnnouncements();
-            links = displayAnnouncementList.getLinks();
->>>>>>> database
-        }
-        else if (pastActivity.equals(titleValue[1])){
-            DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title).invoke();
-            announcements = displayAnnouncementList.getAnnouncements();
-            linkTo = displayAnnouncementList.getLinkTo();
-        }
-        else if (pastActivity.equals(titleValue[2])){
-            DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title).invoke();
-            announcements = displayAnnouncementList.getAnnouncements();
-            linkTo = displayAnnouncementList.getLinkTo();
-        }
         else{
-            announcements = new String[]{"No Announcement"};
-            linkTo = new String[]{"http://www.techannounce.ttu.edu"};
+            DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title, 0).invoke();
+            announcements = displayAnnouncementList.getAnnouncements();
+            links = displayAnnouncementList.getLinks();
         }
-        final String[] finalAnnouncements = announcements;
-        final String[] finalLink = linkTo;
 
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.ann_list_style, R.id.tvAnn, announcements);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.ann_list_style, R.id.tvAnn, announcements);
 
         list.setAdapter(adapter);
 
         // View Chosen Category List
-<<<<<<< HEAD
-=======
         final String[] finalAnnouncements = announcements;
         final String[] finalLinks = links;
->>>>>>> database
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long arg3) {
                 view.setSelected(true);
                 //TODO: Display webView of Announcement
-<<<<<<< HEAD
-                            Intent intent = new Intent(AnnouncementsList.this, DisplayAnnouncement.class);
-                            intent.putExtra("Title", finalAnnouncements[position]);
-                            intent.putExtra("URL",finalLink[position]);
-                            startActivity(intent);
-=======
                 Intent intent = new Intent(AnnouncementsList.this, DisplayAnnouncement.class);
                 intent.putExtra("Title", finalAnnouncements[position]);
-                intent.putExtra("URL",finalLinks[position]);
+                intent.putExtra("URL", finalLinks[position]);
                 startActivity(intent);
->>>>>>> database
             }
         });
+
+    list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+            if (techAnnounceDAO.getAnnouncementsByLink(finalLinks[position], getBaseContext()).getLink() == null &&
+                    list.getItemAtPosition(position) == "No Announcements") {
+                return false;
+            }
+            else {
+
+                int updatedRow = techAnnounceDAO.updateSavedCol(1, finalLinks[position], getBaseContext());
+                if (updatedRow >= 1) {
+                    android.util.Log.i("Updated Ann Row: ", String.valueOf(updatedRow));
+                    view.setSelected(true);
+                    Toast.makeText(getBaseContext(), "Announcement Saved", Toast.LENGTH_LONG).show();
+                    return true;
+                } else {
+                    Log.i("Updated Ann Row: ", "No update");
+                    return false;
+                }
+            }
+        }
+    });
 
     }
 
@@ -152,11 +149,13 @@ public class AnnouncementsList extends Activity {
     }
 
     private class DisplayAnnouncementList {
-        private String title;
+        private final String title;
+        private final int list;
         private String[] announcements;
         private String[] links;
 
-        public DisplayAnnouncementList(String title) {
+        public DisplayAnnouncementList(String title, int list) {
+            this.list = list;
             this.title = title;
         }
 
@@ -169,56 +168,69 @@ public class AnnouncementsList extends Activity {
         }
 
         public DisplayAnnouncementList invoke() {
-            switch (title){
-                case "All Announcements":
-                    announcements = announcementTitles;
-                    links = announcementLinks;
+            switch (list) {
+                case 0:
+                    if (title.equals("All Announcements") )
+                    {
+                          announcements = announcementTitles;
+                            links = announcementLinks;
+                    }
+                    else{
+                        int cat_id= techCategoryDAO.getCategoriesByName(title, getBaseContext()).getId();
+
+                        ArrayList<TechAnnounceCategoryList> announcementCat = techAnnounceCategoryDAO.getAnnByCatId(cat_id,
+                                getBaseContext());
+
+                        if (announcementCat.size() == 0){
+                            announcements = new String[]{"No Announcements"};
+                            links = new String[]{"http://www.techannounce.ttu.edu/"};
+                        }
+                        else {
+                            String[] announcementsCatTitle = new String[announcementCat.size()];
+                            String[] announcementsCatLink = new String[announcementCat.size()];
+                            int i = 0;
+                            int j = 0;
+
+                            for (TechAnnounceCategoryList techAnnounceCategoryList : announcementCat) {
+                                TechAnnounce announcement4mDB = techAnnounceDAO.getAnnouncementsById(
+                                        techAnnounceCategoryList.getA_Id(), getBaseContext());
+
+                                announcementsCatTitle[i++] = announcement4mDB.getTitle();
+                                announcementsCatLink[j++] = announcement4mDB.getLink();
+                            }
+                            announcements = announcementsCatTitle;
+                            links = announcementsCatLink;
+                        }
+                    }
                     break;
+                case 1:
+                    int cat_id= techCategoryDAO.getCategoriesByName(title, getBaseContext()).getId();
+                    ArrayList<TechAnnounceCategoryList> announcementCat = techAnnounceCategoryDAO.getAnnByCatId(cat_id ,getBaseContext());
+
+                    String[] announcementsCatTitle = new String[announcementCat.size()];
+                    String[] announcementsCatLink = new String[announcementCat.size()];
+                    int i = 0;
+                    int j = 0;
+
+                    for(TechAnnounceCategoryList techAnnounceCategoryList: announcementCat)
+                    {
+                        TechAnnounce announcement4mDB = techAnnounceDAO.getAnnouncementsById(
+                                techAnnounceCategoryList.getA_Id(), getBaseContext());
+
+                        announcementsCatTitle[i++] = announcement4mDB.getTitle();
+                        announcementsCatLink[j++] = announcement4mDB.getLink();
+                    }
+                    announcements = announcementsCatTitle;
+                    links = announcementsCatLink;
 
                 default:
                     announcements = new String[]{"No Announcements"};
                     links = new String[]{"http://www.techannounce.ttu.edu/"};
                     break;
+
             }
             return this;
         }
     }
-
-<<<<<<< HEAD
-    private class DisplayAnnouncementList {
-        private String title;
-        private String[] announcements;
-        private String[] linkTo;
-
-        public DisplayAnnouncementList(String title) {
-            this.title = title;
-        }
-
-        public String[] getAnnouncements() {
-            return announcements;
-        }
-
-        public String[] getLinkTo() {
-            return linkTo;
-        }
-
-        public DisplayAnnouncementList invoke() {
-            setTitle(title + " List");
-            switch (title){
-                case "All Announcements":
-                    announcements = announcementTitles;
-                    linkTo = announcementLinks;
-                    break;
-
-                default:
-                    announcements = new String[]{"No Announcement"};
-                    linkTo = new String[]{"http://www.techannounce.ttu.edu"};
-                    break;
-            }
-            return this;
-        }
-    }
-=======
-
->>>>>>> database
 }
+

@@ -12,13 +12,18 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.android.slidingtabsbasic.AppContent.TechAnnounce;
+import com.example.android.slidingtabsbasic.DAO.TechAnnounceCategoryDAO;
+import com.example.android.slidingtabsbasic.DAO.TechAnnounceDAO;
+import com.example.android.slidingtabsbasic.DAO.TechCategoryDAO;
+import com.example.android.slidingtabsbasic.DBS.TechAnnounce;
+import com.example.android.slidingtabsbasic.DBS.TechAnnounceCategoryList;
 import com.example.android.slidingtabsbasic.MainActivity;
 import com.example.android.slidingtabsbasic.R;
 import com.example.android.slidingtabsbasic.RSSParser.HttpManager;
 import com.example.android.slidingtabsbasic.RSSParser.TechAnnounceParser;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -30,23 +35,43 @@ import java.util.List;
  */
 public class TACAppSchedulingService extends IntentService {
 
-    List<TechAnnounce> techAnnounceList;
-    //List<String[]> announcementCategories = new ArrayList<>();
-    String[] announcementTitles = new String[]{};
-    String[] announcementURLs = new String[]{};
+    private List<TechAnnounce> techAnnounceList;
+
+    private final TechAnnounceDAO techAnnounceDAO = new TechAnnounceDAO();
+    private final TechAnnounceCategoryList techAnnounceCategoryList = new TechAnnounceCategoryList();
+    private final TechAnnounceCategoryDAO techAnnounceCategoryDAO = new TechAnnounceCategoryDAO();
+    private final TechCategoryDAO techCategoryDAO = new TechCategoryDAO();
+
+
+    private final Calendar calendar = Calendar.getInstance();
+    //one week in millisec
+    private final long diff = 604800;
+
+    private final long thisTime = calendar.getTimeInMillis();
+    //plus  1 minute
+    private final long extraTime = thisTime + (60) ;
+    private final long pastWeekT = extraTime - diff;
+
+    //private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    //String currentTime = formatter.format(new Timestamp(extraTime));
+
+    //Timestamp currentTime = Timestamp.valueOf(currentT);
+    //String currentTimeTD = String.valueOf(currentTime);
+
+    //String pastWeek = formatter.format(new Timestamp(pastWeekT));
+    //Timestamp pastWeek = Timestamp.valueOf(pastWeekS);
+    //String pastWeekTS = String.valueOf(pastWeek);
 
 
     public TACAppSchedulingService() {
         super("SchedulingService");
     }
 
-    public static final String TAG = "Conn To Tech Announce";
+    private static final String TAG = "Conn To Tech Announce";
     // An ID used to post the notification.
-    public static final int NOTIFICATION_ID = 1;
+    private static final int NOTIFICATION_ID = 1;
     //URL it parses from
-    public static final String URL = "http://www.techannounce.ttu.edu/Client/ViewRss.aspx";
-    private NotificationManager mNotificationManager;
-    NotificationCompat.Builder builder;
+    private static final String URL = "http://www.techannounce.ttu.edu/Client/ViewRss.aspx";
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -64,13 +89,69 @@ public class TACAppSchedulingService extends IntentService {
 
             //if parseableURl, send notification
             if (techAnnounceList != null) {
-                int i = 0,j = 0;
+
                 for (TechAnnounce techannounce :techAnnounceList ) {
-                    techannounce.getCategoryList();
-                    techannounce.getTitle();
-                    techannounce.getLink();
-                    techannounce.getDescription();
-                    techannounce.getCategoryList();
+
+                    String availLinkInDB = techAnnounceDAO.getAnnouncementsByLink(
+                            techannounce.getLink(), getBaseContext()).getLink();
+
+                    int availIdInDB = techAnnounceDAO.getAnnouncementsByLink(
+                            techannounce.getLink(), getBaseContext()).getId();
+
+                    if (availLinkInDB == null) {
+                        //perform insertion
+                        int insertedRow = techAnnounceDAO.insert(techannounce, getBaseContext());
+
+                        String value = String.valueOf(insertedRow);
+                        //log progress
+                        if (insertedRow > 0) {
+                            Log.i("Inserted Row NO:", value);
+                            techCategoryDAO.checkCategoryList(techannounce, insertedRow, getBaseContext());
+                        }
+                        else {
+                            Log.i("No Inserted Row:", value);
+                        }
+                    }
+                    //if link is available
+                    else {
+                        //perform update
+
+                        int updatedRow = techAnnounceDAO.update(techannounce, availIdInDB , getBaseContext());
+                        String value = String.valueOf(updatedRow);
+                        if (updatedRow > 0) {
+                            techCategoryDAO.checkCategoryList(techannounce, availIdInDB, getBaseContext());
+                            Log.i("Updated Row NO:", value);
+
+                        } else {
+                            Log.i("No Updated Row:", value);
+                        }
+
+                    }
+
+                    TechAnnounce announcement = techAnnounceDAO.getAnnouncementsB4Date(pastWeekT, extraTime, getBaseContext());
+                    int id = announcement.getId();
+                    if ( id > 1){
+                        int deletedRow = techAnnounceDAO.delete(id, getBaseContext());
+
+                        if (techAnnounceCategoryList.getA_Id() == id){
+                            int deletedACRow = techAnnounceCategoryDAO.delete(id ,getBaseContext());
+                            String val = String.valueOf(deletedRow);
+                            if (deletedACRow >= 1 ) {
+                                Log.i("Deleted Row NO:", val);
+                            } else {
+                                Log.i("No Deleted Row:", val);
+                            }
+                        }
+
+                        String value = String.valueOf(deletedRow);
+                        if (deletedRow >= 1) {
+                            Log.i("Deleted Row NO:", value);
+                        } else {
+                            Log.i("No Deleted Row:", value);
+                        }
+
+                    }
+
                 }
 
                     sendNotification(getString(R.string.announcement_found));
@@ -90,7 +171,7 @@ public class TACAppSchedulingService extends IntentService {
 
     // Post a notification indicating whether a doodle was found.
     private void sendNotification(String msg) {
-        mNotificationManager = (NotificationManager)
+        NotificationManager mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Intent intent= new Intent(this, MainActivity.class);
@@ -121,10 +202,9 @@ public class TACAppSchedulingService extends IntentService {
 //
     /** Given a URL string, initiate a fetch operation. */
     private String  loadFromNetwork(String urlString) throws IOException {
-        String content = HttpManager.getData(urlString);
-        return content;
+        return HttpManager.getData(urlString);
     }
-    protected boolean isOnline() {
+    private boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();

@@ -13,7 +13,7 @@ import android.content.Intent;
  */
 // BEGIN_INCLUDE(autostart)
 public class TACAppBootReceiver extends BroadcastReceiver {
-    TACAppAlarmReceiver alarm = new TACAppAlarmReceiver();
+    private final TACAppAlarmReceiver alarm = new TACAppAlarmReceiver();
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED"))

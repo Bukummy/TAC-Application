@@ -29,16 +29,12 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-<<<<<<< HEAD
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-=======
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
->>>>>>> database
 
     <!-- Min/target SDK versions (<uses-sdk>) managed by build.gradle -->
     <application
@@ -65,6 +61,20 @@
             android:name=".DisplayAnnouncement"
             android:label="@string/title_activity_display_announcement"  >
         </activity>
+        <receiver android:name=".AlarmManager.TACAppAlarmReceiver" />
+        <receiver
+            android:name=".AlarmManager.TACAppBootReceiver"
+            android:enabled="false" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".AlarmManager.TACAppSchedulingService" />
+
+
+
+
     </application>
 
 </manifest>

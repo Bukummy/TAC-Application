@@ -1,8 +1,6 @@
-package com.bukunmioyedeji.tac.ContentRetrival;
+package com.example.android.slidingtabsbasic.DBS;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -11,6 +9,12 @@ import android.util.Log;
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String TAG = "DBHelper";
+
+    public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+        super(context, name, factory, version);
+    }
+
+
 
     // column of the Announcements Table
     public static final String Table_Announcements = "announcements";
@@ -35,6 +39,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String Column_Categories_Name = "name";
     public static final String Column_Categories_Favorites ="c_favorites";
     public static final String Column_Categories_Date_Added ="c_date_added";
+    public static final String[] Table_Categories_Column_List= new String[]
+            {Column_Categories_Name, Column_Categories_Favorites};
 
     //column of the AnnouncementsKeywords table creation
     public static final String Table_AnnouncementsKeyWords = "announce_keywords";
@@ -51,7 +57,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String Column_AnnouncementsCategories_Date_Added ="aC_date_added";
 
     public static final String DATABASE_NAME = "announcementsDB";
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 5;
 
     //SQL statements of Announcements table creation
     public static final String SQL_CREATE_TABLE_Announcements = "CREATE TABLE " + Table_Announcements +"("
@@ -60,6 +66,7 @@ public class DBHelper extends SQLiteOpenHelper {
             + Column_Announcements_Link + " TEXT NOT NULL, "
             + Column_Announcements_Desc + " TEXT NOT NULL, "
             + Column_Announcements_Saved + " INTEGER, "
+            + Column_Announcements_Date + " INTEGER, "
             + Column_Announcements_Date_Added + " TEXT default CURRENT_TIMESTAMP "
             +");";
 
@@ -156,56 +163,4 @@ public class DBHelper extends SQLiteOpenHelper {
         return instance;
     }
 
-    public Cursor selectCategoriesDB(String column_name){
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        final String[] selectionArg = new String[] {column_name};
-
-        // Define a projection that specifies which columns from the database
-// you will actually use after this query.
-        String[] projection = {
-                Column_Categories_ID,
-                Column_Categories_Name,
-                Column_Categories_Favorites,
-                Column_Categories_Date_Added
-        };
-
-// How you want the results sorted in the resulting Cursor
-        String sortOrder =
-                Column_Categories_Date_Added + " DESC";
-
-        Cursor c = db.query(
-                Table_Categories,        // The table to query
-                projection,              // The columns to return
-                Column_Categories_Name,  // The columns for the WHERE clause
-                selectionArg,             // The values for the WHERE clause
-                null,                    // don't group the rows
-                null,                    // don't filter by row groups
-                sortOrder                // The sort order
-        );
-
-
-        return c;
-    }
-
-    public  boolean insertCategoriesDB(String[] categories ) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        long newInsert = 0 ;
-        for (String category : categories) {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(Column_Categories_Name, category);
-
-            newInsert = db.insert(Table_Categories, null, contentValues);
-            String newResult = String.valueOf(newInsert);
-
-            Log.d("Inserted", newResult);
-
-        }
-
-        if (newInsert == -1)
-            return false;
-        else
-            return true;
-
-    }
 }
