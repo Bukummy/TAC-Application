@@ -96,11 +96,22 @@ public class TACAppSchedulingService extends IntentService {
 
                 for (TechAnnounce techannounce :techAnnounceList ) {
 
+                    int compareAnnouncement;
                     String availLinkInDB = techAnnounceDAO.getAnnouncementsByLink(
                             techannounce.getLink(), getBaseContext()).getLink();
 
+                    String  availIdTitleDB = techAnnounceDAO.getAnnouncementsByLink(
+                            techannounce.getLink(), getBaseContext()).getTitle();
+
+                    String availIdDesDB = techAnnounceDAO.getAnnouncementsByLink(
+                            techannounce.getLink(), getBaseContext()).getDescription();
+
+                    String[] availCategoriesDB = techAnnounceDAO.getAnnouncementsByLink(
+                            techannounce.getLink(), getBaseContext()).getCategoryList();
+
                     int availIdInDB = techAnnounceDAO.getAnnouncementsByLink(
                             techannounce.getLink(), getBaseContext()).getId();
+
                     if (availLinkInDB == null) {
                         //perform insertion
                         int insertedRow = techAnnounceDAO.insert(techannounce, getBaseContext());
@@ -118,10 +129,13 @@ public class TACAppSchedulingService extends IntentService {
                     //if link is available
                     else {
                         //perform update
+
                         int updatedRow = techAnnounceDAO.update(techannounce, availIdInDB , getBaseContext());
                         String value = String.valueOf(updatedRow);
                         if (updatedRow > 0) {
+                            techCategoryDAO.checkCategoryList(techannounce, availIdInDB, getBaseContext());
                             Log.i("Updated Row NO:", value);
+
                         } else {
                             Log.i("No Updated Row:", value);
                         }

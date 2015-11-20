@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.example.android.slidingtabsbasic.DBS.DBHelper;
 import com.example.android.slidingtabsbasic.DBS.TechAnnounce;
 import com.example.android.slidingtabsbasic.DBS.TechKeyList;
 

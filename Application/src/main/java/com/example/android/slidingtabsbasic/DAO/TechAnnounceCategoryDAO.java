@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.android.slidingtabsbasic.DBS.DBHelper;
 import com.example.android.slidingtabsbasic.DBS.TechAnnounceCategoryList;
 
 import java.util.ArrayList;
@@ -69,7 +70,7 @@ public class TechAnnounceCategoryDAO {
                 DBHelper.Column_AnnouncementsCategories_Announcements_ID + "," +
                 DBHelper.Column_AnnouncementsCategories_Categories_ID +
                 " FROM " + DBHelper.Table_AnnouncementsCategories +
-                " WHERE " + DBHelper.Column_AnnouncementsCategories_Categories_ID + " =?"; // It's a good practice to use parameter ?, instead of concatenate string
+                " WHERE " + DBHelper.Column_AnnouncementsCategories_Categories_ID + " =? "; // It's a good practice to use parameter ?, instead of concatenate string
 
         int iCount = 0;
         Cursor cursor = db.rawQuery(selectQuery, new String[]{String.valueOf(cat_id)});
@@ -94,6 +95,40 @@ public class TechAnnounceCategoryDAO {
         cursor.close();
         db.close();
         return techA_CategoryLists;
+    }
+
+    public int getAnnCatId(int ann_id, int cat_id, Context c) {
+
+
+        dbHelper = new DBHelper(c);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String selectQuery = "SELECT  " +
+                DBHelper.Column_AnnouncementsCategories_ID + "," +
+                DBHelper.Column_AnnouncementsCategories_Announcements_ID + "," +
+                DBHelper.Column_AnnouncementsCategories_Categories_ID +
+                " FROM " + DBHelper.Table_AnnouncementsCategories +
+                " WHERE " + DBHelper.Column_AnnouncementsCategories_Categories_ID + " = " + cat_id +
+                " AND " + DBHelper.Column_AnnouncementsCategories_Announcements_ID + " = " + ann_id ; // It's a good practice to use parameter ?, instead of concatenate string
+
+         int ann_cat_id = 0;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        //if (cursor.moveToFirst()) {
+
+        while (cursor.moveToNext()) {
+            TechAnnounceCategoryList techAnnounceCategoryList = new TechAnnounceCategoryList();
+
+            ann_cat_id = cursor.getInt(cursor.getColumnIndex(DBHelper.Column_AnnouncementsCategories_ID));
+
+            techAnnounceCategoryList.setA_Id(cursor.getInt(cursor.getColumnIndex(DBHelper.Column_AnnouncementsCategories_Announcements_ID)));
+            techAnnounceCategoryList.setC_Id(cursor.getInt(cursor.getColumnIndex(DBHelper.Column_AnnouncementsCategories_Categories_ID)));
+
+            //if(cursor.getPosition() == iCount + 1){
+        }
+
+        cursor.close();
+        db.close();
+        return ann_cat_id;
     }
 
 }

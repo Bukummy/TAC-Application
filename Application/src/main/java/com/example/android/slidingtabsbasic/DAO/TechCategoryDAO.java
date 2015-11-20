@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.example.android.slidingtabsbasic.DBS.DBHelper;
 import com.example.android.slidingtabsbasic.DBS.TechAnnounce;
 import com.example.android.slidingtabsbasic.DBS.TechCategoryList;
 
@@ -225,27 +226,31 @@ public class TechCategoryDAO {
 
 
             TechCategoryList techCategoryList = getCategoriesByName(categoryName, c);
+
             int cat_id = techCategoryList.getId();
 
-            if(cat_id > 1){
-                loadAnnouncementCategoryList(announcement_id, cat_id, c);
+            if(cat_id >= 1){
+                loadTechAnnouncementCategoryList(announcement_id, cat_id, c);
 
             }
         }
 
     }
 
-    public void loadAnnouncementCategoryList (int ann_id, int cat_id, Context c){
+    public void loadTechAnnouncementCategoryList(int ann_id, int cat_id, Context c){
         TechAnnounceCategoryDAO techAnnounceCategoryDAO= new TechAnnounceCategoryDAO();
-
-        int insertedRow = techAnnounceCategoryDAO.insert(ann_id, cat_id, c);
-        String value = String.valueOf(insertedRow);
-        //log progress
-        if (insertedRow >= 1) {
-            Log.i("Inserted AC Row NO:", value);
-        } else {
-            Log.i("No Inserted AC Row:", value);
-        }
+        int annCatId = techAnnounceCategoryDAO.getAnnCatId(ann_id, cat_id, c);
+        if (annCatId < 1)
+        {
+            int insertedRow = techAnnounceCategoryDAO.insert(ann_id, cat_id, c);
+            String value = String.valueOf(insertedRow);
+            //log progress
+            if (insertedRow >= 1) {
+                Log.i("Inserted AC Row NO:", value);
+            } else {
+                Log.i("No Inserted AC Row:", value);
+            }
+            }
 
     }
 }

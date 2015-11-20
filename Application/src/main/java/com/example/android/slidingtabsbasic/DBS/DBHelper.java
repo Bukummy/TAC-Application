@@ -1,4 +1,4 @@
-package com.example.android.slidingtabsbasic.DAO;
+package com.example.android.slidingtabsbasic.DBS;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -66,7 +66,7 @@ public class DBHelper extends SQLiteOpenHelper {
             {Column_AnnouncementsCategories_Announcements_ID, Column_AnnouncementsCategories_Categories_ID};
 
     public static final String DATABASE_NAME = "announcementsDB";
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 5;
 
     //SQL statements of Announcements table creation
     public static final String SQL_CREATE_TABLE_Announcements = "CREATE TABLE " + Table_Announcements +"("

@@ -9,7 +9,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.example.android.common.logger.Log;
 import com.example.android.slidingtabsbasic.DAO.TechAnnounceCategoryDAO;
 import com.example.android.slidingtabsbasic.DAO.TechAnnounceDAO;
 import com.example.android.slidingtabsbasic.DAO.TechAnnounceKeyDAO;
@@ -48,14 +50,15 @@ public class AnnouncementsList extends Activity {
 
         Intent intent = getIntent();
         String title = intent.getStringExtra("Title");
+
         setTitle(title + " List");
 
 
         String pastActivity = intent.getStringExtra("From");
-        announcementTitles = intent.getStringArrayExtra("Titles");
         announcementLinks = intent.getStringArrayExtra("URLs");
+        announcementTitles = intent.getStringArrayExtra("Titles");
 
-        ListView list = (ListView) findViewById(R.id.AnnouncementListView);
+        final ListView list = (ListView) findViewById(R.id.AnnouncementListView);
 
         String[] listName = new String[]{"Category", "Tags", "Favorite"};
 
@@ -63,20 +66,20 @@ public class AnnouncementsList extends Activity {
         String[] links = new String[]{"http://www.techannounce.ttu.edu/"};
 
         //Set announcements depending on which was chosen
-        if (pastActivity.equals(listName[0])) {
-            DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title, 0).invoke();
-            announcements = displayAnnouncementList.getAnnouncements();
-            links = displayAnnouncementList.getLinks();
-
-        }
         if (pastActivity.equals(listName[1])) {
             DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title, 1).invoke();
             announcements = displayAnnouncementList.getAnnouncements();
             links = displayAnnouncementList.getLinks();
         }
 
+        else{
+            DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title, 0).invoke();
+            announcements = displayAnnouncementList.getAnnouncements();
+            links = displayAnnouncementList.getLinks();
+        }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.ann_list_style, R.id.tvAnn, announcements);
+
 
         list.setAdapter(adapter);
 
@@ -95,6 +98,30 @@ public class AnnouncementsList extends Activity {
                 startActivity(intent);
             }
         });
+
+    list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+            if (techAnnounceDAO.getAnnouncementsByLink(finalLinks[position], getBaseContext()).getLink() == null &&
+                    list.getItemAtPosition(position) == "No Announcements") {
+                return false;
+            }
+            else {
+
+                int updatedRow = techAnnounceDAO.updateSavedCol(1, finalLinks[position], getBaseContext());
+                if (updatedRow >= 1) {
+                    android.util.Log.i("Updated Ann Row: ", String.valueOf(updatedRow));
+                    view.setSelected(true);
+                    Toast.makeText(getBaseContext(), "Announcement Saved", Toast.LENGTH_LONG).show();
+                    return true;
+                } else {
+                    Log.i("Updated Ann Row: ", "No update");
+                    return false;
+                }
+            }
+        }
+    });
 
     }
 
@@ -149,58 +176,62 @@ public class AnnouncementsList extends Activity {
         public DisplayAnnouncementList invoke() {
             switch (list) {
                 case 0:
-                    switch (title) {
-                        case "All Announcements":
-                            announcements = announcementTitles;
+                    if (title.equals("All Announcements") )
+                    {
+                          announcements = announcementTitles;
                             links = announcementLinks;
-                            break;
+                    }
+                    else{
+                        int cat_id= techCategoryDAO.getCategoriesByName(title, getBaseContext()).getId();
 
-                        default:
+                        ArrayList<TechAnnounceCategoryList> announcementCat = techAnnounceCategoryDAO.getAnnByCatId(cat_id,
+                                getBaseContext());
 
-                            ArrayList<TechAnnounceCategoryList> announcementCat =techAnnounceCategoryDAO.getAnnByCatId(
-                                    techCategoryDAO.getCategoriesByName(title, getBaseContext()).getId(), getBaseContext());
+                        if (announcementCat.size() == 0){
+                            announcements = new String[]{"No Announcements"};
+                            links = new String[]{"http://www.techannounce.ttu.edu/"};
+                        }
+                        else {
                             String[] announcementsCatTitle = new String[announcementCat.size()];
                             String[] announcementsCatLink = new String[announcementCat.size()];
-                            int val = 0;
-                            for(TechAnnounceCategoryList techAnnounceCategoryList: announcementCat)
-                            {
-                                announcementsCatTitle[val++] = techAnnounceDAO.getAnnouncementsById(
-                                        techAnnounceCategoryList.getA_Id(), getBaseContext()).getTitle();
+                            int i = 0;
+                            int j = 0;
 
-                                announcementsCatLink[val++] = techAnnounceDAO.getAnnouncementsById(
-                                        techAnnounceCategoryList.getA_Id(), getBaseContext()).getLink();
+                            for (TechAnnounceCategoryList techAnnounceCategoryList : announcementCat) {
+                                TechAnnounce announcement4mDB = techAnnounceDAO.getAnnouncementsById(
+                                        techAnnounceCategoryList.getA_Id(), getBaseContext());
+
+                                announcementsCatTitle[i++] = announcement4mDB.getTitle();
+                                announcementsCatLink[j++] = announcement4mDB.getLink();
                             }
                             announcements = announcementsCatTitle;
                             links = announcementsCatLink;
-                            break;
+                        }
                     }
                     break;
                 case 1:
-                    switch (title) {
-                        case "All Announcements":
-                            announcements = announcementTitles;
-                            links = announcementLinks;
-                            break;
+                    int cat_id= techCategoryDAO.getCategoriesByName(title, getBaseContext()).getId();
+                    ArrayList<TechAnnounceCategoryList> announcementCat = techAnnounceCategoryDAO.getAnnByCatId(cat_id ,getBaseContext());
 
-                        default:
-                            announcements = new String[]{"No Announcements"};
-                            links = new String[]{"http://www.techannounce.ttu.edu/"};
-                            break;
+                    String[] announcementsCatTitle = new String[announcementCat.size()];
+                    String[] announcementsCatLink = new String[announcementCat.size()];
+                    int i = 0;
+                    int j = 0;
+
+                    for(TechAnnounceCategoryList techAnnounceCategoryList: announcementCat)
+                    {
+                        TechAnnounce announcement4mDB = techAnnounceDAO.getAnnouncementsById(
+                                techAnnounceCategoryList.getA_Id(), getBaseContext());
+
+                        announcementsCatTitle[i++] = announcement4mDB.getTitle();
+                        announcementsCatLink[j++] = announcement4mDB.getLink();
                     }
-                    break;
+                    announcements = announcementsCatTitle;
+                    links = announcementsCatLink;
 
                 default:
-                    switch (title) {
-                        case "All Announcements":
-                            announcements = announcementTitles;
-                            links = announcementLinks;
-                            break;
-
-                        default:
-                            announcements = new String[]{"No Announcements"};
-                            links = new String[]{"http://www.techannounce.ttu.edu/"};
-                            break;
-                    }
+                    announcements = new String[]{"No Announcements"};
+                    links = new String[]{"http://www.techannounce.ttu.edu/"};
                     break;
 
             }

@@ -27,10 +27,10 @@ public class OneTimeRun extends Application {
             String[] categoryList = new String[]{
                     "Academic",
                     "Administration & Finance Information Systems Management (AFISM)",
-                    "Arts  Entertainment",
+                    "Arts & Entertainment",
                     "Athletic",
                     "Computing Equipment",
-                    "Departamental",
+                    "Departmental",
                     "Departmental Events",
                     "Events",
                     "Faculty/Staff Organization",

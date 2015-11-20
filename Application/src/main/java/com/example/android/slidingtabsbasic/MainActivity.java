@@ -119,7 +119,6 @@ public class MainActivity extends SampleActivityBase {
                 categories = techannounce.getCategoryList();
                 announcementTitle[i++] = techannounce.getTitle();
                 announcementLink[j++] = techannounce.getLink();
-                announcementCategory.add(categories);
 
             }
             //createIntent(announcementTitle, announcementLink);
@@ -130,7 +129,6 @@ public class MainActivity extends SampleActivityBase {
             Bundle announcementsBundle = new Bundle();
             announcementsBundle.putStringArray("Announcement Titles", announcementTitles);
             announcementsBundle.putStringArray("Announcement URLs", announcementURLs);
-//            announcementsBundle.putStringArrayList("Announcement Category", categories);
             if (state == null) {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 SlidingTabsBasicFragment fragment = new SlidingTabsBasicFragment();
@@ -170,6 +168,8 @@ public class MainActivity extends SampleActivityBase {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
+    //This task handler get the announcement items from TechAnnounce in real time this implies:
+    // every time the app loads, the new announcements will be available to users if any
     private class MyTask extends AsyncTask<String, String, String> {
 
         @Override
