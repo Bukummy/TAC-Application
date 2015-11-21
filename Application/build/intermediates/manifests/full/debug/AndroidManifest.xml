@@ -55,6 +55,17 @@
             android:name="com.example.android.slidingtabsbasic.DisplayAnnouncement"
             android:label="@string/title_activity_display_announcement" >
         </activity>
+
+        <receiver android:name="com.example.android.slidingtabsbasic.AlarmManager.TACAppAlarmReceiver" />
+        <receiver
+            android:name="com.example.android.slidingtabsbasic.AlarmManager.TACAppBootReceiver"
+            android:enabled="false" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name="com.example.android.slidingtabsbasic.AlarmManager.TACAppSchedulingService" />
     </application>
 
 </manifest>
