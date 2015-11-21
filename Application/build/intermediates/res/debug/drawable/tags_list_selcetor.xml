@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:state_selected="false"
+        android:tag="false"
+        android:drawable="@drawable/ic_checkbox_marked_grey"   >
+    </item>
+
+    <item
+        android:state_selected="true"
+        android:tag="@string/tag_fav_text"
+        android:drawable="@drawable/ic_checkbox_marked_black" >
+    </item>
+
+
+</selector><!-- From: file:/Users/DanielMedina/Documents/TAC-Application/Application/src/main/res/drawable/tags_list_selcetor.xml -->
