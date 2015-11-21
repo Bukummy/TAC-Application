@@ -1,6 +1,8 @@
 package com.example.android.slidingtabsbasic.RSSParser;
 
 
+import com.example.android.slidingtabsbasic.DBS.TechAnnounce;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 

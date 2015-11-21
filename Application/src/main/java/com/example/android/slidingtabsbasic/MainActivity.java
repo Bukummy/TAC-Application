@@ -18,7 +18,6 @@
 package com.example.android.slidingtabsbasic;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -28,22 +27,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.ViewAnimator;
 
-import com.example.android.slidingtabsbasic.RSSParser.AllAnnouncementsList;
-import com.example.android.slidingtabsbasic.RSSParser.TechAnnounce;
-
 import com.example.android.common.activities.SampleActivityBase;
 import com.example.android.common.logger.Log;
-import com.example.android.common.logger.LogFragment;
-import com.example.android.common.logger.LogWrapper;
-import com.example.android.common.logger.MessageOnlyLogFilter;
-import com.example.android.slidingtabsbasic.RSSParser.TechAnnounce;
+import com.example.android.slidingtabsbasic.DBS.TechAnnounce;
 import com.example.android.slidingtabsbasic.RSSParser.HttpManager;
 import com.example.android.slidingtabsbasic.RSSParser.TechAnnounceParser;
 
@@ -59,26 +49,28 @@ import java.util.List;
  */
 public class MainActivity extends SampleActivityBase {
 
+    //TACAppAlarmReceiver alarm = new TACAppAlarmReceiver();
+
     public static final String TAG = "MainActivity";
 
-    ListView listAnnouncement;
-    ProgressBar pb;
-    List<MyTask> tasks;
-    List<TechAnnounce> techAnnounceList;
-    String[] announcementTitles = new String[]{};
-    String[] announcementURLs = new String[]{};
+    //ListView listAnnouncement;
+    private ProgressBar pb;
+    private List<MyTask> tasks;
+    private List<TechAnnounce> techAnnounceList;
+    //List<String[]> announcementCategories = new ArrayList<>();
+    private String[] announcementTitles = new String[]{};
+    private String[] announcementURLs = new String[]{};
 
     // Whether the Log Fragment is currently shown
     private boolean mLogShown;
 
-    Bundle state;
+    private Bundle state;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
 
         setContentView(R.layout.activity_main);
 
@@ -87,10 +79,13 @@ public class MainActivity extends SampleActivityBase {
         pb = (ProgressBar) findViewById(R.id.progressBar);
         pb.setVisibility(View.INVISIBLE);
 
+        //take this out
+//        alarm.setAlarm(this);
+
         tasks = new ArrayList<>();
 
-        for(int i = 0;i < announcementTitles.length;i++){
-            Log.e("Title", announcementTitles[i]);
+        for (String announcementTitle : announcementTitles) {
+            Log.e("Title", announcementTitle);
         }
 
     }
@@ -98,18 +93,18 @@ public class MainActivity extends SampleActivityBase {
     protected void onStart() {
         super.onStart();
         if (isOnline()) {
-            requestData("http://www.techannounce.ttu.edu/Client/ViewRss.aspx");
+            requestData();
         } else {
             Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG).show();
         }
     }
 
-    private void requestData(String uri) {
+    private void requestData() {
         MyTask task = new MyTask();
-        task.execute(uri);
+        task.execute("http://www.techannounce.ttu.edu/Client/ViewRss.aspx");
     }
 
-    protected void updateDisplay() {
+    private void updateDisplay() {
         if (techAnnounceList != null){
 
             final String[] announcementTitle = new String[techAnnounceList.size()];
@@ -119,13 +114,15 @@ public class MainActivity extends SampleActivityBase {
             for (TechAnnounce techannounce :techAnnounceList ) {
                 announcementTitle[i++] = techannounce.getTitle();
                 announcementLink[j++] = techannounce.getLink();
+
             }
             //createIntent(announcementTitle, announcementLink);
             announcementTitles = announcementTitle;
             announcementURLs = announcementLink;
 
+
             Bundle announcementsBundle = new Bundle();
-            announcementsBundle.putStringArray("Announcement Titles",announcementTitles);
+            announcementsBundle.putStringArray("Announcement Titles", announcementTitles);
             announcementsBundle.putStringArray("Announcement URLs", announcementURLs);
             if (state == null) {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -160,16 +157,14 @@ public class MainActivity extends SampleActivityBase {
 //        });
 //      }
 
-    protected boolean isOnline() {
+    private boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-            return true;
-        } else {
-            return false;
-        }
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
+    //This task handler get the announcement items from TechAnnounce in real time this implies:
+    // every time the app loads, the new announcements will be available to users if any
     private class MyTask extends AsyncTask<String, String, String> {
 
         @Override
@@ -185,8 +180,7 @@ public class MainActivity extends SampleActivityBase {
         @Override
         protected String doInBackground(String... params) {
 
-            String content = HttpManager.getData(params[0]);
-            return content;
+            return HttpManager.getData(params[0]);
         }
 
 
@@ -230,18 +224,18 @@ public class MainActivity extends SampleActivityBase {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-//        switch(item.getItemId()) {
-//            case R.id.menu_toggle_log:
-//                mLogShown = !mLogShown;
-//                ViewAnimator output = (ViewAnimator) findViewById(R.id.sample_output);
-//                if (mLogShown) {
-//                    output.setDisplayedChild(1);
-//                } else {
-//                    output.setDisplayedChild(0);
-//                }
-//                supportInvalidateOptionsMenu();
-//                return true;
-//        }
+        switch(item.getItemId()) {
+            case R.id.menu_toggle_log:
+                mLogShown = !mLogShown;
+                ViewAnimator output = (ViewAnimator) findViewById(R.id.sample_output);
+                if (mLogShown) {
+                    output.setDisplayedChild(1);
+                } else {
+                    output.setDisplayedChild(0);
+                }
+                supportInvalidateOptionsMenu();
+                return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 }
