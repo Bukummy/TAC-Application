@@ -36,6 +36,7 @@ import com.example.android.slidingtabsbasic.DAO.TechCategoryDAO;
 import com.example.android.slidingtabsbasic.DBS.TechAnnounce;
 import com.example.android.slidingtabsbasic.DBS.TechCategoryList;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -233,7 +234,7 @@ public class SlidingTabsBasicFragment extends Fragment {
         //Set up each tab UI
         public void setTabList(View view, int position){
             final ListView list, list2, list3, list4;
-            ArrayAdapter<String> adapter;
+            final ArrayAdapter<String> adapter,adapter2,adapter3;
 
 
             switch (position) {
@@ -307,9 +308,9 @@ public class SlidingTabsBasicFragment extends Fragment {
                     final String[] tags = new String[]{"Free Stuff", "Movies", "Graduate", "Undergraduate"
                             , "Paid Research"};
 
-                    adapter = new ArrayAdapter<String>(getActivity(), R.layout.tags_list_style, R.id.tvList, tags);
+                    adapter2 = new ArrayAdapter<String>(getActivity(), R.layout.tags_list_style, R.id.tvList, tags);
 
-                    list2.setAdapter(adapter);
+                    list2.setAdapter(adapter2);
 
                     // View Chosen Tag List
                     list2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -327,19 +328,19 @@ public class SlidingTabsBasicFragment extends Fragment {
 
                 // On Favorites Tab
                 case 2:
+
                     list3 = (ListView) view.findViewById(R.id.listTags);
-                    List<TechCategoryList> categoryByFav = techCategoryDAO.getCategoriesByFav(favorite[1],getContext());
-                    final String[] favCategoryName = new String[categoryByFav.size()];
-                    int j = 0;
+                    final List<TechCategoryList> categoryByFav = techCategoryDAO.getCategoriesByFav(favorite[1],getContext());
+                    final ArrayList<String> favCategoryName = new ArrayList<String>();
 
                     for (TechCategoryList techCategoryList : categoryByFav){
-                        favCategoryName[j++] = techCategoryList.getName();
+                        favCategoryName.add(techCategoryList.getName());
                         //techAnnounceCategoryDAO.getAnnByCatID(techCategoryList.getId(),getBaseContext());
                     }
 
-                    adapter = new ArrayAdapter<String>(getActivity(), R.layout.tags_list_style, R.id.tvList, favCategoryName);
+                    adapter3 = new ArrayAdapter<String>(getActivity(), R.layout.tags_list_style, R.id.tvList, favCategoryName);
 
-                    list3.setAdapter(adapter);
+                    list3.setAdapter(adapter3);
 
                     // View Chosen Category List
                     list3.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -350,7 +351,7 @@ public class SlidingTabsBasicFragment extends Fragment {
 
                             Intent intent = new Intent(getActivity(), AnnouncementsList.class);
                             intent.putExtra("From", "Category");
-                            intent.putExtra("Title", favCategoryName[position]);
+                            intent.putExtra("Title", favCategoryName.get(position));
                             getActivity().startActivity(intent);
                         }
                     });
@@ -359,23 +360,14 @@ public class SlidingTabsBasicFragment extends Fragment {
                         @Override
                         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                            if ( position == 0){
-                                return false;
-                            }
-                            else {
+                            int updatedRow = techCategoryDAO.updateFavTag(favorite[0], position , getContext());
+                            Log.e("Updated Cat Row: ", String.valueOf(updatedRow));
+                            view.setSelected(true);
+                            Toast.makeText(getActivity(), "Removed From Favorite", Toast.LENGTH_LONG).show();
+                            favCategoryName.remove(position);
+                            adapter3.notifyDataSetChanged();
+                            return true;
 
-                                int updatedRow = techCategoryDAO.updateFavTag(favorite[0], position , getContext());
-                                if(updatedRow >= 1) {
-                                    Log.i("Updated Cat Row: ", String.valueOf(updatedRow));
-                                    view.setSelected(true);
-                                    Toast.makeText(getActivity(), "Removed From Favorite", Toast.LENGTH_LONG).show();
-                                    return true;
-                                }
-                                else{
-                                    Log.i("Updated Cat Row: ", "No update");
-                                    return false;
-                                }
-                            }
                         }
                     });
 
