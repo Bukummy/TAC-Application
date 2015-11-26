@@ -57,7 +57,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String Column_AnnouncementsCategories_Date_Added ="aC_date_added";
 
     public static final String DATABASE_NAME = "announcementsDB";
-    public static final int DATABASE_VERSION = 5;
+    public static final int DATABASE_VERSION = 6;
 
     //SQL statements of Announcements table creation
     public static final String SQL_CREATE_TABLE_Announcements = "CREATE TABLE " + Table_Announcements +"("
