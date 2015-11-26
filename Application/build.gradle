@@ -2,6 +2,8 @@
 buildscript {
     repositories {
         jcenter()
+        mavenCentral()
+        mavenLocal  ()
     }
 
     dependencies {
@@ -19,6 +21,7 @@ dependencies {
     compile "com.android.support:support-v4:23.0.0"
     compile "com.android.support:support-v13:23.0.0"
     compile "com.android.support:cardview-v7:23.0.0"
+    compile "com.github.markushi:circlebutton:1.1"
 }
 
 // The sample build uses multiple directories to

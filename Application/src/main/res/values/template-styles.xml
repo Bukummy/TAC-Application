@@ -22,6 +22,13 @@
 
     <style name="Theme.Sample" parent="Theme.Base" />
 
+    <style name="AppTheme.CustomTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+
+
+
     <style name="AppTheme" parent="Theme.Sample" />
     <!-- Widget styling -->
 

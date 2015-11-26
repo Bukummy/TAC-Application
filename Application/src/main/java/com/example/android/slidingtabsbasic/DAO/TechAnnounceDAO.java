@@ -22,8 +22,6 @@ public class TechAnnounceDAO  {
 
 
     public int insert(TechAnnounce announcements, Context c) {
-
-
         //Open connection to write data
         dbHelper = new DBHelper(c);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -49,21 +47,28 @@ public class TechAnnounceDAO  {
         return result;
     }
 
-    public int update(TechAnnounce announcements, int id, Context c) {
+    public int update(TechAnnounce announcementUpdate, int id, Context c) {
+        TechAnnounce announcementInDB = getAnnouncementsById(id,c);
+        //check content value
+        if(announcementUpdate.getTitle().equals(announcementInDB.getTitle())  &&
+                announcementUpdate.getDescription().equals(announcementInDB.getDescription())){
+            return 0;
+        }
+        else {
+            dbHelper = new DBHelper(c);
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            ContentValues values = new ContentValues();
 
-        dbHelper = new DBHelper(c);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
+            values.put(DBHelper.Column_Announcements_Title, announcementUpdate.getTitle());
+            values.put(DBHelper.Column_Announcements_Desc, announcementUpdate.getDescription());
+            values.put(DBHelper.Column_Announcements_Date_Added, calendar.getTimeInMillis());
+            // TODO: 11/15/2015 UpdateSaved only
 
-        values.put(DBHelper.Column_Announcements_Title, announcements.getTitle());
-        values.put(DBHelper.Column_Announcements_Desc, announcements.getDescription());
-        values.put(DBHelper.Column_Announcements_Date_Added, calendar.getTimeInMillis());
-        // TODO: 11/15/2015 UpdateSaved only
-
-        // It's a good practice to use parameter ?, instead of concatenate string
-        long announcement_id = db.update(DBHelper.Table_Announcements, values, DBHelper.Column_Announcements_ID + "= ?", new String[]{String.valueOf(id)});
-        db.close(); // Closing database connection
-        return  (int) announcement_id;
+            // It's a good practice to use parameter ?, instead of concatenate string
+            long announcement_id = db.update(DBHelper.Table_Announcements, values, DBHelper.Column_Announcements_ID + "= ?", new String[]{String.valueOf(id)});
+            db.close(); // Closing database connection
+            return (int) announcement_id;
+        }
     }
 
     public int updateSavedCol(int savedTag, String link, Context c) {
@@ -154,6 +159,42 @@ public class TechAnnounceDAO  {
         return announcementList;
     }
 
+    public ArrayList<TechAnnounce> getAllAnnouncements(Context c ){
+        dbHelper = new DBHelper(c);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String selectQuery =  "SELECT  " +
+                DBHelper.Column_Announcements_ID + ", " +
+                DBHelper.Column_Announcements_Title + ", " +
+                DBHelper.Column_Announcements_Link + ", " +
+                DBHelper.Column_Announcements_Desc + ", " +
+                DBHelper.Column_Announcements_Saved + ", " +
+                DBHelper.Column_Announcements_Date_Added +
+                " FROM " + DBHelper.Table_Announcements +
+                " ORDER BY " + DBHelper.Column_Announcements_Date_Added + " DESC "; // It's a good practice to use parameter ?, instead of concatenate string
+
+        int iCount =0;
+        ArrayList<TechAnnounce> announcementList = new ArrayList<>();
+        Cursor cursor = db.rawQuery(selectQuery, null );
+
+        if (cursor.moveToFirst()) {
+            do {
+                TechAnnounce announcements = new TechAnnounce();
+
+                announcements.setId(cursor.getInt(cursor.getColumnIndex(DBHelper.Column_Announcements_ID)));
+                announcements.setTitle(cursor.getString(cursor.getColumnIndex(DBHelper.Column_Announcements_Title)));
+                announcements.setLink(cursor.getString(cursor.getColumnIndex(DBHelper.Column_Announcements_Link)));
+                announcements.setDescription(cursor.getString(cursor.getColumnIndex(DBHelper.Column_Announcements_Desc)));
+                announcements.setSaved(cursor.getInt(cursor.getColumnIndex(DBHelper.Column_Announcements_Saved)));
+                //announcements.a_date_added =cursor.getString(cursor.getColumnIndex(dbHelper.Column_Announcements_Date_Added));
+                announcementList.add(announcements);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return announcementList;
+    }
+
     public TechAnnounce getAnnouncementsB4Date(long weekOld, long currentTime, Context c){
         dbHelper = new DBHelper(c);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -167,6 +208,7 @@ public class TechAnnounceDAO  {
                 DBHelper.Column_Announcements_Date_Added +
                 " FROM " + DBHelper.Table_Announcements
                 + " WHERE " +
+                DBHelper.Column_Announcements_Saved + " = " + 0 + " AND " +
                 DBHelper.Column_Announcements_Date_Added +
                 " NOT BETWEEN '" + weekOld + "' AND '" + currentTime + "' " ; // It's a good practice to use parameter ?, instead of concatenate string
         //String[] selectArg = {};
@@ -184,6 +226,7 @@ public class TechAnnounceDAO  {
                 announcements.setSaved(cursor.getInt(cursor.getColumnIndex(DBHelper.Column_Announcements_Saved)));
                 announcements.setDateAdded(cursor.getLong(cursor.getColumnIndex(DBHelper.Column_Announcements_Date_Added)));
             } while (cursor.moveToNext());
+
         }
 
         cursor.close();
@@ -203,12 +246,13 @@ public class TechAnnounceDAO  {
                 DBHelper.Column_Announcements_Date_Added +
                 " FROM " + DBHelper.Table_Announcements
                 + " WHERE " +
-                DBHelper.Column_Announcements_Link + "= ?"; // It's a good practice to use parameter ?, instead of concatenate string
+                DBHelper.Column_Announcements_Link + "= '" + link + "' "+
+                " ORDER BY " + DBHelper.Column_Announcements_Date_Added + " DESC "; // It's a good practice to use parameter ?, instead of concatenate string
 
         int iCount =0;
         TechAnnounce announcements = new TechAnnounce();
 
-        Cursor cursor = db.rawQuery(selectQuery, new String[] { link } );
+        Cursor cursor = db.rawQuery(selectQuery, null );
 
         if (cursor.moveToFirst()) {
             do {

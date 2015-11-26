@@ -16,7 +16,6 @@
 -->
 
 <resources>
-    <string name="app_name">TAC</string>
     <string name="intro_message">
         <![CDATA[
         

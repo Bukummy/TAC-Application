@@ -22,6 +22,8 @@ public class OneTimeRun extends Application {
            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (!prefs.getBoolean("", false)) {
 
+
+
             String[] categoryList = new String[]{
                     "Academic",
                     "Administration & Finance Information Systems Management (AFISM)",

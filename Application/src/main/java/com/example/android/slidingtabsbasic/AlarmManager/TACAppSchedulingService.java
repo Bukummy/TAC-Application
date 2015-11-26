@@ -23,6 +23,8 @@ import com.example.android.slidingtabsbasic.RSSParser.HttpManager;
 import com.example.android.slidingtabsbasic.RSSParser.TechAnnounceParser;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -45,17 +47,17 @@ public class TACAppSchedulingService extends IntentService {
 
     private final Calendar calendar = Calendar.getInstance();
     //one week in millisec
-    private final long diff = 604800;
+    private final long diff = 604800 * 1000;
 
     private final long thisTime = calendar.getTimeInMillis();
-    //plus  1 minute
-    private final long extraTime = thisTime + (60) ;
+    //plus  5 minute
+    private final long extraTime = thisTime + (5*60*1000) ;
     private final long pastWeekT = extraTime - diff;
 
-    //private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    //String currentTime = formatter.format(new Timestamp(extraTime));
+    private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    String currentTimeX = formatter.format(new Timestamp(extraTime));
 
-    //Timestamp currentTime = Timestamp.valueOf(currentT);
+    Timestamp currentTime = Timestamp.valueOf(currentTimeX);
     //String currentTimeTD = String.valueOf(currentTime);
 
     //String pastWeek = formatter.format(new Timestamp(pastWeekT));
@@ -130,9 +132,8 @@ public class TACAppSchedulingService extends IntentService {
 
                     TechAnnounce announcement = techAnnounceDAO.getAnnouncementsB4Date(pastWeekT, extraTime, getBaseContext());
                     int id = announcement.getId();
-                    if ( id > 1){
+                    if ( id >= 1){
                         int deletedRow = techAnnounceDAO.delete(id, getBaseContext());
-
                         if (techAnnounceCategoryList.getA_Id() == id){
                             int deletedACRow = techAnnounceCategoryDAO.delete(id ,getBaseContext());
                             String val = String.valueOf(deletedRow);

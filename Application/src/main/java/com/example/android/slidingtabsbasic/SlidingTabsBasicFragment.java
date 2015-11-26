@@ -16,6 +16,7 @@
 
 package com.example.android.slidingtabsbasic;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.common.logger.Log;
@@ -36,7 +38,10 @@ import com.example.android.slidingtabsbasic.DAO.TechCategoryDAO;
 import com.example.android.slidingtabsbasic.DBS.TechAnnounce;
 import com.example.android.slidingtabsbasic.DBS.TechCategoryList;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import at.markushi.ui.CircleButton;
 
 /**
  * A basic sample which shows how to use {@link com.example.android.common.view.SlidingTabLayout}
@@ -49,8 +54,12 @@ public class SlidingTabsBasicFragment extends Fragment {
 
     final TechCategoryDAO techCategoryDAO = new TechCategoryDAO();
     final TechAnnounceDAO techAnnounceDAO = new TechAnnounceDAO();
+    List<TechAnnounce> techAnnounceList = new ArrayList<>();
 
-    final int[] favorite = {0,1};
+
+    //final TechAnnounce techAnnounce = new TechAnnounce();
+
+    final static int[] favorite = {0,1};
     //TechCategoryList techCategoryList = new TechCategoryList();
 
     String[] announcementTitles;
@@ -65,6 +74,7 @@ public class SlidingTabsBasicFragment extends Fragment {
      * A {@link ViewPager} which will be used in conjunction with the {@link SlidingTabLayout} above.
      */
     private ViewPager mViewPager;
+    private at.markushi.ui.CircleButton tutorialButton;
 
     /**
      * Inflates the {@link View} which will be displayed by this {@link Fragment}, from the app's
@@ -90,9 +100,15 @@ public class SlidingTabsBasicFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        //list of current parsed data
-        announcementTitles = getArguments().getStringArray("Announcement Titles");
-        announcementURLs = getArguments().getStringArray("Announcement URLs");
+
+        tutorialButton = (CircleButton) view.findViewById(R.id.tutorialBtn);
+        /*tutorialButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),TutorialDialog.class);
+                startActivity(intent);
+            }
+            });*/
 
         //BEGIN_INCLUDE (setup_viewpager)
         //Get the ViewPager and set it's PagerAdapter so that it can display items
@@ -233,7 +249,9 @@ public class SlidingTabsBasicFragment extends Fragment {
         //Set up each tab UI
         public void setTabList(View view, int position){
             final ListView list, list2, list3, list4;
-            ArrayAdapter<String> adapter;
+            final ArrayAdapter<String> adapter,adapter3,adapter4;
+
+            final SlidingTabKeyList adapter2;
 
 
             switch (position) {
@@ -251,7 +269,7 @@ public class SlidingTabsBasicFragment extends Fragment {
                     }
                     final String[] categories = new String[categoryName.length +1];
 
-                    categories[0] = "All Announcements";
+                    categories[0] = "Most Recent Announcement";
                     System.arraycopy(categoryName, 0, categories, 1, categoryName.length);
 
                     //final  String[] category = categoryName;
@@ -267,13 +285,18 @@ public class SlidingTabsBasicFragment extends Fragment {
                         public void onItemClick(AdapterView<?> parent, View view, int position, long arg3) {
                             view.setSelected(true);
                             //Display Chosen Category Announcement List
-
-                            Intent intent = new Intent(getActivity(), AnnouncementsList.class);
-                            intent.putExtra("From", "Category");
-                            intent.putExtra("Title", categories[position]);
-                            intent.putExtra("Titles", announcementTitles);
-                            intent.putExtra("URLs", announcementURLs);
-                            getActivity().startActivity(intent);
+                            if (position == 0) {
+                                Intent intent = new Intent(getActivity(), MostRecentList.class);
+                                intent.putExtra("From", "Category");
+                                intent.putExtra("Title", categories[position]);
+                                getActivity().startActivity(intent);
+                            }
+                            else{
+                                Intent intent = new Intent(getActivity(), AnnouncementsList.class);
+                                intent.putExtra("From", "Category");
+                                intent.putExtra("Title", categories[position]);
+                                getActivity().startActivity(intent);
+                            }
                         }
                     });
 
@@ -284,12 +307,12 @@ public class SlidingTabsBasicFragment extends Fragment {
                             if (position == 0) {
                                 return false;
                             } else {
-                                //onItemLongClick, update the table, and log Pri
+                                //onItemLongClick, update the table, and log Progress
                                 int updatedRow = techCategoryDAO.updateFavTag(favorite[1], categories[position], getContext());
                                 if (updatedRow >= 1) {
                                     Log.i("Updated Cat Row: ", String.valueOf(updatedRow));
                                     view.setSelected(true);
-                                    Toast.makeText(getActivity(), "Saved to Favorite", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getActivity(), "Saved " +categories[position] + " to Favorite", Toast.LENGTH_LONG).show();
                                     return true;
                                 } else {
                                     Log.i("Updated Cat Row: ", "No update");
@@ -302,14 +325,15 @@ public class SlidingTabsBasicFragment extends Fragment {
 
                 // On Tags Tab
                 case 1:
-                    //TODO: Change the R.id.listTags to the corresponding id of the ListView in XML
+                    final ArrayList<TechAnnounce> techAnnounceList = new ArrayList<>();
+
+                    for (TechAnnounce techAnnounce :techAnnounceDAO.getAllAnnouncements(getContext()))
+                    {
+                        techAnnounceList.add(techAnnounce);
+                    }
+                    adapter2 = new SlidingTabKeyList(getActivity(), R.layout.tags_list_style, R.id.tvList, techAnnounceList);
                     list2 = (ListView) view.findViewById(R.id.listTags);
-                    final String[] tags = new String[]{"Free Stuff", "Movies", "Graduate", "Undergraduate"
-                            , "Paid Research"};
-
-                    adapter = new ArrayAdapter<String>(getActivity(), R.layout.tags_list_style, R.id.tvList, tags);
-
-                    list2.setAdapter(adapter);
+                    list2.setAdapter(adapter2);
 
                     // View Chosen Tag List
                     list2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -317,29 +341,49 @@ public class SlidingTabsBasicFragment extends Fragment {
                         public void onItemClick(AdapterView<?> parent, View view, int position, long arg3) {
                             view.setSelected(true);
                             //TODO: Display Chosen Tag Announcements
-                            Intent intent = new Intent(getActivity(), AnnouncementsList.class);
-                            intent.putExtra("Title", tags[position]);
+                            Intent intent = new Intent(getActivity(), DisplayAnnouncement.class);
+                            intent.putExtra("Title", techAnnounceList.get(position).getTitle());
+                            intent.putExtra("URL", techAnnounceList.get(position).getLink());
                             intent.putExtra("From", "Tags");
                             getActivity().startActivity(intent);
                         }
+                    });
+                    list2.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                        @Override
+                        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                            int updatedRow = techAnnounceDAO.updateSavedCol(1, techAnnounceList.get(position).getLink(), getContext());
+
+                            adapter2.notifyDataSetChanged();
+                            if (updatedRow >= 1) {
+                                android.util.Log.i("Updated Ann Row: ", String.valueOf(updatedRow));
+                                view.setSelected(true);
+                                Toast.makeText(getActivity(), "Announcement #" + (position + 1) + " is Saved", Toast.LENGTH_LONG).show();
+                                return true;
+                            } else {
+                                Log.i("Updated Ann Row: ", "No update");
+                                return false;
+                            }
+                            }
+
                     });
                     break;
 
                 // On Favorites Tab
                 case 2:
+
                     list3 = (ListView) view.findViewById(R.id.listTags);
-                    List<TechCategoryList> categoryByFav = techCategoryDAO.getCategoriesByFav(favorite[1],getContext());
-                    final String[] favCategoryName = new String[categoryByFav.size()];
-                    int j = 0;
+                    final List<TechCategoryList> categoryByFav = techCategoryDAO.getCategoriesByFav(favorite[1],getContext());
+                    final ArrayList<String> favCategoryName = new ArrayList<String>();
 
                     for (TechCategoryList techCategoryList : categoryByFav){
-                        favCategoryName[j++] = techCategoryList.getName();
+                        favCategoryName.add(techCategoryList.getName());
                         //techAnnounceCategoryDAO.getAnnByCatID(techCategoryList.getId(),getBaseContext());
                     }
 
-                    adapter = new ArrayAdapter<String>(getActivity(), R.layout.tags_list_style, R.id.tvList, favCategoryName);
+                    adapter3 = new ArrayAdapter<String>(getActivity(), R.layout.tags_list_style, R.id.tvList, favCategoryName);
 
-                    list3.setAdapter(adapter);
+                    list3.setAdapter(adapter3);
 
                     // View Chosen Category List
                     list3.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -350,7 +394,7 @@ public class SlidingTabsBasicFragment extends Fragment {
 
                             Intent intent = new Intent(getActivity(), AnnouncementsList.class);
                             intent.putExtra("From", "Category");
-                            intent.putExtra("Title", favCategoryName[position]);
+                            intent.putExtra("Title", favCategoryName.get(position));
                             getActivity().startActivity(intent);
                         }
                     });
@@ -359,49 +403,40 @@ public class SlidingTabsBasicFragment extends Fragment {
                         @Override
                         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                            if ( position == 0){
-                                return false;
-                            }
-                            else {
+                            int updatedRow = techCategoryDAO.updateFavTag(favorite[0], favCategoryName.get(position) , getContext());
+                            Log.e("Updated Cat Row: ", String.valueOf(updatedRow));
+                            view.setSelected(true);
+                            Toast.makeText(getActivity(),  "Removed " + favCategoryName.get(position) +" From Favorite", Toast.LENGTH_LONG).show();
+                            favCategoryName.remove(position);
+                            adapter3.notifyDataSetChanged();
+                            return true;
 
-                                int updatedRow = techCategoryDAO.updateFavTag(favorite[0], position , getContext());
-                                if(updatedRow >= 1) {
-                                    Log.i("Updated Cat Row: ", String.valueOf(updatedRow));
-                                    view.setSelected(true);
-                                    Toast.makeText(getActivity(), "Removed From Favorite", Toast.LENGTH_LONG).show();
-                                    return true;
-                                }
-                                else{
-                                    Log.i("Updated Cat Row: ", "No update");
-                                    return false;
-                                }
-                            }
                         }
                     });
+
 
                     break;
 
                 // On Saved Tab
                 case 3:
-                    list3 = (ListView) view.findViewById(R.id.listTags);
-                    List<TechAnnounce> savedAnnounments = techAnnounceDAO.getAnnouncementsBySavedTag(1, getContext());
-                    final String[] savedTitles = new String[savedAnnounments.size()];
-                    final String[] savedLinks = new String[savedAnnounments.size()];
+                    list4 = (ListView) view.findViewById(R.id.listTags);
+                    List<TechAnnounce> savedAnnouncements = techAnnounceDAO.getAnnouncementsBySavedTag(1, getContext());
+                    final ArrayList<String> savedTitles = new ArrayList<>();
+                    final ArrayList<String> savedLinks = new ArrayList<>();
                     int p = 0;
                     int q = 0;
 
-                    for (TechAnnounce techAnnounce : savedAnnounments){
-                        savedTitles[p++] = techAnnounce.getTitle();
-                        savedLinks[q++] = techAnnounce.getLink();
-                        //techAnnounceCategoryDAO.getAnnByCatID(techCategoryList.getId(),getBaseContext());
+                    for (TechAnnounce techAnnounce : savedAnnouncements) {
+                        savedTitles.add(techAnnounce.getTitle());
+                        savedLinks.add(techAnnounce.getLink());
                     }
 
-                    adapter = new ArrayAdapter<String>(getActivity(), R.layout.tags_list_style, R.id.tvList, savedTitles);
-
-                    list3.setAdapter(adapter);
+                    adapter4 = new ArrayAdapter<String>(getActivity(), R.layout.tags_list_style, R.id.tvList, savedTitles);
+                    adapter4.notifyDataSetChanged();
+                    list4.setAdapter(adapter4);
 
                     // View Chosen Category List
-                    list3.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    list4.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long arg3) {
                             view.setSelected(true);
@@ -409,21 +444,24 @@ public class SlidingTabsBasicFragment extends Fragment {
 
                             Intent intent = new Intent(getActivity(), DisplayAnnouncement.class);
 
-                            intent.putExtra("Title", savedTitles[position]);
-                            intent.putExtra("URL", savedLinks[position]);
+                            intent.putExtra("Title", savedTitles.get(position));
+                            intent.putExtra("URL", savedLinks.get(position));
                             getActivity().startActivity(intent);
                         }
                     });
 
-                    list3.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                    list4.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                         @Override
                         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                            int updatedRow = techAnnounceDAO.updateSavedCol(0, savedLinks[position], getContext());
+                            int updatedRow = techAnnounceDAO.updateSavedCol(0, savedLinks.get(position), getContext());
                             if (updatedRow >= 1) {
+                                savedLinks.remove(position);
+                                savedTitles.remove(position);
                                 Log.i("Updated Ann Row: ", String.valueOf(updatedRow));
                                 view.setSelected(true);
-                                Toast.makeText(getActivity(), "Removed Saved Announcement ", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity(), "Removed #" + (position+1) +" Saved Announcement ", Toast.LENGTH_LONG).show();
+
                                 return true;
                             } else {
                                 Log.i("Updated Ann Row: ", "No update");
@@ -439,7 +477,11 @@ public class SlidingTabsBasicFragment extends Fragment {
                     break;
 
             }
+
         }
+
+
+
 
         /**
          * Destroy the item from the {@link ViewPager}. In our case this is simply removing the
@@ -451,5 +493,44 @@ public class SlidingTabsBasicFragment extends Fragment {
             Log.i(LOG_TAG, "destroyItem() [position: " + position + "]");
         }
 
+
+
+        private class SlidingTabKeyList extends ArrayAdapter<TechAnnounce> {
+
+            private List<TechAnnounce> techAnnounceList;
+
+            public SlidingTabKeyList(Context context, int resource, int textViewResourceId, List<TechAnnounce> techAnnounceList) {
+                super(context, resource, textViewResourceId, techAnnounceList);
+                this.techAnnounceList = techAnnounceList;
+            }
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                // Make sure we have a view to work with (may have been given null)
+                View itemView = convertView;
+                if (itemView == null) {
+                    itemView = getLayoutInflater(null).inflate(R.layout.sliding_tab_tag_list, parent, false);
+                }
+
+                // Find the announcement to work with.
+                TechAnnounce currentAnnouncement = techAnnounceList.get(position);
+
+                // AnnouncementTitle:
+                TextView announcementTitle = (TextView) itemView.findViewById(R.id.item_announcement);
+                announcementTitle.setText(currentAnnouncement.getTitle());
+
+                //tagList
+                TextView announcementTags = (TextView) itemView.findViewById(R.id.item_tags);
+                String keyList[] = currentAnnouncement.getKeyList();
+                if (keyList != null){
+
+                    for (String tag : keyList) {
+                        announcementTags.append("- " + tag);
+                    }
+                }
+
+                return itemView;
+            }
+        }
     }
 }

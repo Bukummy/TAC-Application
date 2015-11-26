@@ -6,7 +6,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.SystemClock;
 import android.support.v4.content.WakefulBroadcastReceiver;
 
 import java.util.Calendar;
@@ -98,13 +97,13 @@ public class TACAppAlarmReceiver extends WakefulBroadcastReceiver {
         // Set the alarm to fire at approximately 11:10 a.m., according to the device's
         // clock, and to repeat once a day.
         //Run Alarm within 3 hours each day
-        long alarmDuration = 3 * AlarmManager.INTERVAL_HOUR;
-
-        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-                SystemClock.elapsedRealtime(), alarmDuration, alarmIntent);
+        //long alarmDuration = 3 * AlarmManager.INTERVAL_HOUR;
 
         //alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-        //        calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, alarmIntent);
+         //       SystemClock.elapsedRealtime(), alarmDuration, alarmIntent);
+
+        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, alarmIntent);
 
         // Enable {@code TACAppBootReceiver} to automatically restart the alarm when the
         // device is rebooted.

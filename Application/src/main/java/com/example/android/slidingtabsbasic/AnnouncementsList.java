@@ -72,7 +72,7 @@ public class AnnouncementsList extends Activity {
             links = displayAnnouncementList.getLinks();
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.ann_list_style, R.id.tvAnn, announcements);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.ann_list_style, R.id.tvAnn, announcements);
 
 
         list.setAdapter(adapter);
@@ -104,10 +104,11 @@ public class AnnouncementsList extends Activity {
             else {
 
                 int updatedRow = techAnnounceDAO.updateSavedCol(1, finalLinks[position], getBaseContext());
+                adapter.notifyDataSetChanged();
                 if (updatedRow >= 1) {
                     android.util.Log.i("Updated Ann Row: ", String.valueOf(updatedRow));
                     view.setSelected(true);
-                    Toast.makeText(getBaseContext(), "Announcement Saved", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), "Announcement #" + (position+1)+" is Saved", Toast.LENGTH_LONG).show();
                     return true;
                 } else {
                     Log.i("Updated Ann Row: ", "No update");

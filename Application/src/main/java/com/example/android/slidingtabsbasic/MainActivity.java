@@ -17,28 +17,17 @@
 
 package com.example.android.slidingtabsbasic;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 import android.widget.ViewAnimator;
 
 import com.example.android.common.activities.SampleActivityBase;
-import com.example.android.common.logger.Log;
-import com.example.android.slidingtabsbasic.DBS.TechAnnounce;
-import com.example.android.slidingtabsbasic.RSSParser.HttpManager;
-import com.example.android.slidingtabsbasic.RSSParser.TechAnnounceParser;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.android.slidingtabsbasic.AlarmManager.TACAppAlarmReceiver;
 
 /**
  * A simple launcher activity containing a summary sample description, sample log and a custom
@@ -49,22 +38,11 @@ import java.util.List;
  */
 public class MainActivity extends SampleActivityBase {
 
-    //TACAppAlarmReceiver alarm = new TACAppAlarmReceiver();
-
+    TACAppAlarmReceiver alarmReceiver = new TACAppAlarmReceiver();
     public static final String TAG = "MainActivity";
-
-    //ListView listAnnouncement;
-    private ProgressBar pb;
-    private List<MyTask> tasks;
-    private List<TechAnnounce> techAnnounceList;
-    //List<String[]> announcementCategories = new ArrayList<>();
-    private String[] announcementTitles = new String[]{};
-    private String[] announcementURLs = new String[]{};
 
     // Whether the Log Fragment is currently shown
     private boolean mLogShown;
-
-    private Bundle state;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,139 +50,23 @@ public class MainActivity extends SampleActivityBase {
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
+//        alarmReceiver.setAlarm(this);
         setContentView(R.layout.activity_main);
 
-        state = savedInstanceState;
-
-        pb = (ProgressBar) findViewById(R.id.progressBar);
-        pb.setVisibility(View.INVISIBLE);
-
-        //take this out
-//        alarm.setAlarm(this);
-
-        tasks = new ArrayList<>();
-
-        for (String announcementTitle : announcementTitles) {
-            Log.e("Title", announcementTitle);
-        }
-
-    }
-
-    protected void onStart() {
-        super.onStart();
-        if (isOnline()) {
-            requestData();
-        } else {
-            Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG).show();
+        if (savedInstanceState == null) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            SlidingTabsBasicFragment fragment = new SlidingTabsBasicFragment();
+            transaction.replace(R.id.sample_content_fragment, fragment);
+            transaction.commit();
         }
     }
 
-    private void requestData() {
-        MyTask task = new MyTask();
-        task.execute("http://www.techannounce.ttu.edu/Client/ViewRss.aspx");
-    }
-
-    private void updateDisplay() {
-        if (techAnnounceList != null){
-
-            final String[] announcementTitle = new String[techAnnounceList.size()];
-            final String[] announcementLink = new String[techAnnounceList.size()];
-
-            int i = 0,j = 0;
-            for (TechAnnounce techannounce :techAnnounceList ) {
-                announcementTitle[i++] = techannounce.getTitle();
-                announcementLink[j++] = techannounce.getLink();
-
-            }
-            //createIntent(announcementTitle, announcementLink);
-            announcementTitles = announcementTitle;
-            announcementURLs = announcementLink;
-
-
-            Bundle announcementsBundle = new Bundle();
-            announcementsBundle.putStringArray("Announcement Titles", announcementTitles);
-            announcementsBundle.putStringArray("Announcement URLs", announcementURLs);
-            if (state == null) {
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                SlidingTabsBasicFragment fragment = new SlidingTabsBasicFragment();
-                fragment.setArguments(announcementsBundle);
-                transaction.replace(R.id.sample_content_fragment, fragment);
-                transaction.commit();
-            }
-
-        }
-
-    }
-
-//    protected void createIntent(final String[] announcementTitle, final String[] announcementLink) {
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-//                this, android.R.layout.simple_list_item_2, android.R.id.text1,announcementTitle );
-//
-//        listAnnouncement.setAdapter(adapter);
-//
-//        listAnnouncement.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long arg3) {
-//                view.setSelected(true);
-//
-//                Intent intent = new Intent(AllAnnouncementsList.this, DisplayAnnouncement.class);
-//
-//                intent.putExtra("Title", announcementTitle[position]);
-//                intent.putExtra("URL", announcementLink[position]);
-//                AllAnnouncementsList.this.startActivity(intent);
-//            }
-//        });
-//      }
-
-    private boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
+    public void showTutorial(View view) {
+        startActivity(new Intent(this, TutorialDialog.class));
     }
 
     //This task handler get the announcement items from TechAnnounce in real time this implies:
     // every time the app loads, the new announcements will be available to users if any
-    private class MyTask extends AsyncTask<String, String, String> {
-
-        @Override
-        protected void onPreExecute() {
-            //updateDisplay("Starting task");
-
-            if (tasks.isEmpty()) {
-                pb.setVisibility(View.VISIBLE);
-            }
-            tasks.add(this);
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            return HttpManager.getData(params[0]);
-        }
-
-
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            techAnnounceList = TechAnnounceParser.parseFeed(result);
-
-            updateDisplay();
-
-            tasks.remove(this);
-            if (tasks.size() == 0) {
-                pb.setVisibility(View.INVISIBLE);
-            }    techAnnounceList = TechAnnounceParser.parseFeed(result);
-
-        }
-
-        @Override
-        protected void onProgressUpdate(String... values) {
-            //		updateDisplay(values[0]);
-        }
-
-    }
 
 
     @Override

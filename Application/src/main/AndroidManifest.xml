@@ -19,22 +19,17 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="23" />
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
 
     <!-- Min/target SDK versions (<uses-sdk>) managed by build.gradle -->
     <application
@@ -55,12 +50,16 @@
         <activity
             android:name=".AnnouncementsList"
             android:label="@string/title_activity_announcements_list" >
-
         </activity>
         <activity
             android:name=".DisplayAnnouncement"
-            android:label="@string/title_activity_display_announcement"  >
+            android:label="@string/title_activity_display_announcement" >
         </activity>
+        <activity
+            android:name=".TutorialDialog"
+            android:label="@string/title_activity_tutorial" >
+        </activity>
+
         <receiver android:name=".AlarmManager.TACAppAlarmReceiver" />
         <receiver
             android:name=".AlarmManager.TACAppBootReceiver"
@@ -72,9 +71,10 @@
 
         <service android:name=".AlarmManager.TACAppSchedulingService" />
 
-
-
-
+        <activity
+            android:name=".MostRecentList"
+            android:label="@string/title_activity_most_recent_list" >
+        </activity>
     </application>
 
 </manifest>

@@ -108,12 +108,27 @@ public class MostRecentList extends Activity {
                         this, android.R.layout.simple_list_item_2, android.R.id.text1, announcementTitle);
                 listAnnouncement.setAdapter(adapter);
 
+                listAnnouncement.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long arg3) {
+                        view.setSelected(true);
+
+                        Intent intent = new Intent(MostRecentList.this, DisplayAnnouncement.class);
+
+                        intent.putExtra("Title", announcementTitle[position]);
+                        intent.putExtra("URL", announcementLink[position]);
+                        MostRecentList.this.startActivity(intent);
+                    }
+                });
+
                 listAnnouncement.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
                         TechAnnounceDAO techAnnounceDAO = new TechAnnounceDAO();
-                        if (techAnnounceDAO.getAnnouncementsByLink(announcementTitle[position], getBaseContext()).getLink() == null) {
+                        String link = techAnnounceDAO.getAnnouncementsByLink(announcementLink[position], getBaseContext()).getLink();
+                        if (!(link.equals(announcementLink[position]))) {
                             Toast.makeText(getBaseContext(), "Announcement Not Accessible Yet", Toast.LENGTH_LONG).show();
                             return false;
                         } else {
@@ -130,20 +145,6 @@ public class MostRecentList extends Activity {
                                 return false;
                             }
                         }
-                    }
-                });
-
-                listAnnouncement.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long arg3) {
-                        view.setSelected(true);
-
-                        Intent intent = new Intent(MostRecentList.this, DisplayAnnouncement.class);
-
-                        intent.putExtra("Title", announcementTitle[position]);
-                        intent.putExtra("URL", announcementLink[position]);
-                        MostRecentList.this.startActivity(intent);
                     }
                 });
             }
