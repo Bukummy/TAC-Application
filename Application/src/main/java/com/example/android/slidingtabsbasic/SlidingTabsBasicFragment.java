@@ -249,6 +249,7 @@ public class SlidingTabsBasicFragment extends Fragment {
         //Set up each tab UI
         public void setTabList(View view, int position){
             final ListView list, list2, list3, list4;
+
             final ArrayAdapter<String> adapter,adapter3,adapter4;
 
             final SlidingTabKeyList adapter2;
@@ -327,6 +328,7 @@ public class SlidingTabsBasicFragment extends Fragment {
                 case 1:
                     final ArrayList<TechAnnounce> techAnnounceList = new ArrayList<>();
 
+
                     for (TechAnnounce techAnnounce :techAnnounceDAO.getAllAnnouncements(getContext()))
                     {
                         techAnnounceList.add(techAnnounce);
@@ -403,10 +405,11 @@ public class SlidingTabsBasicFragment extends Fragment {
                         @Override
                         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                            int updatedRow = techCategoryDAO.updateFavTag(favorite[0], favCategoryName.get(position) , getContext());
+                            int updatedRow = techCategoryDAO.updateFavTag(favorite[0], position , getContext());
                             Log.e("Updated Cat Row: ", String.valueOf(updatedRow));
                             view.setSelected(true);
-                            Toast.makeText(getActivity(),  "Removed " + favCategoryName.get(position) +" From Favorite", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Removed From Favorite", Toast.LENGTH_LONG).show();
+
                             favCategoryName.remove(position);
                             adapter3.notifyDataSetChanged();
                             return true;

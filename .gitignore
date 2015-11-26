@@ -6,5 +6,4 @@ build/
 *.class
 *.dex
 .navigation/
-.idea/workspace.xml
 *.zip
