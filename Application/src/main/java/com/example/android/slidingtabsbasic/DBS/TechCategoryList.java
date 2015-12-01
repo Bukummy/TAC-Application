@@ -4,8 +4,6 @@ package com.example.android.slidingtabsbasic.DBS;
  * Created by Bukunmi on 10/16/2015.
  */
 public class TechCategoryList {
-// TOdo this class structure
-
 
     private int id;
     private String name;
