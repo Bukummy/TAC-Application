@@ -405,7 +405,7 @@ public class SlidingTabsBasicFragment extends Fragment {
                         @Override
                         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                            int updatedRow = techCategoryDAO.updateFavTag(favorite[0], position , getContext());
+                            int updatedRow = techCategoryDAO.updateFavTag(favorite[0], favCategoryName.get(position) , getContext());
                             Log.e("Updated Cat Row: ", String.valueOf(updatedRow));
                             view.setSelected(true);
                             Toast.makeText(getActivity(), "Removed From Favorite", Toast.LENGTH_LONG).show();
