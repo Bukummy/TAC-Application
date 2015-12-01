@@ -1,10 +1,6 @@
 package com.example.android.slidingtabsbasic;
 
 import android.os.AsyncTask;
-import android.util.Log;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -12,12 +8,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Iterator;
 
 /**
  * Created by jinyiyang on 11/30/15.
  */
-public class keyphrase extends AsyncTask<String, String, String> {
+public class ReturnJson extends AsyncTask<String, String, String> {
 
     HttpURLConnection urlConnection;
 
@@ -60,29 +55,12 @@ public class keyphrase extends AsyncTask<String, String, String> {
         //Do something with the JSON string
 
 
-try{
-        JSONObject jsonRootObject = new JSONObject(result);
-        JSONObject output = jsonRootObject.getJSONObject("output");
-        JSONObject kwresult =output.getJSONObject("result");
-        JSONObject bigram =kwresult.getJSONObject("2");
 
-        Iterator<?> keys = bigram.keys();
-        int i=0;
-        String key_phrase ="";
-    //get the first keyphrase.
-        while( keys.hasNext()&i<1 ) {
-            String key = (String)keys.next();
-            //This is the key_phrase(bigram);
-            key_phrase = key;
-            i++;
-        }
-
-    //log the first bigram keyphrase here. I just use the first bigram keyphrase.
-    // if we want to show more keyphrase, just change the number of the while loop.
-        Log.i("yjy", key_phrase);}catch (JSONException e) {e.printStackTrace();}
 
 //do whatever you want with the key_phrase here
-        // and it should be use
+
+
+
 
 
     }

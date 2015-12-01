@@ -25,9 +25,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ViewAnimator;
+import android.util.Log;
 
 import com.example.android.common.activities.SampleActivityBase;
 import com.example.android.slidingtabsbasic.AlarmManager.TACAppAlarmReceiver;
+
+import org.json.JSONException;
+
+import java.util.concurrent.ExecutionException;
 
 /**
  * A simple launcher activity containing a summary sample description, sample log and a custom
@@ -54,7 +59,20 @@ public class MainActivity extends SampleActivityBase {
         //text is the announcement text.
         /*****************************************/
         String text = "The Center for Active Learning and Undergraduate Engagement is now accepting applications for travel funding to support the presentation of undergraduate student scholarly works." ;
-        new keyphrase().execute(text);
+
+        try {
+            String json = new ReturnJson().execute(text).get();
+            String keyphrase = new ReturnKeyphrase().ReturnKeyphrase(json);
+            Log.i("yjy", keyphrase);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
         /*****************************************/
 
 //        alarmReceiver.setAlarm(this);
