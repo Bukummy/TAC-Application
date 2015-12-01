@@ -17,5 +17,8 @@
 
 <resources>
 
-
+ <color name="primary">#EF5350</color>
+ <color name="primary_dark">#D32F2F</color>
+ <color name="accent">#FFCDD2</color>
+ <color name="tab_background">#EF5350</color>
 </resources>

@@ -60,7 +60,7 @@ public class TACAppAlarmReceiver extends WakefulBroadcastReceiver {
         calendar.setTimeInMillis(System.currentTimeMillis());
         // Set the alarm's trigger time to 11:05 a.m each Day.
         calendar.set(Calendar.HOUR_OF_DAY, 11);
-        calendar.set(Calendar.MINUTE, 10);
+        calendar.set(Calendar.MINUTE, 05);
   
         /* 
          * If you don't have precise time requirements, use an inexact repeating alarm

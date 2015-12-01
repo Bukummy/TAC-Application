@@ -18,7 +18,12 @@
 <resources>
 
     <!-- Activity themes -->
-    <style name="Theme.Base" parent="android:Theme.Material.Light">
+    <style name="Theme.Base" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="android:windowBackground">@color/tab_background</item>
+        <item name="android:textColorPrimary">#000000</item>
+
     </style>
 
 </resources>

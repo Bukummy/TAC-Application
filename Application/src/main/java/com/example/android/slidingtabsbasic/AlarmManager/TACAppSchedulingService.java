@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.android.slidingtabsbasic.DAO.TechAnnounceCategoryDAO;
 import com.example.android.slidingtabsbasic.DAO.TechAnnounceDAO;
 import com.example.android.slidingtabsbasic.DAO.TechCategoryDAO;
+import com.example.android.slidingtabsbasic.DAO.TechKeyDAO;
 import com.example.android.slidingtabsbasic.DBS.TechAnnounce;
 import com.example.android.slidingtabsbasic.DBS.TechAnnounceCategoryList;
 import com.example.android.slidingtabsbasic.MainActivity;
@@ -22,10 +23,15 @@ import com.example.android.slidingtabsbasic.R;
 import com.example.android.slidingtabsbasic.RSSParser.HttpManager;
 import com.example.android.slidingtabsbasic.RSSParser.TechAnnounceParser;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -43,7 +49,7 @@ public class TACAppSchedulingService extends IntentService {
     private final TechAnnounceCategoryList techAnnounceCategoryList = new TechAnnounceCategoryList();
     private final TechAnnounceCategoryDAO techAnnounceCategoryDAO = new TechAnnounceCategoryDAO();
     private final TechCategoryDAO techCategoryDAO = new TechCategoryDAO();
-
+    private final TechKeyDAO techKeyDAO = new TechKeyDAO();
 
     private final Calendar calendar = Calendar.getInstance();
     //one week in millisec
@@ -74,6 +80,8 @@ public class TACAppSchedulingService extends IntentService {
     private static final int NOTIFICATION_ID = 1;
     //URL it parses from
     private static final String URL = "http://www.techannounce.ttu.edu/Client/ViewRss.aspx";
+    private static final String api_key = "1d4e852374c1e857eb39a0a3b1cf1472";
+    private static final String n = "2";
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -93,6 +101,22 @@ public class TACAppSchedulingService extends IntentService {
             if (techAnnounceList != null) {
 
                 for (TechAnnounce techannounce :techAnnounceList ) {
+                    String urlExtractString =
+                            "http://api.datumbox.com/1.0/KeywordExtraction.json?"+"api_key="+api_key+"&n="+n+"&text="+
+                                    techannounce.getDescription().replace(" ", "%20");
+                    ArrayList<String> extractedKeys = new ArrayList<>();
+
+                    try {
+                        String result = loadFromNetwork(urlExtractString);
+                        /**
+                         * extrackKeyPhrase takes in the result from Loading from network and
+                         * extract the keys in Json format turned into an array
+                         */
+                        extractedKeys = extractKeyPhrase(result);
+                    } catch (IOException e) {
+                        Log.i(TAG, getString(R.string.connection_error));
+                    }
+
 
                     String availLinkInDB = techAnnounceDAO.getAnnouncementsByLink(
                             techannounce.getLink(), getBaseContext()).getLink();
@@ -109,6 +133,8 @@ public class TACAppSchedulingService extends IntentService {
                         if (insertedRow > 0) {
                             Log.i("Inserted Row NO:", value);
                             techCategoryDAO.checkCategoryList(techannounce, insertedRow, getBaseContext());
+                            if (extractedKeys != null){
+                                techKeyDAO.checkKeyList(extractedKeys, insertedRow, getBaseContext());}
                         }
                         else {
                             Log.i("No Inserted Row:", value);
@@ -123,7 +149,8 @@ public class TACAppSchedulingService extends IntentService {
                         if (updatedRow > 0) {
                             techCategoryDAO.checkCategoryList(techannounce, availIdInDB, getBaseContext());
                             Log.i("Updated Row NO:", value);
-
+                            if (extractedKeys != null){
+                                techKeyDAO.checkKeyList(extractedKeys, availIdInDB, getBaseContext());}
                         } else {
                             Log.i("No Updated Row:", value);
                         }
@@ -155,7 +182,7 @@ public class TACAppSchedulingService extends IntentService {
 
                 }
 
-                    sendNotification(getString(R.string.announcement_found));
+                sendNotification(getString(R.string.announcement_found));
                 Log.i(TAG, "Updated TechAnnounce!!");
             } else {
                 sendNotification(getString(R.string.no_announcement));
@@ -211,6 +238,35 @@ public class TACAppSchedulingService extends IntentService {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
+    private ArrayList<String> extractKeyPhrase(String result) {
+        ArrayList<String> key_phrases = new ArrayList<>();
+        try{
+            JSONObject jsonRootObject = new JSONObject(result);
+            JSONObject output = jsonRootObject.getJSONObject("output");
+            JSONObject kwresult =output.getJSONObject("result");
+            JSONObject bigram =kwresult.getJSONObject("2");
+
+            Iterator<?> keys = bigram.keys();
+            int i=0;
+            //String key_phrase ="";
+            //get the first two KeyPhrases
+
+            while( keys.hasNext() && i < 2) {
+                String key = (String)keys.next();
+                //This is the key_phrase(bigram);
+                //key_phrase = key;
+                key_phrases.add(key);
+
+                //log the first bigram KeyPhraseExtract. I just use the first bigram KeyPhraseExtractionTask.
+                // if we want to show more KeyPhraseExtractionTask, just change the number of the while loop.
+                Log.i("KeyList", String.valueOf(key));
+                i++;
+
+            }
+            key_phrases.size();
 
 
+        }catch (JSONException e) {e.printStackTrace();}
+        return key_phrases;
+    }
 }
