@@ -62,7 +62,7 @@ public class TechAnnounceDAO  {
             values.put(DBHelper.Column_Announcements_Title, announcementUpdate.getTitle());
             values.put(DBHelper.Column_Announcements_Desc, announcementUpdate.getDescription());
             values.put(DBHelper.Column_Announcements_Date_Added, calendar.getTimeInMillis());
-            // TODO: 11/15/2015 UpdateSaved only
+
 
             // It's a good practice to use parameter ?, instead of concatenate string
             long announcement_id = db.update(DBHelper.Table_Announcements, values, DBHelper.Column_Announcements_ID + "= ?", new String[]{String.valueOf(id)});
@@ -78,7 +78,7 @@ public class TechAnnounceDAO  {
         ContentValues values = new ContentValues();
 
         values.put(DBHelper.Column_Announcements_Saved, savedTag);
-        // TODO: 11/15/2015 UpdateSaved only
+
 
         // It's a good practice to use parameter ?, instead of concatenate string
         long result = db.update(DBHelper.Table_Announcements, values, DBHelper.Column_Announcements_Link + "= ?", new String[]{String.valueOf(link)});

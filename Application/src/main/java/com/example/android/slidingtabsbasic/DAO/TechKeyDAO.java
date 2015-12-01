@@ -19,13 +19,13 @@ public class TechKeyDAO {
     private DBHelper dbHelper;
 
 
-    public int insert(String categoryName, Context c) {
+    public int insert(String keywordName, Context c) {
         //Open connection to write data
         dbHelper = new DBHelper(c);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(DBHelper.Column_KeyWords_Name, categoryName);
+        values.put(DBHelper.Column_KeyWords_Name, keywordName);
 
         // Inserting Row
         long keyList_id = db.insert(DBHelper.Table_KeyWords, null, values);
@@ -43,45 +43,6 @@ public class TechKeyDAO {
         return  result;
     }
 
-    //selecting favorites
-    public int updateFavTag(int favorite, int id, Context c) {
-
-        dbHelper = new DBHelper(c);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        //String selector = "id";
-        String[] selectorArg = {String.valueOf(id)};
-        values.put(DBHelper.Column_KeyWords_Favorites, favorite);
-        // TODO: 11/15/2015 UpdateSaved only
-
-        // It's a good practice to use parameter ?, instead of concatenate string
-        //db.close(); // Closing database connection
-        return db.update(DBHelper.Table_KeyWords,
-                values,
-                DBHelper.Column_KeyWords_ID + "=?",
-                selectorArg);
-    }
-
-    //un-selecting favorites
-    public int updateFavTag(int favorite, String name, Context c) {
-
-        dbHelper = new DBHelper(c);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        //String selector = "id";
-        String[] selectorArg = {String.valueOf(name)};
-        values.put(DBHelper.Column_KeyWords_Favorites, favorite);
-        // TODO: 11/15/2015 UpdateSaved only
-
-        // It's a good practice to use parameter ?, instead of concatenate string
-        //db.close(); // Closing database connection
-        return db.update(DBHelper.Table_KeyWords,
-                values,
-                DBHelper.Column_KeyWords_Name +"=?",
-                selectorArg);
-    }
-
-
     public ArrayList<TechKeyList> getKeyList(Context c) {
 
 
@@ -89,8 +50,7 @@ public class TechKeyDAO {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String selectQuery =  "SELECT  " +
                 DBHelper.Column_KeyWords_ID + "," +
-                DBHelper.Column_KeyWords_Name + "," +
-                DBHelper.Column_KeyWords_Favorites +
+                DBHelper.Column_KeyWords_Name + "" +
                 " FROM " + DBHelper.Table_KeyWords +
                 " ORDER BY " + DBHelper.Column_KeyWords_Date_Added + ", " +
                 DBHelper.Column_KeyWords_ID + " ASC"; // It's a good practice to use parameter ?, instead of concatenate string
@@ -103,17 +63,15 @@ public class TechKeyDAO {
         //if (cursor.moveToFirst()) {
         while (cursor.moveToNext()){
 
-            TechKeyList category = new TechKeyList();
+            TechKeyList keyword = new TechKeyList();
 
-            category.setId(cursor.getInt(cursor.getColumnIndex(DBHelper.Column_KeyWords_ID)));
-            category.setName(cursor.getString(cursor.getColumnIndex(DBHelper.Column_KeyWords_Name)));
-            category.setFavorite(cursor.getInt(cursor.getColumnIndex(DBHelper.Column_KeyWords_Favorites)));
-            //keyList.setDateAdded(cursor.getString(cursor.getColumnIndex(dbHelper.Column_Key_Date_Added)));
+            keyword.setId(cursor.getInt(cursor.getColumnIndex(DBHelper.Column_KeyWords_ID)));
+            keyword.setName(cursor.getString(cursor.getColumnIndex(DBHelper.Column_KeyWords_Name)));
             int val = cursor.getPosition() + 1;
 
             //if(cursor.getPosition() == iCount + 1){
             iCount++;
-            techKeyLists.add(category);
+            techKeyLists.add(keyword);
 
         }
 
@@ -162,8 +120,7 @@ public class TechKeyDAO {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String selectQuery =  "SELECT  " +
                 DBHelper.Column_KeyWords_ID + "," +
-                DBHelper.Column_KeyWords_Name + "," +
-                DBHelper.Column_KeyWords_Favorites +
+                DBHelper.Column_KeyWords_Name +
                 " FROM " + DBHelper.Table_KeyWords
                 + " WHERE " +
                 DBHelper.Column_KeyWords_Name + "= ?"; // It's a good practice to use parameter ?, instead of concatenate string
@@ -177,8 +134,6 @@ public class TechKeyDAO {
             do {
                 keyList.setId(cursor.getInt(cursor.getColumnIndex(DBHelper.Column_KeyWords_ID)));
                 keyList.setName(cursor.getString(cursor.getColumnIndex(DBHelper.Column_KeyWords_Name)));
-                keyList.setFavorite(cursor.getInt(cursor.getColumnIndex(DBHelper.Column_KeyWords_Favorites)));
-                //keyList.a_date_added =cursor.getString(cursor.getColumnIndex(dbHelper.Column_Announcements_Date_Added));
             } while (cursor.moveToNext());
         }
 
@@ -192,8 +147,7 @@ public class TechKeyDAO {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String selectQuery =  "SELECT  " +
                 DBHelper.Column_KeyWords_ID + "," +
-                DBHelper.Column_KeyWords_Name + "," +
-                DBHelper.Column_KeyWords_Favorites +
+                DBHelper.Column_KeyWords_Name +
                 " FROM " + DBHelper.Table_KeyWords
                 + " WHERE " +
                 DBHelper.Column_KeyWords_ID + "= ?"; // It's a good practice to use parameter ?, instead of concatenate string
@@ -207,8 +161,6 @@ public class TechKeyDAO {
             do {
                 keyList.setId(cursor.getInt(cursor.getColumnIndex(DBHelper.Column_KeyWords_ID)));
                 keyList.setName(cursor.getString(cursor.getColumnIndex(DBHelper.Column_KeyWords_Name)));
-                keyList.setFavorite(cursor.getInt(cursor.getColumnIndex(DBHelper.Column_KeyWords_Favorites)));
-                //keyList.a_date_added =cursor.getString(cursor.getColumnIndex(dbHelper.Column_Announcements_Date_Added));
             } while (cursor.moveToNext());
         }
 
@@ -219,11 +171,11 @@ public class TechKeyDAO {
 
     public void checkKeyList (TechAnnounce announcement, int announcement_id, Context c){
 
-        String categoryList[] = announcement.getKeyList();
+        String keywordList[] = announcement.getKeyList();
 
-        for (String categoryName : categoryList){
+        for (String keywordName : keywordList){
 
-            TechKeyList techKeyList = getKeysByName(categoryName, c);
+            TechKeyList techKeyList = getKeysByName(keywordName, c);
             int cat_id = techKeyList.getId();
 
             if(cat_id > 1){

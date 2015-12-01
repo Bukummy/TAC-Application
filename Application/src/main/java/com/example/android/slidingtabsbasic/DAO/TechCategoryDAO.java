@@ -52,7 +52,6 @@ public class TechCategoryDAO {
         //String selector = "id";
         String[] selectorArg = {String.valueOf(id)};
         values.put(DBHelper.Column_Categories_Favorites, favorite);
-        // TODO: 11/15/2015 UpdateSaved only
 
         // It's a good practice to use parameter ?, instead of concatenate string
         int result = db.update(DBHelper.Table_Categories,
@@ -72,7 +71,7 @@ public class TechCategoryDAO {
         //String selector = "id";
         String[] selectorArg = {String.valueOf(name)};
         values.put(DBHelper.Column_Categories_Favorites, favorite);
-        // TODO: 11/15/2015 UpdateSaved only
+
 
         // It's a good practice to use parameter ?, instead of concatenate string
         int result = db.update(DBHelper.Table_Categories,

@@ -85,7 +85,7 @@ public class AnnouncementsList extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long arg3) {
                 view.setSelected(true);
-                //TODO: Display webView of Announcement
+
                 Intent intent = new Intent(AnnouncementsList.this, DisplayAnnouncement.class);
                 intent.putExtra("Title", finalAnnouncements[position]);
                 intent.putExtra("URL", finalLinks[position]);

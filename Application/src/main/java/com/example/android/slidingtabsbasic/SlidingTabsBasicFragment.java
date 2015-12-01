@@ -342,7 +342,6 @@ public class SlidingTabsBasicFragment extends Fragment {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long arg3) {
                             view.setSelected(true);
-                            //TODO: Display Chosen Tag Announcements
                             Intent intent = new Intent(getActivity(), DisplayAnnouncement.class);
                             intent.putExtra("Title", techAnnounceList.get(position).getTitle());
                             intent.putExtra("URL", techAnnounceList.get(position).getLink());
@@ -405,14 +404,20 @@ public class SlidingTabsBasicFragment extends Fragment {
                         @Override
                         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                            int updatedRow = techCategoryDAO.updateFavTag(favorite[0], position , getContext());
-                            Log.e("Updated Cat Row: ", String.valueOf(updatedRow));
-                            view.setSelected(true);
-                            Toast.makeText(getActivity(), "Removed From Favorite", Toast.LENGTH_LONG).show();
+                            int updatedRow = techCategoryDAO.updateFavTag(favorite[0], favCategoryName.get(position) , getContext());
+                            if (updatedRow >= 1){
+                                Log.e("Updated Cat Row: ", String.valueOf(updatedRow));
+                                view.setSelected(true);
+                                Toast.makeText(getActivity(), "Removed From Favorite", Toast.LENGTH_LONG).show();
+                                favCategoryName.remove(position);
+                                adapter3.notifyDataSetChanged();
+                                return true;
+                            }
+                            else {
+                                Toast.makeText(getActivity(), "Error", Toast.LENGTH_LONG).show();
 
-                            favCategoryName.remove(position);
-                            adapter3.notifyDataSetChanged();
-                            return true;
+                                return false;
+                            }
 
                         }
                     });
@@ -422,12 +427,11 @@ public class SlidingTabsBasicFragment extends Fragment {
 
                 // On Saved Tab
                 case 3:
+
                     list4 = (ListView) view.findViewById(R.id.listTags);
                     List<TechAnnounce> savedAnnouncements = techAnnounceDAO.getAnnouncementsBySavedTag(1, getContext());
                     final ArrayList<String> savedTitles = new ArrayList<>();
                     final ArrayList<String> savedLinks = new ArrayList<>();
-                    int p = 0;
-                    int q = 0;
 
                     for (TechAnnounce techAnnounce : savedAnnouncements) {
                         savedTitles.add(techAnnounce.getTitle());
@@ -435,8 +439,8 @@ public class SlidingTabsBasicFragment extends Fragment {
                     }
 
                     adapter4 = new ArrayAdapter<String>(getActivity(), R.layout.tags_list_style, R.id.tvList, savedTitles);
-                    adapter4.notifyDataSetChanged();
                     list4.setAdapter(adapter4);
+                    adapter4.notifyDataSetChanged();
 
                     // View Chosen Category List
                     list4.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -459,11 +463,13 @@ public class SlidingTabsBasicFragment extends Fragment {
 
                             int updatedRow = techAnnounceDAO.updateSavedCol(0, savedLinks.get(position), getContext());
                             if (updatedRow >= 1) {
-                                savedLinks.remove(position);
-                                savedTitles.remove(position);
+
                                 Log.i("Updated Ann Row: ", String.valueOf(updatedRow));
                                 view.setSelected(true);
                                 Toast.makeText(getActivity(), "Removed #" + (position+1) +" Saved Announcement ", Toast.LENGTH_LONG).show();
+                                savedLinks.remove(position);
+                                savedTitles.remove(position);
+                                adapter4.notifyDataSetChanged();
 
                                 return true;
                             } else {

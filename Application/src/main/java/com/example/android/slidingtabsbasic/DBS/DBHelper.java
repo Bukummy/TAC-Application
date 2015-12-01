@@ -30,7 +30,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String Table_KeyWords = "keywords";
     public static final String Column_KeyWords_ID = "id";
     public static final String Column_KeyWords_Name = "name";
-    public static final String Column_KeyWords_Favorites ="kw_favorites";
     public static final String Column_KeyWords_Date_Added = "kw_date_added";
 
     //column of the Categories Table
@@ -57,7 +56,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String Column_AnnouncementsCategories_Date_Added ="aC_date_added";
 
     public static final String DATABASE_NAME = "announcementsDB";
-    public static final int DATABASE_VERSION = 6;
+    public static final int DATABASE_VERSION = 1;
 
     //SQL statements of Announcements table creation
     public static final String SQL_CREATE_TABLE_Announcements = "CREATE TABLE " + Table_Announcements +"("
@@ -74,7 +73,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String SQL_CREATE_TABLE_KeyWords = "CREATE TABLE " + Table_KeyWords +" ("
             + Column_KeyWords_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + Column_KeyWords_Name + " TEXT NOT NULL, "
-            + Column_KeyWords_Favorites + " INTEGER, "
             + Column_KeyWords_Date_Added + " TEXT default CURRENT_TIMESTAMP "
             + "); ";
 
