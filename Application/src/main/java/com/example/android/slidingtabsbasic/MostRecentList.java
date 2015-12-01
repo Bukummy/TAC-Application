@@ -128,7 +128,7 @@ public class MostRecentList extends Activity {
 
                         TechAnnounceDAO techAnnounceDAO = new TechAnnounceDAO();
                         String link = techAnnounceDAO.getAnnouncementsByLink(announcementLink[position], getBaseContext()).getLink();
-                        if (!(link == null) {
+                        if (link == null) {
                             Toast.makeText(getBaseContext(), "Announcement Not Accessible Yet", Toast.LENGTH_LONG).show();
                             return false;
                         } 

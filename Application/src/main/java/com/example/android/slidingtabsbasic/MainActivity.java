@@ -50,6 +50,13 @@ public class MainActivity extends SampleActivityBase {
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
+        //this is the execute of the key_phrase function.
+        //text is the announcement text.
+        /*****************************************/
+        String text = "The Center for Active Learning and Undergraduate Engagement is now accepting applications for travel funding to support the presentation of undergraduate student scholarly works." ;
+        new keyphrase().execute(text);
+        /*****************************************/
+
 //        alarmReceiver.setAlarm(this);
         setContentView(R.layout.activity_main);
 
