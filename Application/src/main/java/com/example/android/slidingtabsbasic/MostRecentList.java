@@ -128,11 +128,11 @@ public class MostRecentList extends Activity {
 
                         TechAnnounceDAO techAnnounceDAO = new TechAnnounceDAO();
                         String link = techAnnounceDAO.getAnnouncementsByLink(announcementLink[position], getBaseContext()).getLink();
-                        if (!(link.equals(announcementLink[position]))) {
+                        if (link == null) {
                             Toast.makeText(getBaseContext(), "Announcement Not Accessible Yet", Toast.LENGTH_LONG).show();
                             return false;
-                        } else {
-
+                        }
+                        else {
                             int updatedRow = techAnnounceDAO.updateSavedCol(1, announcementLink[position], getBaseContext());
                             adapter.notifyDataSetChanged();
                             if (updatedRow >= 1) {
