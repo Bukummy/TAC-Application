@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:tag="false"
         android:drawable="@drawable/ic_checkbox_marked_grey"   >
     </item>
 
     <item
-    android:tag="true"
-    android:drawable="@drawable/ic_checkbox_marked_black" >
+        android:drawable="@drawable/ic_checkbox_marked_black" >
 </item>
 
 
