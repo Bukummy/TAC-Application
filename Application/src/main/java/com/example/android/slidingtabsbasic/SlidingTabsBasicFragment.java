@@ -461,6 +461,7 @@ public class SlidingTabsBasicFragment extends Fragment {
                             if (updatedRow >= 1) {
                                 savedLinks.remove(position);
                                 savedTitles.remove(position);
+                                adapter4.notifyDataSetChanged();
                                 Log.i("Updated Ann Row: ", String.valueOf(updatedRow));
                                 view.setSelected(true);
                                 Toast.makeText(getActivity(), "Removed #" + (position+1) +" Saved Announcement ", Toast.LENGTH_LONG).show();
