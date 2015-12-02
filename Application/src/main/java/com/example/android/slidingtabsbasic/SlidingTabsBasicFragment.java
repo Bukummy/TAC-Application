@@ -35,6 +35,8 @@ import com.example.android.common.logger.Log;
 import com.example.android.common.view.SlidingTabLayout;
 import com.example.android.slidingtabsbasic.DAO.TechAnnounceDAO;
 import com.example.android.slidingtabsbasic.DAO.TechCategoryDAO;
+import com.example.android.slidingtabsbasic.DAO.TechKeyDAO;
+import com.example.android.slidingtabsbasic.DAO.TechAnnounceKeyDAO;
 import com.example.android.slidingtabsbasic.DBS.TechAnnounce;
 import com.example.android.slidingtabsbasic.DBS.TechCategoryList;
 
