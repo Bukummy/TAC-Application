@@ -38,6 +38,7 @@ import com.example.android.slidingtabsbasic.DAO.TechCategoryDAO;
 import com.example.android.slidingtabsbasic.DAO.TechKeyDAO;
 import com.example.android.slidingtabsbasic.DAO.TechAnnounceKeyDAO;
 import com.example.android.slidingtabsbasic.DBS.TechAnnounce;
+import com.example.android.slidingtabsbasic.DBS.TechAnnounceKeyList;
 import com.example.android.slidingtabsbasic.DBS.TechCategoryList;
 
 import java.util.ArrayList;
