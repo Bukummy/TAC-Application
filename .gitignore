@@ -7,3 +7,5 @@ build/
 *.dex
 .navigation/
 *.zip
+*.class
+local.properties

@@ -25,13 +25,19 @@ import com.example.android.slidingtabsbasic.RSSParser.TechAnnounceParser;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Created by Bukunmi on 11/15/2015.
+ */
+
+//Displays Announcement as it is on Tech Announce website,
+// This carters for situations where the announcement gets updated after Daily Scheduled DB update Service
 public class MostRecentList extends Activity {
 
-        ListView listAnnouncement;
-        ProgressBar pb;
-        List<MyTask> tasks;
+        private ListView listAnnouncement;
+        private ProgressBar pb;
+        private List<MyTask> tasks;
 
-        List<TechAnnounce> techAnnounceList;
+        private List<TechAnnounce> techAnnounceList;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -53,14 +59,14 @@ public class MostRecentList extends Activity {
         }
 
     @Override
-    protected void onStart() {
+    protected void onResume() {
 
         if (isOnline()) {
-            requestData("http://www.techannounce.ttu.edu/Client/ViewRss.aspx");
+            requestData();
         } else {
             Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG).show();
         }
-        super.onStart();
+        super.onResume();
     }
 
     @Override
@@ -80,19 +86,20 @@ public class MostRecentList extends Activity {
             // manually Refresh List
             if (item.getItemId() == R.id.action_get_data) {
                 if (isOnline()) {
-                    requestData("http://www.techannounce.ttu.edu/Client/ViewRss.aspx");
+                    requestData();
                 } else {
                     Toast.makeText(this, "Network isn't available", Toast.LENGTH_LONG).show();
                 }
             }
             return super.onOptionsItemSelected(item);
         }
-        private void requestData(String uri) {
+
+        private void requestData() {
             MyTask task = new MyTask();
-            task.execute(uri);
+            task.execute("http://www.techannounce.ttu.edu/Client/ViewRss.aspx");
         }
 
-        protected void updateDisplay() {
+        private void updateDisplay() {
             if (techAnnounceList != null) {
 
                 final String[] announcementTitle = new String[techAnnounceList.size()];
@@ -122,6 +129,7 @@ public class MostRecentList extends Activity {
                     }
                 });
 
+                //On LongClick Select Announcement  as Saved Page if Accible on the app
                 listAnnouncement.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -131,7 +139,7 @@ public class MostRecentList extends Activity {
                         if (link == null) {
                             Toast.makeText(getBaseContext(), "Announcement Not Accessible Yet", Toast.LENGTH_LONG).show();
                             return false;
-                        }
+                        } 
                         else {
                             int updatedRow = techAnnounceDAO.updateSavedCol(1, announcementLink[position], getBaseContext());
                             adapter.notifyDataSetChanged();
@@ -150,7 +158,7 @@ public class MostRecentList extends Activity {
             }
         }
 
-        protected boolean isOnline() {
+        private boolean isOnline() {
             ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo netInfo = cm.getActiveNetworkInfo();
             if (netInfo != null && netInfo.isConnectedOrConnecting()) {
@@ -175,8 +183,7 @@ public class MostRecentList extends Activity {
             @Override
             protected String doInBackground(String... params) {
 
-                String content = HttpManager.getData(params[0]);
-                return content;
+                return HttpManager.getData(params[0]);
             }
 
 

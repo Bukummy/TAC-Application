@@ -22,20 +22,10 @@ import java.util.ArrayList;
 
 
 public class AnnouncementsList extends Activity {
-    //TechAnnounce techAnnounce = new TechAnnounce();
-    //TechCategoryList techCategoryList = new TechCategoryList();
-    //TechKeyList techKeyList = new TechKeyList();
-    //TechAnnounceKeyList techAnnounceKeyList = new TechAnnounceKeyList();
-    //TechAnnounceCategoryList techAnnounceCategoryList = new TechAnnounceCategoryList();
 
     private final TechAnnounceDAO techAnnounceDAO = new TechAnnounceDAO();
     private final TechCategoryDAO techCategoryDAO = new TechCategoryDAO();
-    //TechKeyDAO techKeyDAO = new TechKeyDAO();
-    //TechAnnounceKeyDAO techAnnounceKeyDAO = new TechAnnounceKeyDAO();
     private final TechAnnounceCategoryDAO techAnnounceCategoryDAO = new TechAnnounceCategoryDAO();
-
-    private String[] announcementTitles;
-    private String[] announcementLinks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,36 +38,23 @@ public class AnnouncementsList extends Activity {
         setTitle(title + " List");
 
 
-        String pastActivity = intent.getStringExtra("From");
-        announcementLinks = intent.getStringArrayExtra("URLs");
-        announcementTitles = intent.getStringArrayExtra("Titles");
-
         final ListView list = (ListView) findViewById(R.id.AnnouncementListView);
 
-        String[] listName = new String[]{"Category", "Tags", "Favorite"};
 
         String[] announcements;
         String[] links;
 
-        //Set announcements depending on which was chosen
-        if (pastActivity.equals(listName[1])) {
-            DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title, 1).invoke();
-            announcements = displayAnnouncementList.getAnnouncements();
-            links = displayAnnouncementList.getLinks();
-        }
-
-        else{
-            DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title, 0).invoke();
-            announcements = displayAnnouncementList.getAnnouncements();
-            links = displayAnnouncementList.getLinks();
-        }
+        //announcement title and link list from past activity selected category
+        DisplayAnnouncementList displayAnnouncementList = new DisplayAnnouncementList(title).invoke();
+        announcements = displayAnnouncementList.getAnnouncements();
+        links = displayAnnouncementList.getLinks();
 
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.ann_list_style, R.id.tvAnn, announcements);
 
 
         list.setAdapter(adapter);
 
-        // View Chosen Category List
+        // View Chosen Announcement List under Category
         final String[] finalAnnouncements = announcements;
         final String[] finalLinks = links;
 
@@ -148,15 +125,13 @@ public class AnnouncementsList extends Activity {
 
 
     }
-
+//Display the Category list in respectively
     private class DisplayAnnouncementList {
         private final String title;
-        private final int list;
         private String[] announcements;
         private String[] links;
 
-        public DisplayAnnouncementList(String title, int list) {
-            this.list = list;
+        public DisplayAnnouncementList(String title ) {
             this.title = title;
         }
 
@@ -169,66 +144,30 @@ public class AnnouncementsList extends Activity {
         }
 
         public DisplayAnnouncementList invoke() {
-            switch (list) {
-                case 0:
-                    if (title.equals("All Announcements") )
-                    {
-                          announcements = announcementTitles;
-                            links = announcementLinks;
-                    }
-                    else{
-                        int cat_id= techCategoryDAO.getCategoriesByName(title, getBaseContext()).getId();
+            int cat_id= techCategoryDAO.getCategoriesByName(title, getBaseContext()).getId();
 
-                        ArrayList<TechAnnounceCategoryList> announcementCat = techAnnounceCategoryDAO.getAnnByCatId(cat_id,
-                                getBaseContext());
+            ArrayList<TechAnnounceCategoryList> announcementCat = techAnnounceCategoryDAO.getAllAnnByCatId(cat_id,
+                    getBaseContext());
 
-                        if (announcementCat.size() == 0){
-                            announcements = new String[]{"No Announcements"};
-                            links = new String[]{"http://www.techannounce.ttu.edu/"};
-                        }
-                        else {
-                            String[] announcementsCatTitle = new String[announcementCat.size()];
-                            String[] announcementsCatLink = new String[announcementCat.size()];
-                            int i = 0;
-                            int j = 0;
+            if (announcementCat.size() == 0){
+                announcements = new String[]{"No Announcements"};
+                links = new String[]{"http://www.techannounce.ttu.edu/"};
+            }
+            else {
+                String[] announcementsCatTitle = new String[announcementCat.size()];
+                String[] announcementsCatLink = new String[announcementCat.size()];
+                int i = 0;
+                int j = 0;
 
-                            for (TechAnnounceCategoryList techAnnounceCategoryList : announcementCat) {
-                                TechAnnounce announcement4mDB = techAnnounceDAO.getAnnouncementsById(
-                                        techAnnounceCategoryList.getA_Id(), getBaseContext());
+                for (TechAnnounceCategoryList techAnnounceCategoryList : announcementCat) {
+                    TechAnnounce announcement4mDB = techAnnounceDAO.getAnnouncementsById(
+                            techAnnounceCategoryList.getA_Id(), getBaseContext());
 
-                                announcementsCatTitle[i++] = announcement4mDB.getTitle();
-                                announcementsCatLink[j++] = announcement4mDB.getLink();
-                            }
-                            announcements = announcementsCatTitle;
-                            links = announcementsCatLink;
-                        }
-                    }
-                    break;
-                case 1:
-                    int cat_id= techCategoryDAO.getCategoriesByName(title, getBaseContext()).getId();
-                    ArrayList<TechAnnounceCategoryList> announcementCat = techAnnounceCategoryDAO.getAnnByCatId(cat_id ,getBaseContext());
-
-                    String[] announcementsCatTitle = new String[announcementCat.size()];
-                    String[] announcementsCatLink = new String[announcementCat.size()];
-                    int i = 0;
-                    int j = 0;
-
-                    for(TechAnnounceCategoryList techAnnounceCategoryList: announcementCat)
-                    {
-                        TechAnnounce announcement4mDB = techAnnounceDAO.getAnnouncementsById(
-                                techAnnounceCategoryList.getA_Id(), getBaseContext());
-
-                        announcementsCatTitle[i++] = announcement4mDB.getTitle();
-                        announcementsCatLink[j++] = announcement4mDB.getLink();
-                    }
-                    announcements = announcementsCatTitle;
-                    links = announcementsCatLink;
-
-                default:
-                    announcements = new String[]{"No Announcements"};
-                    links = new String[]{"http://www.techannounce.ttu.edu/"};
-                    break;
-
+                    announcementsCatTitle[i++] = announcement4mDB.getTitle();
+                    announcementsCatLink[j++] = announcement4mDB.getLink();
+                }
+                announcements = announcementsCatTitle;
+                links = announcementsCatLink;
             }
             return this;
         }

@@ -27,7 +27,7 @@ import com.example.android.common.logger.LogWrapper;
  */
 public class SampleActivityBase extends FragmentActivity {
 
-    public static final String TAG = "SampleActivityBase";
+    private static final String TAG = "SampleActivityBase";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

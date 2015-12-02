@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.android.slidingtabsbasic.DAO.TechAnnounceCategoryDAO;
 import com.example.android.slidingtabsbasic.DAO.TechAnnounceDAO;
+import com.example.android.slidingtabsbasic.DAO.TechAnnounceKeyDAO;
 import com.example.android.slidingtabsbasic.DAO.TechCategoryDAO;
 import com.example.android.slidingtabsbasic.DAO.TechKeyDAO;
 import com.example.android.slidingtabsbasic.DBS.TechAnnounce;
@@ -27,8 +28,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -48,6 +47,7 @@ public class TACAppSchedulingService extends IntentService {
     private final TechAnnounceDAO techAnnounceDAO = new TechAnnounceDAO();
     private final TechAnnounceCategoryList techAnnounceCategoryList = new TechAnnounceCategoryList();
     private final TechAnnounceCategoryDAO techAnnounceCategoryDAO = new TechAnnounceCategoryDAO();
+    private final TechAnnounceKeyDAO techAnnounceKeyDAO = new TechAnnounceKeyDAO();
     private final TechCategoryDAO techCategoryDAO = new TechCategoryDAO();
     private final TechKeyDAO techKeyDAO = new TechKeyDAO();
 
@@ -58,29 +58,21 @@ public class TACAppSchedulingService extends IntentService {
     private final long thisTime = calendar.getTimeInMillis();
     //plus  5 minute
     private final long extraTime = thisTime + (5*60*1000) ;
+    //calculate a week ago in by long datatype
     private final long pastWeekT = extraTime - diff;
-
-    private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    String currentTimeX = formatter.format(new Timestamp(extraTime));
-
-    Timestamp currentTime = Timestamp.valueOf(currentTimeX);
-    //String currentTimeTD = String.valueOf(currentTime);
-
-    //String pastWeek = formatter.format(new Timestamp(pastWeekT));
-    //Timestamp pastWeek = Timestamp.valueOf(pastWeekS);
-    //String pastWeekTS = String.valueOf(pastWeek);
-
 
     public TACAppSchedulingService() {
         super("SchedulingService");
     }
 
     private static final String TAG = "Conn To Tech Announce";
+    private static final String TAG2 = "Extract KeyPhrase";
     // An ID used to post the notification.
     private static final int NOTIFICATION_ID = 1;
     //URL it parses from
     private static final String URL = "http://www.techannounce.ttu.edu/Client/ViewRss.aspx";
-    private static final String api_key = "1d4e852374c1e857eb39a0a3b1cf1472";
+    private static final String api_key = "1d4e852374c1e857eb39a0a3b1cf1472"; //the api key
+    //private static final String api_key = "659edf6262926fd91cbff013cb49490f";
     private static final String n = "2";
 
     @Override
@@ -97,24 +89,33 @@ public class TACAppSchedulingService extends IntentService {
                 Log.i(TAG, getString(R.string.connection_error));
             }
 
-            //if parseableURl, send notification
+            //if parseableURl, send notification after updating the Database
             if (techAnnounceList != null) {
-
+                int i=0;
                 for (TechAnnounce techannounce :techAnnounceList ) {
-                    String urlExtractString =
-                            "http://api.datumbox.com/1.0/KeywordExtraction.json?"+"api_key="+api_key+"&n="+n+"&text="+
-                                    techannounce.getDescription().replace(" ", "%20");
-                    ArrayList<String> extractedKeys = new ArrayList<>();
+                    //replace special string characters  with %20
+                    String description = techannounce.getDescription()
+                            .replace("\n", "%20").replace("\b", "%20").replace(" ", "%20")
+                            .replace("\t", "%20").replace("\'", "%20")
+                            .replace("\\ ", "%20").replace("\"", "%20");
 
+                    //URL that performs feeds the extractByKeyPhrase method
+                    String urlExtractString =
+                            "http://api.datumbox.com/1.0/KeywordExtraction.json?"+"api_key="+api_key+"&n="+n+"&text="+description;
+                    ArrayList<String> extractedKeys = new ArrayList<>();
+                    i++; //tracks the announcement by item number
                     try {
                         String result = loadFromNetwork(urlExtractString);
                         /**
                          * extrackKeyPhrase takes in the result from Loading from network and
                          * extract the keys in Json format turned into an array
                          */
-                        extractedKeys = extractKeyPhrase(result);
+
+                        extractedKeys = extractKeyPhrase(result,i);
                     } catch (IOException e) {
                         Log.i(TAG, getString(R.string.connection_error));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
 
 
@@ -133,7 +134,7 @@ public class TACAppSchedulingService extends IntentService {
                         if (insertedRow > 0) {
                             Log.i("Inserted Row NO:", value);
                             techCategoryDAO.checkCategoryList(techannounce, insertedRow, getBaseContext());
-                            if (extractedKeys != null){
+                            if (extractedKeys.size() != 0){
                                 techKeyDAO.checkKeyList(extractedKeys, insertedRow, getBaseContext());}
                         }
                         else {
@@ -142,35 +143,50 @@ public class TACAppSchedulingService extends IntentService {
                     }
                     //if link is available
                     else {
-                        //perform update
+                        if (extractedKeys.size() != 0){
+                            techKeyDAO.checkKeyList(extractedKeys, availIdInDB, getBaseContext());}
 
+                        //perform update
                         int updatedRow = techAnnounceDAO.update(techannounce, availIdInDB , getBaseContext());
                         String value = String.valueOf(updatedRow);
+                        //record progress
                         if (updatedRow > 0) {
                             techCategoryDAO.checkCategoryList(techannounce, availIdInDB, getBaseContext());
+                            //insert key id if extractedKeys provides a vaiue
                             Log.i("Updated Row NO:", value);
-                            if (extractedKeys != null){
-                                techKeyDAO.checkKeyList(extractedKeys, availIdInDB, getBaseContext());}
-                        } else {
+                            } else {
                             Log.i("No Updated Row:", value);
                         }
 
                     }
 
+                    //check if the announcement has spent over a week in the database
                     TechAnnounce announcement = techAnnounceDAO.getAnnouncementsB4Date(pastWeekT, extraTime, getBaseContext());
-                    int id = announcement.getId();
-                    if ( id >= 1){
-                        int deletedRow = techAnnounceDAO.delete(id, getBaseContext());
-                        if (techAnnounceCategoryList.getA_Id() == id){
-                            int deletedACRow = techAnnounceCategoryDAO.delete(id ,getBaseContext());
+                    int announcementId = announcement.getId();
+                    if ( announcementId >= 1){
+                        int deletedRow = techAnnounceDAO.delete(announcementId, getBaseContext());
+                        //if announcement is deleted delete corresponding AC and AK
+                        if (techAnnounceCategoryList.getA_Id() == announcementId){
+                            int deletedACRow = techAnnounceCategoryDAO.delete(announcementId ,getBaseContext());
+                            int deletedAKRow = techAnnounceKeyDAO.delete(announcementId ,getBaseContext());
                             String val = String.valueOf(deletedRow);
+
+                            //log Deleted Announcement Key Row
                             if (deletedACRow >= 1 ) {
+                                Log.i("Deleted Row NO:", val);
+                            } else {
+                                Log.i("No Deleted Row:", val);
+                            }
+
+                            //log Deleted Announcement Key Row
+                            if (deletedAKRow >= 1 ) {
                                 Log.i("Deleted Row NO:", val);
                             } else {
                                 Log.i("No Deleted Row:", val);
                             }
                         }
 
+                        //log Deleted Announcement Row
                         String value = String.valueOf(deletedRow);
                         if (deletedRow >= 1) {
                             Log.i("Deleted Row NO:", value);
@@ -233,40 +249,56 @@ public class TACAppSchedulingService extends IntentService {
         return HttpManager.getData(urlString);
     }
     private boolean isOnline() {
+        //check Connectivity status of the system
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
-    private ArrayList<String> extractKeyPhrase(String result) {
+    private ArrayList<String> extractKeyPhrase(String result, int j) throws JSONException {
+
+        //Resulting JSON Object
         ArrayList<String> key_phrases = new ArrayList<>();
-        try{
-            JSONObject jsonRootObject = new JSONObject(result);
-            JSONObject output = jsonRootObject.getJSONObject("output");
-            JSONObject kwresult =output.getJSONObject("result");
-            JSONObject bigram =kwresult.getJSONObject("2");
 
-            Iterator<?> keys = bigram.keys();
-            int i=0;
-            //String key_phrase ="";
-            //get the first two KeyPhrases
+        JSONObject jsonRootObject = new JSONObject(result);
+        JSONObject output = jsonRootObject.getJSONObject("output");
+        int status = output.getInt("status");
 
-            while( keys.hasNext() && i < 2) {
-                String key = (String)keys.next();
-                //This is the key_phrase(bigram);
-                //key_phrase = key;
-                key_phrases.add(key);
-
-                //log the first bigram KeyPhraseExtract. I just use the first bigram KeyPhraseExtractionTask.
-                // if we want to show more KeyPhraseExtractionTask, just change the number of the while loop.
-                Log.i("KeyList", String.valueOf(key));
-                i++;
+        if (status == 0) {
+            //if status value = 0, display "NO Tag Available to Users"
+            JSONObject error_report = output.getJSONObject("error");
+            int errorCode = error_report.getInt("ErrorCode");
+            String errorMessage = error_report.getString("ErrorMessage");
+            if (errorCode == 11) {
+                Log.i(TAG2, "extractKeyPhrase " + errorMessage + " " + j);
+                key_phrases.add("No Tag Available");
 
             }
-            key_phrases.size();
+        }
+        else if (status == 1) {
+            //if status is one get extracted bi-gram text
+            JSONObject kwresult = output.getJSONObject("result");
+            JSONObject bigram = kwresult.getJSONObject("2");
 
+            Iterator<?> keys = bigram.keys();
+            int i = 0;
+            //get the last two KeyPhraseExtract.
+            while (keys.hasNext() && i < 3) {
+                String key = (String) keys.next();
 
-        }catch (JSONException e) {e.printStackTrace();}
+                //This is the key_phrase(bigram);
+                key_phrases.add(key);
+                Log.i("KeyList", String.valueOf(key));
+                i++;
+            }
+//            key_phrases.size();
+        }
+
+        else {
+            Log.i(TAG2, "Highly Unlikely");
+        }
+        //return either 0,1 or 2 items
         return key_phrases;
     }
+
 }

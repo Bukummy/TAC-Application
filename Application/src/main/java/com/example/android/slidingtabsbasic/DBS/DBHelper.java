@@ -8,7 +8,7 @@ import android.util.Log;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    public static final String TAG = "DBHelper";
+    private static final String TAG = "DBHelper";
 
     public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -23,15 +23,13 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String Column_Announcements_Link = "announce_link";
     public static final String Column_Announcements_Desc = "description";
     public static final String Column_Announcements_Saved = "announce_saved";
-    public static final String Column_Announcements_Date = "date";
     public static final String Column_Announcements_Date_Added = "a_date_added";
 
     // column of the KeyWords Table
     public static final String Table_KeyWords = "keywords";
     public static final String Column_KeyWords_ID = "id";
     public static final String Column_KeyWords_Name = "name";
-    public static final String Column_KeyWords_Favorites ="kw_favorites";
-    public static final String Column_KeyWords_Date_Added = "kw_date_added";
+    private static final String Column_KeyWords_Date_Added = "kw_date_added";
 
     //column of the Categories Table
     public static final String Table_Categories = "categories";
@@ -47,39 +45,37 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String Column_AnnouncementsKeyWords_ID = "id";
     public static final String Column_AnnouncementsKeyWords_Announcements_ID ="a_id";
     public static final String Column_AnnouncementsKeyWords_KeyWords_ID ="kw_id";
-    public static final String Column_AnnouncementsKeyWords_Date_Added = "aKw_date_added";
+    private static final String Column_AnnouncementsKeyWords_Date_Added = "aKw_date_added";
 
     //column of the AnnouncementCategories Table
     public static final String Table_AnnouncementsCategories = "announce_categories";
     public static final String Column_AnnouncementsCategories_ID ="id";
     public static final String Column_AnnouncementsCategories_Announcements_ID ="a_id";
     public static final String Column_AnnouncementsCategories_Categories_ID ="c_id";
-    public static final String Column_AnnouncementsCategories_Date_Added ="aC_date_added";
+    private static final String Column_AnnouncementsCategories_Date_Added ="aC_date_added";
 
-    public static final String DATABASE_NAME = "announcementsDB";
-    public static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "announcementsDB";
+    private static final int DATABASE_VERSION = 1;
 
     //SQL statements of Announcements table creation
-    public static final String SQL_CREATE_TABLE_Announcements = "CREATE TABLE " + Table_Announcements +"("
+    private static final String SQL_CREATE_TABLE_Announcements = "CREATE TABLE " + Table_Announcements +"("
             + Column_Announcements_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + Column_Announcements_Title + " TEXT NOT NULL, "
             + Column_Announcements_Link + " TEXT NOT NULL, "
             + Column_Announcements_Desc + " TEXT NOT NULL, "
             + Column_Announcements_Saved + " INTEGER, "
-            + Column_Announcements_Date + " INTEGER, "
             + Column_Announcements_Date_Added + " TEXT default CURRENT_TIMESTAMP "
             +");";
 
     //SQL statements of KeyWords table creation
-    public static final String SQL_CREATE_TABLE_KeyWords = "CREATE TABLE " + Table_KeyWords +" ("
+    private static final String SQL_CREATE_TABLE_KeyWords = "CREATE TABLE " + Table_KeyWords +" ("
             + Column_KeyWords_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + Column_KeyWords_Name + " TEXT NOT NULL, "
-            + Column_KeyWords_Favorites + " INTEGER, "
             + Column_KeyWords_Date_Added + " TEXT default CURRENT_TIMESTAMP "
             + "); ";
 
     //SQL statements of Categories table creation
-    public static final String SQL_CREATE_TABLE_Categories = "CREATE TABLE " + Table_Categories +"("
+    private static final String SQL_CREATE_TABLE_Categories = "CREATE TABLE " + Table_Categories +"("
             + Column_Categories_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + Column_Categories_Name + " TEXT NOT null, "
             + Column_Categories_Favorites + " INTEGER, "
@@ -87,7 +83,7 @@ public class DBHelper extends SQLiteOpenHelper {
             +"); ";
 
     //SQL statements of AnnouncementsKeywords table creation
-    public static final String SQL_CREATE_TABLE_Table_AnnouncementsKeyWords = "CREATE TABLE " + Table_AnnouncementsKeyWords +"("
+    private static final String SQL_CREATE_TABLE_Table_AnnouncementsKeyWords = "CREATE TABLE " + Table_AnnouncementsKeyWords +"("
             + Column_AnnouncementsKeyWords_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + Column_AnnouncementsKeyWords_Announcements_ID + " INTEGER, "
             + Column_AnnouncementsKeyWords_KeyWords_ID + " INTEGER, "
@@ -100,7 +96,7 @@ public class DBHelper extends SQLiteOpenHelper {
             +"); ";
 
     //SQL statements of AnnouncementCategories table creation
-    public static final String SQL_CREATE_TABLE_Table_AnnouncementCategories = "CREATE TABLE " + Table_AnnouncementsCategories +"("
+    private static final String SQL_CREATE_TABLE_Table_AnnouncementCategories = "CREATE TABLE " + Table_AnnouncementsCategories +"("
             + Column_AnnouncementsCategories_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + Column_AnnouncementsCategories_Announcements_ID + " INTEGER, "
             + Column_AnnouncementsCategories_Categories_ID + " INTEGER, "
@@ -138,6 +134,9 @@ public class DBHelper extends SQLiteOpenHelper {
         database.execSQL(SQL_CREATE_TABLE_Categories);
         database.execSQL(SQL_CREATE_TABLE_Table_AnnouncementCategories);
         database.execSQL(SQL_CREATE_TABLE_Table_AnnouncementsKeyWords);
+
+
+
     }
 
     @Override
@@ -153,6 +152,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         //create the tables
         onCreate(db);
+        db.close();
     }
 
 

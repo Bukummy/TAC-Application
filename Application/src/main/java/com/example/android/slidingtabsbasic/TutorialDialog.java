@@ -7,7 +7,6 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 public class TutorialDialog extends Activity {
-    TextView intro_heading, intro_body, tutorial_heading, tutorial_body;
 
 
     @Override
@@ -15,10 +14,10 @@ public class TutorialDialog extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutorial);
 
-        intro_heading = (TextView) findViewById(R.id.intro_heading);
-        intro_body = (TextView) findViewById(R.id.intro_body);
-        tutorial_heading = (TextView) findViewById(R.id.tutorial_heading);
-        tutorial_body = (TextView) findViewById(R.id.intro_body);
+        TextView intro_heading = (TextView) findViewById(R.id.intro_heading);
+        TextView intro_body = (TextView) findViewById(R.id.intro_body);
+        TextView tutorial_heading = (TextView) findViewById(R.id.tutorial_heading);
+        TextView tutorial_body = (TextView) findViewById(R.id.intro_body);
     }
 
     @Override

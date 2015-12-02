@@ -44,25 +44,6 @@ public class TechCategoryDAO {
     }
 
     //selecting favorites
-    public int updateFavTag(int favorite, int id, Context c) {
-
-        dbHelper = new DBHelper(c);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        //String selector = "id";
-        String[] selectorArg = {String.valueOf(id)};
-        values.put(DBHelper.Column_Categories_Favorites, favorite);
-        // TODO: 11/15/2015 UpdateSaved only
-
-        // It's a good practice to use parameter ?, instead of concatenate string
-        int result = db.update(DBHelper.Table_Categories,
-                values,
-                DBHelper.Column_Categories_ID + "=?",
-                selectorArg);
-        db.close(); // Closing database connection
-        return result;
-    }
-
     //un-selecting favorites
     public int updateFavTag(int favorite, String name, Context c) {
 
@@ -230,14 +211,21 @@ public class TechCategoryDAO {
             int cat_id = techCategoryList.getId();
 
             if(cat_id >= 1){
-                loadTechAnnouncementCategoryList(announcement_id, cat_id, c);
+                loadAnnouncementCategoryList(announcement_id, cat_id, c);
 
+            }
+            else if(cat_id == 0){
+                int newCat_id = insert(categoryName,c);
+                loadAnnouncementCategoryList(announcement_id, newCat_id, c);
+            }
+            else {
+                Log.i("Row: :", String.valueOf(cat_id));
             }
         }
 
     }
 
-    private void loadTechAnnouncementCategoryList(int ann_id, int cat_id, Context c){
+    private void loadAnnouncementCategoryList(int ann_id, int cat_id, Context c){
         TechAnnounceCategoryDAO techAnnounceCategoryDAO= new TechAnnounceCategoryDAO();
         int annCatId = techAnnounceCategoryDAO.getAnnCatId(ann_id, cat_id, c);
         if (annCatId < 1)

@@ -254,6 +254,7 @@
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="android:windowBackground">@color/tab_background</item>
         <item name="android:textColorPrimary">#000000</item>
+        <item name="android:windowNoTitle">@bool/abc_config_showMenuShortcutsWhenKeyboardPresent</item>
 
     </style>
 </resources>

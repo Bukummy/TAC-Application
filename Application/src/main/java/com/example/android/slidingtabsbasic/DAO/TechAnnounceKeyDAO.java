@@ -42,23 +42,7 @@ public class TechAnnounceKeyDAO {
         return result;
     }
 
-    public int update(TechAnnounceKeyList announceKeyList, int id, Context c) {
-
-        dbHelper = new DBHelper(c);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-
-        values.put(DBHelper.Column_AnnouncementsKeyWords_KeyWords_ID, announceKeyList.getK_Id());
-        values.put(DBHelper.Column_AnnouncementsKeyWords_Announcements_ID, announceKeyList.getA_id());
-        //values.put(dbHelper.Column_Announcements_Saved, annoucementCategories.getSaved());
-
-        // It's a good practice to use parameter ?, instead of concatenate string
-        int result = db.update(DBHelper.Table_AnnouncementsKeyWords, values, DBHelper.Column_AnnouncementsKeyWords_ID + "= ?", new String[]{String.valueOf(id)});
-        db.close(); // Closing database connection
-        return result;
-    }
-
-    public ArrayList<TechAnnounceKeyList> getKeyByAnnId(int announcement_id, Context c) {
+    public ArrayList<TechAnnounceKeyList> getAllKeyByAnnId(int announcement_id, Context c) {
 
 
         ArrayList<TechAnnounceKeyList> techA_KeyLists = new ArrayList<>();
@@ -93,5 +77,37 @@ public class TechAnnounceKeyDAO {
         return techA_KeyLists;
     }
 
+    public int getAnnKeyId(int ann_id, int keyList_id, Context c) {
+
+        dbHelper = new DBHelper(c);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String selectQuery = "SELECT  " +
+                DBHelper.Column_AnnouncementsKeyWords_ID + "," +
+                DBHelper.Column_AnnouncementsKeyWords_Announcements_ID + "," +
+                DBHelper.Column_AnnouncementsKeyWords_KeyWords_ID +
+                " FROM " + DBHelper.Table_AnnouncementsKeyWords +
+                " WHERE " + DBHelper.Column_AnnouncementsKeyWords_KeyWords_ID + " = " + keyList_id +
+                " AND " + DBHelper.Column_AnnouncementsKeyWords_Announcements_ID + " = " + ann_id ; // It's a good practice to use parameter ?, instead of concatenate string
+
+        int ann_keyList_id = 0;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        //if (cursor.moveToFirst()) {
+
+        while (cursor.moveToNext()) {
+            TechAnnounceKeyList techAnnounceKeyList = new TechAnnounceKeyList();
+
+            ann_keyList_id = cursor.getInt(cursor.getColumnIndex(DBHelper.Column_AnnouncementsKeyWords_ID));
+
+            techAnnounceKeyList.setA_id(cursor.getInt(cursor.getColumnIndex(DBHelper.Column_AnnouncementsKeyWords_Announcements_ID)));
+            techAnnounceKeyList.setK_Id(cursor.getInt(cursor.getColumnIndex(DBHelper.Column_AnnouncementsKeyWords_KeyWords_ID)));
+
+            //if(cursor.getPosition() == iCount + 1){
+        }
+
+        cursor.close();
+        db.close();
+        return ann_keyList_id;
+    }
 }
 

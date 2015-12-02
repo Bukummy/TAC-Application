@@ -13,7 +13,7 @@ import com.example.android.slidingtabsbasic.DAO.TechCategoryDAO;
 public class OneTimeRun extends Application {
 
     private final TACAppAlarmReceiver alarm = new TACAppAlarmReceiver();
-    final TechCategoryDAO techCategoryDAO = new TechCategoryDAO();
+    private final TechCategoryDAO techCategoryDAO = new TechCategoryDAO();
 
     @Override
     public void onCreate() {

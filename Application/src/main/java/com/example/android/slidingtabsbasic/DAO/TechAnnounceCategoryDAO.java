@@ -42,23 +42,7 @@ public class TechAnnounceCategoryDAO {
         return result;
     }
 
-    public int update(TechAnnounceCategoryList announceCategoryList, int id, Context c) {
-
-        dbHelper = new DBHelper(c);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-
-        values.put(DBHelper.Column_AnnouncementsCategories_Categories_ID, announceCategoryList.getC_Id());
-        values.put(DBHelper.Column_AnnouncementsCategories_Announcements_ID, announceCategoryList.getA_Id());
-        //values.put(dbHelper.Column_Announcements_Saved, annoucementCategories.getSaved());
-
-        // It's a good practice to use parameter ?, instead of concatenate string
-        int result = db.update(DBHelper.Table_AnnouncementsCategories, values, DBHelper.Column_AnnouncementsCategories_ID + "= ?", new String[]{String.valueOf(id)});
-        db.close(); // Closing database connection
-        return result;
-    }
-
-    public ArrayList<TechAnnounceCategoryList> getAnnByCatId(int cat_id, Context c) {
+    public ArrayList<TechAnnounceCategoryList> getAllAnnByCatId(int cat_id, Context c) {
 
 
         ArrayList<TechAnnounceCategoryList> techA_CategoryLists = new ArrayList<>();

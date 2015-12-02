@@ -11,7 +11,6 @@ public class TechAnnounce {
     private String link;
     private String description;
     private int saved;
-    private String[] KeyList;
     private String[] categoryList;
     private long dateAdded;
 
@@ -21,14 +20,6 @@ public class TechAnnounce {
 
     public void setDateAdded(long dateAdded) {
         this.dateAdded = dateAdded;
-    }
-
-    public String[] getKeyList() {
-        return KeyList;
-    }
-
-    public void setKeyList(String[] keyList) {
-        KeyList = keyList;
     }
 
     public String[] getCategoryList() {
