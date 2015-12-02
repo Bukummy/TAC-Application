@@ -56,7 +56,7 @@
             android:label="@string/title_activity_display_announcement" >
         </activity>
         <activity
-            android:name=".TutorialDialog"
+            android:name=".Tutorial"
             android:label="@string/title_activity_tutorial" >
         </activity>
 

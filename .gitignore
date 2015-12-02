@@ -9,3 +9,6 @@ build/
 *.zip
 *.class
 local.properties
+local.properties
+Application/build/intermediates/incremental/mergeResources/debug/merger.xml
+Application/build/intermediates/incremental/mergeResources/debug/merger.xml

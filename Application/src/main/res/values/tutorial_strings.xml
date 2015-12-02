@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="intro_heading_text">Hi There, </string>
+    <string name="intro_body_text">Thanks for Using Tech Announce Classifier</string>
+    Your daily announcement just became easier to read through\n\n
+    <string name="tutorial_heading_text"><b>How The Application Works</b></string>
+	<string name="tutorial_body_text"><b>To View Announcement in a Category</b> - Click on a category or List  to see group of
+        announcements listed under it \n\n
+	<b>To Save a Particular Category as Favorite</b> - Long Press on the Category, a notification pops up that says
+        “The category has been Saved to Favorite”.\n
+	    <i>View selected category list in the Favorites Tab.</i>\n\n
+	<b>To De-Select a Favorites Category </b> - Long Press on the Category.
+        <i>While in the Favorites Tab</i>,the notification appears on the screen.\n\n
+	<b>To View Most Recent Announcement </b> - click on the category, the announcements in this list appears.
+        <i>This is the current list on Tech Announce website</i>. \n\n
+	<b>To Save an Announcement to Saved Pages </b> - Long press the announcement,
+        either on the Tag Tab or Most Recent Announcement List till a notification pops up on the screen. \n
+        <i> View Saved Announcement list in the Saved-Pages Tab.</i>\n\n
+	<b>To Remove Saved Announcement</b> - Long Press on the announcement. \n
+        <i>While on the Saved-Pages Tab, the notification appears.</i>\n</string>
+    <string name="conclusion_heading_text"><u>Please Take Note</u></string>
+    <string name="conclusion_body_text">You can only save announcement to Saved_pages if it is Accessible to the App\n\n
+    All Announcements are retrieved Daily at <b>11:05AM</b> If an announcement is posted after this set time,
+        it will not be accessible to Select to Saved Pages.\n\n
+    The checker, identify items, on accessible on you local device.\n\n
+    Announcement are stored for a week, then deleted. if the announcement is not saved.\n</string>
+
+
+
+
+</resources>

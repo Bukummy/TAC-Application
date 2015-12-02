@@ -19,24 +19,6 @@
     <string name="tag_fav_text">Set as Favorite</string>
     <string name="app_name">Tech Announce Classifier App</string>
     <string name="title_activity_tutorial">Confused?</string>
-
-    <string name="intro_heading_text">Hi There, </string>
-    <string name="intro_body_text">Thanks for Using Tech Announce Classifier</string>
-    Your daily announcement just became easier to read through\n\n
-    <string name="tutorial_heading_text"><b>How The Application Works</b></string>
-	<string name="tutorial_body_text"><b>To View Announcement in a Category</b> - Click on a category or List  to see group of announcements listed under it \n\n
-	<b>To Save a Particular Category as Favorite</b> - Long Press on the Category, a notification pops up that says
-        \“The category has been Saved to Favorite\”.\n
-	    <i>View selected category list in the Favorites Tab.</i>\n\n
-	<b>To De-select a Favorites Category </b> - Long Press on the Category <i>while in the Favorites Tab</i>,
-        the notification appears on the screen.\n\n
-	<b>To View an Announcement in a category</b> - click on the category, the announcements in this list appears \n\n
-	<b>To Save an Announcement </b> - Long press the announcement till a notification pops up on the screen\n
-        <i> View Saved Announcement list in the Saved-Pages Tab.</i>\n\n
-	<b>To Remove Saved Announcement</b> - Long Press on the announcement \n
-        <i>while on the Saved-Pages Tab, the notification appears.</i>\n</string>
     <string name="title_activity_most_recent_list">MostRecentList</string>
-
-
 
 </resources>

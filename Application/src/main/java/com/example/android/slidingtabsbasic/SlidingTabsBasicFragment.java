@@ -101,14 +101,7 @@ public class SlidingTabsBasicFragment extends Fragment {
 
 
         tutorialButton = (CircleButton) view.findViewById(R.id.tutorialBtn);
-        /*tutorialButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(),TutorialDialog.class);
-                startActivity(intent);
-            }
-            });*/
-
+        
         //BEGIN_INCLUDE (setup_viewpager)
         //Get the ViewPager and set it's PagerAdapter so that it can display items
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);

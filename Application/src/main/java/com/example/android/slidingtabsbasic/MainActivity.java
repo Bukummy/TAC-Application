@@ -62,7 +62,7 @@ public class MainActivity extends SampleActivityBase {
     }
 
     public void showTutorial(View view) {
-        startActivity(new Intent(this, TutorialDialog.class));
+        startActivity(new Intent(this, Tutorial.class));
     }
 
     //This task handler get the announcement items from TechAnnounce in real time this implies:

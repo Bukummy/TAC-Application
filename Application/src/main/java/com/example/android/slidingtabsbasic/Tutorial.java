@@ -6,7 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-public class TutorialDialog extends Activity {
+public class Tutorial extends Activity {
 
 
     @Override
@@ -14,10 +14,14 @@ public class TutorialDialog extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutorial);
 
+
+
         TextView intro_heading = (TextView) findViewById(R.id.intro_heading);
         TextView intro_body = (TextView) findViewById(R.id.intro_body);
         TextView tutorial_heading = (TextView) findViewById(R.id.tutorial_heading);
         TextView tutorial_body = (TextView) findViewById(R.id.intro_body);
+        TextView conclusion_heading = (TextView) findViewById(R.id.conclusion_heading);
+        TextView conclusion_body = (TextView) findViewById(R.id.conclusion_body);
     }
 
     @Override
