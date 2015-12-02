@@ -25,6 +25,7 @@
         <item name="android:textColorPrimary">#000000</item>
         <item name="android:windowNoTitle">@bool/abc_config_showMenuShortcutsWhenKeyboardPresent</item>
 
+
     </style>
 
 </resources>

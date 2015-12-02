@@ -60,6 +60,7 @@ public class SlidingTabsBasicFragment extends Fragment {
     private final TechAnnounceKeyDAO techAnnounceKeyDAO = new TechAnnounceKeyDAO();
     private final TechKeyDAO techKeyDAO = new TechKeyDAO();
 
+
     private final static int[] favorite = {0,1};
 
     /**
@@ -553,10 +554,6 @@ public class SlidingTabsBasicFragment extends Fragment {
                     }
                 }
                 else {announcementTags.setText(" -- ");}
-
-
-
-
 
                 return itemView;
             }
