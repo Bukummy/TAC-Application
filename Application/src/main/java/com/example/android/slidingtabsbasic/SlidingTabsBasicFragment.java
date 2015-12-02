@@ -55,6 +55,8 @@ public class SlidingTabsBasicFragment extends Fragment {
     final TechCategoryDAO techCategoryDAO = new TechCategoryDAO();
     final TechAnnounceDAO techAnnounceDAO = new TechAnnounceDAO();
     List<TechAnnounce> techAnnounceList = new ArrayList<>();
+    final TechKeyDAO techKeyDAO = new TechKeyDAO();
+    final TechAnnounceKeyDAO techAnnounceKeyDAO = new TechAnnounceKeyDAO();
 
 
     //final TechAnnounce techAnnounce = new TechAnnounce();
@@ -530,12 +532,19 @@ public class SlidingTabsBasicFragment extends Fragment {
 
                 //tagList
                 TextView announcementTags = (TextView) itemView.findViewById(R.id.item_tags);
-                String keyList[] = currentAnnouncement.getKeyList();
-                if (keyList != null){
+ announcementTags.setText("");
 
-                    for (String tag : keyList) {
-                        announcementTags.append("- " + tag);
+
+                ArrayList<TechAnnounceKeyList> techAnnounceKeyList = techAnnounceKeyDAO.getKeyByAnnId(currentAnnouncement.getId(), getActivity());
+
+                if (techAnnounceKeyList.size() != 0){
+                    for(TechAnnounceKeyList techAnnounceKey: techAnnounceKeyList){
+                        String tag = techKeyDAO.getKeyByID(techAnnounceKey.getK_Id(),getActivity()).getName();
+                        announcementTags.append(" -- " + tag);
                     }
+                }
+                else{
+                    announcementTags.setText(" -- ");
                 }
 
                 return itemView;
