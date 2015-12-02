@@ -80,7 +80,8 @@ public class TACAppSchedulingService extends IntentService {
     private static final int NOTIFICATION_ID = 1;
     //URL it parses from
     private static final String URL = "http://www.techannounce.ttu.edu/Client/ViewRss.aspx";
-    private static final String api_key = "1d4e852374c1e857eb39a0a3b1cf1472";
+    //private static final String api_key = "1d4e852374c1e857eb39a0a3b1cf1472";
+    private static final String api_key = "659edf6262926fd91cbff013cb49490f";
     private static final String n = "2";
 
     @Override
