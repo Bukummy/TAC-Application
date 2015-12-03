@@ -283,7 +283,7 @@ public class TACAppSchedulingService extends IntentService {
             Iterator<?> keys = bigram.keys();
             int i = 0;
             //get the last two KeyPhraseExtract.
-            while (keys.hasNext() && i < 3) {
+            while (keys.hasNext() && i < 2) {
                 String key = (String) keys.next();
 
                 //This is the key_phrase(bigram);
