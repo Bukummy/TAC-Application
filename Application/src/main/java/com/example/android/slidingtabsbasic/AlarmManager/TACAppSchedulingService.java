@@ -95,9 +95,12 @@ public class TACAppSchedulingService extends IntentService {
                 for (TechAnnounce techannounce :techAnnounceList ) {
                     //replace special string characters  with %20
                     String description = techannounce.getDescription()
-                            .replace("\n", "%20").replace("\b", "%20").replace(" ", "%20")
+                            .replace("%", " percent").replace("\n", "%20")
                             .replace("\t", "%20").replace("\'", "%20")
-                            .replace("\\ ", "%20").replace("\"", "%20");
+                            .replace("\\ ", "%20").replace("\"", "%20")
+                            .replace(" ", "%20").replace("!", "")
+                            .replace("|", "").replace("&", "and")
+                            .replace("\b", "%20");
 
                     //URL that performs feeds the extractByKeyPhrase method
                     String urlExtractString =
